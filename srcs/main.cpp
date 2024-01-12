@@ -3,10 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 12:31:23 by bberger           #+#    #+#             */
-/*   Updated: 2024/01/12 12:31:24 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/12 13:09:32 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <iostream>
+
+int	main(void) {
+	std::cout << "Hello" << std::endl;
+	return (0);
+}
