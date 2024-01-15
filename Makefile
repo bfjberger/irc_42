@@ -9,6 +9,8 @@ BLUE = \033[0;34m
 RED = \033[0;31m
 WHITE = \033[0;97m
 
+INCLUDE = -I ./includes/
+
 SRC_PATH = ./srcs/
 FILES = main.cpp
 
@@ -22,12 +24,12 @@ DIR_DUP = @mkdir -p ${@D}
 
 ${OBJ_DIR}%.o: ${SRC_PATH}%.cpp
 	@${DIR_DUP}
-	@$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) ${INCLUDE} -c $< -o $@
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@($(CC) $(FLAGS) $(OBJ) -o $(NAME))
+	@$(CC) $(FLAGS) ${INCLUDE} $(OBJ) -o $(NAME)
 	@echo "${BLUE}Compiled executable${WHITE}"
 
 clean:
