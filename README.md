@@ -81,7 +81,7 @@ Version: 8
 ## Authors
 
 * [@bberger](https://github.com/bfjberger)
-* [@kmorin](https://github.com/kikinoxx)
+* [@kmorin](https://github.com/Killian-Morin)
 * [@pvong](https://github.com/phlearning)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
