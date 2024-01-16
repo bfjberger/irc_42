@@ -2,7 +2,7 @@ NAME = ircserv
 
 CC = c++
 #FLAGS = -Wall -Wextra -Werror -fsanitize=address -fpermissive -std=c++98 -I./srcs
-FLAGS = -Wall -Wextra -Werror -pedantic -std=c++98 -I./srcs
+FLAGS = -Wall -Wextra -Werror -pedantic -std=c++98
 RM = /bin/rm -rf
 
 BLUE = \033[0;34m
@@ -12,7 +12,8 @@ WHITE = \033[0;97m
 INCLUDE = -I ./includes/
 
 SRC_PATH = ./srcs/
-FILES = main.cpp
+FILES = main.cpp \
+		Server/Server.cpp \
 
 SRCS = ${addprefix ${SRC_PATH}, ${FILES}}
 
