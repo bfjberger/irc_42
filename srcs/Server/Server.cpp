@@ -6,122 +6,242 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/16 12:17:36 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/17 15:20:53 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server() {
-    _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (_serverSocket < 0) {
-        std::cerr << "Error: socket creation failed." << std::endl;
+/**
+ * @brief Accepts a new client connection on the given listen socket.
+ *      The client socket is added to the pollfds vector.
+ * 
+ * accept() is a function that accepts a connection on a socket.
+ * accept() takes three arguments:
+ * 1. the socket file descriptor on which to accept the connection
+ * 2. a pointer to a sockaddr struct that will be filled with the client's address information
+ * 3. a pointer to a socklen_t that will be filled with the size of the client's address information
+ * 
+ * accept() returns the file descriptor of the accepted client socket, or -1 if an error occurred.
+ * 
+ * @param listenSocket The listen socket on which to accept the connection.
+ * @return The file descriptor of the accepted client socket, or -1 if an error occurred.
+ */
+static int acceptSocket(int listenSocket) {
+    struct sockaddr_in clientAddress;
+    socklen_t clientAddressSize = sizeof(clientAddress);
+    int clientSocketFd = accept(listenSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
+    if (clientSocketFd < 0) {
+        std::cerr << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
+        return (-1);
+    }
+    std::cout << COLOR("New connection from ", CYAN) << inet_ntoa(clientAddress.sin_addr) << COLOR(" on clientAddr port ", CYAN) << ntohs(clientAddress.sin_port) << std::endl;
+    return (clientSocketFd);
+}
+
+static void addClient(int clientSocket, std::vector<pollfd> &pollfds) {
+    pollfd clientPollfd;
+    clientPollfd.fd = clientSocket;
+    clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
+    pollfds.push_back(clientPollfd);    
+}
+
+/**
+ * @brief Constructs a Server object with the specified port and password.
+ * 
+ *  The Server object is created with the following steps:
+ * 1. A socket is created with socket()
+ * 2. The socket is bound to an IP address and port with bind()
+ * 3. The socket is set to listen for incoming connections with listen()
+ *  
+ * @param port The port number to listen for connections on.
+ * @param password The password required for clients to connect to the server.
+ */
+Server::Server(const std::string port, const std::string password) : _port(port), _password(password) {
+    _serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
+    if (_serverSocketFd < 0) {
+        std::cerr << COLOR("Error: socket creation failed.", RED) << std::endl;
         exit(EXIT_FAILURE);
     }
 
-    _serverAddress.sin_family = AF_INET;
-    _serverAddress.sin_addr.s_addr = INADDR_ANY;
-    _serverAddress.sin_port = htons(8080);
+    _serverAddress.sin_family = AF_INET; // IPv4
+    _serverAddress.sin_addr.s_addr = INADDR_ANY; // bind to all available interfaces
+    _serverAddress.sin_port = htons(std::atoi(port.c_str())); // convert port to int and convert to network byte order
 
-    int bindResult = bind(_serverSocket, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
+    int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
     if (bindResult < 0) {
-        std::cerr << "Error: socket binding failed: " << strerror(errno) << std::endl;
-        close(_serverSocket);
+        std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
+        close(_serverSocketFd);
         return ;
     }
     
-    if (listen(_serverSocket, MAX_SOCKETS) < 0) {
-        std::cerr << "Error: socket listening failed: " << strerror(errno) << std::endl;
-        close(_serverSocket);
+    if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
+        std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
+        close(_serverSocketFd);
         return ;
     }
 
-    std::cout << "Listening for connections on port " << PORT << "..." << std::endl;
+    std::cout << COLOR("Listening for connections on port ", CYAN) << port << COLOR(" with password: ", CYAN) << password << " ..." << std::endl;
 }
 
 Server::~Server() {
-    close(_serverSocket);
+    std::cout << COLOR("Closing server socket...", CYAN) << std::endl;
+    close(_serverSocketFd);
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                    POLL                                    */
+/* -------------------------------------------------------------------------- */
+
+// Pollfd is a struct with the following members:
+// int fd;         // file descriptor
+// short events;   // requested events
+// short revents;  // returned events
+
+// poll() is a function that waits for one of a set of file descriptors to become ready to perform I/O.
+// poll() takes three arguments:
+// 1. an array of pollfd structs
+// 2. the number of elements in the array
+// 3. a timeout in milliseconds (-1 means infinite timeout)
+
+// poll() returns the number of elements in the array that have non-zero revents fields.
+// If poll() returns 0, it means that the timeout expired and no file descriptors were ready.
+// If poll() returns -1, it means that an error occurred.
+// If poll() returns a positive number, it means that the file descriptor at that index in the array has data available to read.
+
+// POLLIN: data can be read
+// POLLOUT: data can be written
+// POLLERR: an error occurred
+// POLLHUP: the connection was closed
+// POLLNVAL: the file descriptor is not open
+
+/* -------------------------------------------------------------------------- */
+
+/**
+ * @brief Deletes a client from the list of connected clients.
+ * 
+ * This function removes the client with the specified socket file descriptor from the vector of pollfds.
+ * It also closes the client socket and prints a message indicating that the client has been disconnected.
+ * 
+ * @param pollfds The vector of pollfds representing the connected clients.
+ * @param clientSocketFd The socket file descriptor of the client to be deleted.
+ */
+void Server::deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd) {
+    std::vector<pollfd>::iterator it = pollfds.begin();
+    while (it != pollfds.end()) {
+        if (it->fd == clientSocketFd) {
+            std::cout << COLOR("Client ", CYAN) << clientSocketFd << COLOR(" disconnected.", CYAN) << std::endl;
+            close(it->fd);
+            it = pollfds.erase(it);
+            return ;
+        }
+        it++;
+    }
+}
+
+/**
+ * @brief Runs the server and handles incoming connections and data.
+ * 
+ * This function continuously polls for events on the server socket and client sockets.
+ * It accepts new connections, reads data from existing connections, and handles errors and disconnections.
+ * 
+ * Steps:
+ * 1. Create a vector of pollfds with the server socket
+ * 2. Poll for events on the pollfds
+ * 3. If the server socket has an event, accept the connection and add the client socket to the pollfds
+ * 4. If a client socket has an event, read the data and parse it
+ * 5. If an error occurs, delete the client from the pollfds
+ * 6. If the client disconnects, delete the client from the pollfds
+ * 7. If the poll() call returns -1, an error occurred
+ * 8. If the poll() call returns 0, the timeout expired and no file descriptors were ready
+ * 9. If the poll() call returns a positive number, the file descriptor at that index in the array has data available to read
+ * 
+ * TODO: 
+ * The received data is to be parsed according to the IRC protocol, and appropriate responses are sent.
+ * 
+ * @note This function runs indefinitely until an error occurs or all clients disconnect.
+ */
 void Server::run() {
+    std::vector<pollfd> pollfds;
+    pollfd serverPollfd;
+    serverPollfd.fd = _serverSocketFd;
+    serverPollfd.events = POLLIN;
+    pollfds.push_back(serverPollfd);
+
     while (true) {
-        struct sockaddr_in clientAddress; // clientAddress is the address of the client that is connecting to the server
-        socklen_t clientAddressSize = sizeof(clientAddress); // clientAddressSize is the size of the clientAddress struct
+        std::vector<pollfd> newPollfds;
 
-        int clientSocket = accept(_serverSocket, (struct sockaddr *)&clientAddress, &clientAddressSize); // accept() returns a new socket file descriptor for the accepted connection
-        if (clientSocket < 0) {
-            std::cerr << "Error: socket accepting failed: " << strerror(errno) << std::endl;
-            continue;
+        if (poll(&pollfds[0], pollfds.size(), -1) < 0) {
+            std::cerr << COLOR("Error: poll failed: ", RED) << strerror(errno) << std::endl;
+            return ;
         }
+        std::vector<pollfd>::iterator it = pollfds.begin();
+        while (it != pollfds.end()) {
+            // if the data is available to read on the fd/socket
+            // -> if the connection is new, accept it and add it to the pollfds
+            // -> if the connection already exists, read the data and parse it
+            if (it->revents && POLLIN) {
+                if (it->fd == _serverSocketFd) {
+                    int clientSocketFd = acceptSocket(_serverSocketFd);
+                    if (clientSocketFd < 0) {
+                        continue;
+                    }
+                    if (pollfds.size() < MAX_SOCKETS) {
+                        addClient(clientSocketFd, pollfds);
+                    } else {
+                        std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
+                        send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
+                        close(clientSocketFd);
+                    }
+                    it++;
+                }
+                // -> if the connection already exists, read the data and parse it
+                else {
+                    char buffer[BUFF_SIZE];
+                    int readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
 
-        std::cout << "Connection accepted from client " << clientSocket << std::endl;
-        
-        // Create a thread to handle the connection
-        pthread_t client_handler_thread;
-        if (pthread_create(&client_handler_thread, NULL, handle_client, (void *)&clientSocket) < 0) {
-            std::cerr << "Error: thread creation failed: " << strerror(errno) << std::endl;
-            close(clientSocket);
-            continue;
+                    if (readResult < 0) {
+                        std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
+                        deleteClient(pollfds, it->fd);
+                        if (pollfds.size() == 0) {
+                            std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
+                            break ;
+                        }
+                    } else if (readResult == 0) {
+                        deleteClient(pollfds, it->fd);
+                        if (pollfds.size() == 0) {
+                            std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
+                            break ;
+                        }
+                    } else {
+                        std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
+                        // parse the request according to IRC protocol
+                        // Respond to the request
+                        // Handle errors and disconnections
+                        // Close the socket
+                        it++;
+                    }
+                }
+            }
+            else if (it->revents & POLLERR) {
+                if (it->fd == _serverSocketFd) {
+                    std::cerr << COLOR("Error: server socket error: ", RED) << strerror(errno) << std::endl;
+                    return ;
+                } else {
+                    std::cerr << COLOR("Error: client socket error: ", RED) << strerror(errno) << std::endl;
+                    deleteClient(pollfds, it->fd);
+                    if (pollfds.size() == 0) {
+                        std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
+                        break ;
+                    }
+                }
+            } else {
+                it++;
+            }
         }
-
-        // Detach the thread to allow it to run independently
-        pthread_detach(client_handler_thread);
+        // add new pollfds to the pollfds vector
+        pollfds.insert(pollfds.end(), newPollfds.begin(), newPollfds.end());
     }
-    close(_serverSocket);
+    return ;
 }
-
-// parse the client message
-Message Server::parse_message(std::string message) {
-    Message parsedMessage;
-    
-    // prefix
-    std::cout << "Message: " << message << std::endl;
-    if (message[0] == ':') {
-        parsedMessage.prefix = message.substr(1, message.find(' ') - 1);
-        std::cout << "Prefix: " << parsedMessage.prefix << std::endl;
-        message = message.substr(message.find(' ') + 1);
-    }
-
-    // command
-    parsedMessage.command = message.substr(0, message.find(' '));
-    message = message.substr(message.find(' ') + 1);
-    std::cout << "Command: " << parsedMessage.command << std::endl;
-
-    // params
-    while (message.find(' ') != std::string::npos) {
-        parsedMessage.params.push_back(message.substr(0, message.find(' ')));
-        message = message.substr(message.find(' ') + 1);
-    }
-    // show params
-    std::cout << "Params: ";
-    for (std::vector<std::string>::iterator it = parsedMessage.params.begin(); it != parsedMessage.params.end(); it++) {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
-
-    // body
-    parsedMessage.body = message;
-
-    return (parsedMessage);
-}
-
-// handle the client connection
-void *Server::handle_client(void *clientSocket) {
-    int clientSocketFd = *(int *)clientSocket;
-    char buffer[1024] = {0};
-    int readResult;
-
-    while ((readResult = read(clientSocketFd, buffer, 1024)) > 0) {
-        std::cout << "=====================" << std::endl;
-        std::cout << "Received message from client " << clientSocketFd << ": " << buffer << std::endl;
-        std::cout << "=====================" << std::endl;
-        // send a confirmation message to the client
-        std::string confirmation = "Message received\n";
-        send(clientSocketFd, confirmation.c_str(), confirmation.length(), 0);
-    }
-    close(clientSocketFd);
-
-    pthread_exit(NULL);
-    return (NULL);
-}
-            
+     

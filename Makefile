@@ -1,4 +1,6 @@
 NAME = ircserv
+PASSWORD = password
+PORT = 6667
 
 CC = c++
 #FLAGS = -Wall -Wextra -Werror -fsanitize=address -fpermissive -std=c++98 -I./srcs
@@ -33,6 +35,9 @@ $(NAME): $(OBJ)
 	@$(CC) $(FLAGS) ${INCLUDE} $(OBJ) -o $(NAME)
 	@echo "${BLUE}Compiled executable${WHITE}"
 
+run: $(NAME)
+	./$(NAME) $(PORT) $(PASSWORD)
+
 clean:
 	@(${RM} $(OBJ_DIR))
 	@echo "${RED}Clean objects files${WHITE}"
@@ -43,4 +48,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re run
