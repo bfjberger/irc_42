@@ -6,45 +6,15 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/17 15:20:53 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/18 17:55:27 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-/**
- * @brief Accepts a new client connection on the given listen socket.
- *      The client socket is added to the pollfds vector.
- * 
- * accept() is a function that accepts a connection on a socket.
- * accept() takes three arguments:
- * 1. the socket file descriptor on which to accept the connection
- * 2. a pointer to a sockaddr struct that will be filled with the client's address information
- * 3. a pointer to a socklen_t that will be filled with the size of the client's address information
- * 
- * accept() returns the file descriptor of the accepted client socket, or -1 if an error occurred.
- * 
- * @param listenSocket The listen socket on which to accept the connection.
- * @return The file descriptor of the accepted client socket, or -1 if an error occurred.
- */
-static int acceptSocket(int listenSocket) {
-    struct sockaddr_in clientAddress;
-    socklen_t clientAddressSize = sizeof(clientAddress);
-    int clientSocketFd = accept(listenSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
-    if (clientSocketFd < 0) {
-        std::cerr << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
-        return (-1);
-    }
-    std::cout << COLOR("New connection from ", CYAN) << inet_ntoa(clientAddress.sin_addr) << COLOR(" on clientAddr port ", CYAN) << ntohs(clientAddress.sin_port) << std::endl;
-    return (clientSocketFd);
-}
-
-static void addClient(int clientSocket, std::vector<pollfd> &pollfds) {
-    pollfd clientPollfd;
-    clientPollfd.fd = clientSocket;
-    clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
-    pollfds.push_back(clientPollfd);    
-}
+/* -------------------------------------------------------------------------- */
+/*                                   SERVER                                   */
+/* -------------------------------------------------------------------------- */
 
 /**
  * @brief Constructs a Server object with the specified port and password.
@@ -89,9 +59,7 @@ Server::~Server() {
     close(_serverSocketFd);
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                    POLL                                    */
-/* -------------------------------------------------------------------------- */
+/* ---------------------------------- Poll ---------------------------------- */
 
 // Pollfd is a struct with the following members:
 // int fd;         // file descriptor
@@ -140,6 +108,98 @@ void Server::deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd) {
 }
 
 /**
+ * @brief Accepts a new client connection on the given listen socket.
+ *      The client socket is added to the pollfds vector.
+ * 
+ * accept() is a function that accepts a connection on a socket.
+ * accept() takes three arguments:
+ * 1. the socket file descriptor on which to accept the connection
+ * 2. a pointer to a sockaddr struct that will be filled with the client's address information
+ * 3. a pointer to a socklen_t that will be filled with the size of the client's address information
+ * 
+ * accept() returns the file descriptor of the accepted client socket, or -1 if an error occurred.
+ * 
+ * @param listenSocket The listen socket on which to accept the connection.
+ * @return The file descriptor of the accepted client socket, or -1 if an error occurred.
+ */
+static int acceptSocket(int listenSocket) {
+    struct sockaddr_in clientAddress;
+    socklen_t clientAddressSize = sizeof(clientAddress);
+    int clientSocketFd = accept(listenSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
+    if (clientSocketFd < 0) {
+        std::cerr << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
+        return (-1);
+    }
+    std::cout << COLOR("New connection from ", CYAN) << inet_ntoa(clientAddress.sin_addr) << COLOR(" on clientAddr port ", CYAN) << ntohs(clientAddress.sin_port) << std::endl;
+    return (clientSocketFd);
+}
+
+static void addClient(int clientSocket, std::vector<pollfd> &pollfds) {
+    pollfd clientPollfd;
+    clientPollfd.fd = clientSocket;
+    clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
+    pollfds.push_back(clientPollfd);    
+}
+
+void Server::handleMaxClient(int clientSocketFd) {
+    std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
+    send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
+    close(clientSocketFd);
+}
+
+
+// TODO: Working on the parsing to get the user info -> NICK, USER
+static void splitMessage(std::vector<std::string> &cmds, std::string msg) {
+    int pos = 0;
+    std::string delimiter = "\n";
+    std::string substr;
+
+    while ((pos = msg.find(delimiter)) != static_cast<int>(std::string::npos)) {
+        substr = msg.substr(0, pos);
+        cmds.push_back(substr);
+        msg.erase(0, pos + delimiter.length());
+    }
+}
+
+// TODO: Working on it
+std::string tmpFormatString(std::string msg) {
+    if (msg.find(' ') != std::string::npos && msg.find(' ') == 0) {
+        msg.erase(msg.find(' '), 1);
+    }
+    if  (msg.find('\r') != std::string::npos ) {
+        msg.erase(msg.find('\r'), 1);
+    }
+    return msg;
+}
+
+// TODO: Working on it
+void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string msg) {
+    // std::map<const int, Client>::iterator it = clients.find(clientSocketFd);
+    (void) clients, (void) clientSocketFd;
+    std::cout << "fillUserInfo msg: " << msg << std::endl;
+
+    // TODO: CHECK FOR PASS
+}
+
+// TODO: Working on it
+void Server::parseMessage(std::string message, int clientSocketFd) {
+    std::vector<std::string> cmds;
+    std::map<const int, Client>::iterator it = _clients.find(clientSocketFd);
+    std::cout << "parseMessage msg: " << message << std::endl;
+    splitMessage(cmds, message);
+
+    for (size_t i = 0; i != cmds.size(); i++) {
+        if (it->second.isLogged() == false) {
+            fillUserInfo(_clients, clientSocketFd, cmds[i]);
+            if (it->second.getNick() != "" && it->second.getUserName() != "") {
+                it->second.setReceivedInfo(true);
+            }
+        }
+    }
+    it->second.printInfo();
+}
+
+/**
  * @brief Runs the server and handles incoming connections and data.
  * 
  * This function continuously polls for events on the server socket and client sockets.
@@ -171,7 +231,7 @@ void Server::run() {
     while (true) {
         std::vector<pollfd> newPollfds;
 
-        if (poll(&pollfds[0], pollfds.size(), -1) < 0) {
+        if (poll(&pollfds[0], pollfds.size(), -1) == -1) {
             std::cerr << COLOR("Error: poll failed: ", RED) << strerror(errno) << std::endl;
             return ;
         }
@@ -183,16 +243,12 @@ void Server::run() {
             if (it->revents && POLLIN) {
                 if (it->fd == _serverSocketFd) {
                     int clientSocketFd = acceptSocket(_serverSocketFd);
-                    if (clientSocketFd < 0) {
+                    if (clientSocketFd == -1) {
                         continue;
                     }
                     if (pollfds.size() < MAX_SOCKETS) {
-                        addClient(clientSocketFd, pollfds);
-                    } else {
-                        std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
-                        send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
-                        close(clientSocketFd);
-                    }
+                        addClient(clientSocketFd, newPollfds);
+                    } else handleMaxClient(clientSocketFd);
                     it++;
                 }
                 // -> if the connection already exists, read the data and parse it
@@ -215,10 +271,14 @@ void Server::run() {
                         }
                     } else {
                         std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
+                        // TODO: parse the request according to IRC protocol
+
                         // parse the request according to IRC protocol
                         // Respond to the request
                         // Handle errors and disconnections
                         // Close the socket
+                        
+                        parseMessage(buffer, it->fd);
                         it++;
                     }
                 }
