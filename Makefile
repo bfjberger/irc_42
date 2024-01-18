@@ -16,6 +16,7 @@ INCLUDE = -I ./includes/
 SRC_PATH = ./srcs/
 FILES = main.cpp \
 		Server/Server.cpp \
+		Client.cpp \
 
 SRCS = ${addprefix ${SRC_PATH}, ${FILES}}
 
