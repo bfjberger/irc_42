@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 14:46:19 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/19 17:36:54 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,6 @@ static void splitMessage(std::vector<std::string> &cmds, std::string msg) {
 	// }
 }
 
-// TODO: Working on it
 std::string tmpFormatString(std::string msg) {
 	if (msg.find(' ') != std::string::npos && msg.find(' ') == 0) {
 		msg.erase(msg.find(' '), 1);
@@ -183,7 +182,6 @@ std::string tmpFormatString(std::string msg) {
 	return msg;
 }
 
-// TODO: Working on it
 void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string msg) {
 	std::map<const int, Client>::iterator it = clients.find(clientSocketFd);
 	(void) clients, (void) clientSocketFd;
@@ -201,7 +199,6 @@ void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocket
 		msg = tmpFormatString(msg);
 		it->second.setPass(msg.substr(msg.find("PASS") + 5));
 	}
-	// TODO: CHECK FOR PASS
 }
 
 
@@ -212,13 +209,26 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
 	std::cout << "parseMessage msg: " << message << std::endl;
 	splitMessage(cmds, message);
 	std::cout << "cmds size: " << cmds.size() << std::endl;
+
 	for (size_t i = 0; i != cmds.size(); i++) {
-		fillUserInfo(_clients, clientSocketFd, cmds[i]);
-		if (it->second.getPass() == _password) {
-			it->second.setLogged(true);
-		}
-		if (it->second.getNick() != "" && it->second.getUserName() != "") {
-			it->second.setReceivedInfo(true);
+		if (it->second.isRegistered() == false) {
+
+			fillUserInfo(_clients, clientSocketFd, cmds[i]);
+
+			if (it->second.getPass() == _password) {
+				it->second.setLogged(true);
+			}
+
+			if (it->second.getNick() != "" && it->second.getUserName() != "") {
+				it->second.setReceivedInfo(true);
+			}
+
+			if (it->second.isLogged() == true && it->second.hasReceivedInfo() == true && it->second.welcomeSent() == false) {
+				it->second.setRegistered(true);
+				std::string welcome = RPL_WELCOME(it->second.getNick(), _name, USER_ID(it->second));
+				send(clientSocketFd, welcome.c_str(), welcome.length(), 0);
+			}
+
 		}
 	}
 	it->second.printInfo();

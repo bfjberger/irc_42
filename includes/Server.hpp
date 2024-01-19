@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 14:43:11 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/19 17:36:24 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "ft_irc.hpp"
 #include "Client.hpp"
+#include "Numeric_Replies.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
