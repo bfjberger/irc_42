@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 11:45:04 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:51:03 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,18 @@
 
 /**
  * @brief Constructs a Server object with the specified port and password.
- * 
+ *
  *  The Server object is created with the following steps:
  * 1. A socket is created with socket()
  * 2. The socket is bound to an IP address and port with bind()
  * 3. The socket is set to listen for incoming connections with listen()
- *  
+ *
  * @param port The port number to listen for connections on.
  * @param password The password required for clients to connect to the server.
+ * version -> version of the server
+ * name -> name of the server
  */
-Server::Server(const std::string port, const std::string password) : _port(port), _password(password) {
+Server::Server(const std::string port, const std::string password) : _port(port), _password(password), _version("alpha"), _name("oui") {
     _serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_serverSocketFd < 0) {
         std::cerr << COLOR("Error: socket creation failed.", RED) << std::endl;
@@ -44,7 +46,7 @@ Server::Server(const std::string port, const std::string password) : _port(port)
         close(_serverSocketFd);
         return ;
     }
-    
+
     if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
         std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
         close(_serverSocketFd);
@@ -87,10 +89,10 @@ Server::~Server() {
 
 /**
  * @brief Deletes a client from the list of connected clients.
- * 
+ *
  * This function removes the client with the specified socket file descriptor from the vector of pollfds.
  * It also closes the client socket and prints a message indicating that the client has been disconnected.
- * 
+ *
  * @param pollfds The vector of pollfds representing the connected clients.
  * @param clientSocketFd The socket file descriptor of the client to be deleted.
  */
@@ -110,15 +112,15 @@ void Server::deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd) {
 /**
  * @brief Accepts a new client connection on the given listen socket.
  *      The client socket is added to the pollfds vector.
- * 
+ *
  * accept() is a function that accepts a connection on a socket.
  * accept() takes three arguments:
  * 1. the socket file descriptor on which to accept the connection
  * 2. a pointer to a sockaddr struct that will be filled with the client's address information
  * 3. a pointer to a socklen_t that will be filled with the size of the client's address information
- * 
+ *
  * accept() returns the file descriptor of the accepted client socket, or -1 if an error occurred.
- * 
+ *
  * @param listenSocket The listen socket on which to accept the connection.
  * @return The file descriptor of the accepted client socket, or -1 if an error occurred.
  */
@@ -204,10 +206,10 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
 
 /**
  * @brief Runs the server and handles incoming connections and data.
- * 
+ *
  * This function continuously polls for events on the server socket and client sockets.
  * It accepts new connections, reads data from existing connections, and handles errors and disconnections.
- * 
+ *
  * Steps:
  * 1. Create a vector of pollfds with the server socket
  * 2. Poll for events on the pollfds
@@ -218,10 +220,10 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
  * 7. If the poll() call returns -1, an error occurred
  * 8. If the poll() call returns 0, the timeout expired and no file descriptors were ready
  * 9. If the poll() call returns a positive number, the file descriptor at that index in the array has data available to read
- * 
- * TODO: 
+ *
+ * TODO:
  * The received data is to be parsed according to the IRC protocol, and appropriate responses are sent.
- * 
+ *
  * @note This function runs indefinitely until an error occurs or all clients disconnect.
  */
 void Server::run() {
@@ -280,7 +282,7 @@ void Server::run() {
                         // Respond to the request
                         // Handle errors and disconnections
                         // Close the socket
-                        
+
                         parseMessage(buffer, it->fd);
                         it++;
                     }
@@ -307,4 +309,3 @@ void Server::run() {
     }
     return ;
 }
-     
