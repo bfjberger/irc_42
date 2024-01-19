@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/18 17:55:27 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:45:04 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,14 @@ static int acceptSocket(int listenSocket) {
     return (clientSocketFd);
 }
 
-static void addClient(int clientSocket, std::vector<pollfd> &pollfds) {
+void Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
     pollfd clientPollfd;
+    Client client(clientSocket);
     clientPollfd.fd = clientSocket;
     clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
-    pollfds.push_back(clientPollfd);    
+    pollfds.push_back(clientPollfd);
+    _clients.insert(std::pair<int, Client>(clientSocket, client));
+    std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;    
 }
 
 void Server::handleMaxClient(int clientSocketFd) {

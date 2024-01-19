@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/18 18:08:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/19 11:44:04 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ public:
     ~Server();
 
     void run();
+    void addClient(int clientSocket, std::vector<pollfd> &pollfds);
     void deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
     void handleMaxClient(int clientSocketFd);
     void parseMessage(std::string message, int clientSocketFd);

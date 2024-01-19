@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/18 17:53:28 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:37:19 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,6 @@ void Client::printInfo() const {
     std::cout << "nick: " << _nick << std::endl;
     std::cout << "userName: " << _userName << std::endl;
     std::cout << "realName: " << _realName << std::endl;
-    std::cout << "receivedInfo: " << _receivedInfo << std::endl;
-    std::cout << "isLogged: " << _isLogged << std::endl;
+    std::cout << "receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
+    std::cout << "isLogged: " << std::boolalpha << _isLogged << std::endl;
 }
