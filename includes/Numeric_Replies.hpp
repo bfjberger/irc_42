@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Numeric_Replies.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/19 11:54:48 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:20:17 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
-#define RPL_UMODEIS "<user mode string>" //221
+#define RPL_UMODEIS() ("<user mode string>\r\n") //221
 
-#define RPL_AWAY "<nick> :<away message>" //301
+#define RPL_AWAY() ("<nick> :<away message>\r\n") //301
 
-#define RPL_CHANNELMODEIS "<channel> <mode> <mode params>" //324
+#define RPL_CHANNELMODEIS() ("<channel> <mode> <mode params>\r\n") //324
 
 #define RPL_NOTOPIC(channel) (channel + " :No topic is set\r\n") //331
 
@@ -40,6 +40,8 @@
 #define RPL_BANLIST(channel, banid) (channel + " " + banid + "\r\n") //367
 
 #define RPL_ENDOFBANLIST(channel) (channel + " :End of channel ban list\r\n") //368
+
+#define RPL_YOUREOPER() (":You are now an IRC operator") //381
 
 /* ************************************************************************** */
 /*                               ERRORS REPLIES                               */
@@ -65,9 +67,9 @@
 
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters\r\n") //461
 
-#define ERR_ALREADYREGISTRED() (":You may not reregister") //462
+#define ERR_ALREADYREGISTRED() (":You may not reregister\r\n") //462
 
-#define ERR_NONICKNAMEGIVEN() (":No nickname given") //431
+#define ERR_NONICKNAMEGIVEN() (":No nickname given\r\n") //431
 
 #define ERR_ERRONEUSNICKNAME(nick) (nick + " :Erroneus nickname\r\n") //432
 
@@ -78,6 +80,8 @@
 #define ERR_NOTONCHANNEL(channel) (channel + " :You're not on that channel\r\n") //442
 
 #define ERR_USERONCHANNEL(user, channel) (user + " " + channel + " :is already on channel\r\n") //443
+
+#define ERR_PASSWDMISMATCH() (":Password incorrect\r\n") //464
 
 #define ERR_KEYSET(channel) (channel + " :Channel key already set\r\n") //467
 
@@ -92,6 +96,10 @@
 #define ERR_BADCHANNELKEY(channel) (channel + ":Cannot join channel (+k)\r\n") //475
 
 #define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator\r\n") //482
+
+#define ERR_RESTRICTED() (":Your connection is restricted!\r\n") //484
+
+#define ERR_NOOPERHOST() (":No O-lines for your host\r\n") //491
 
 #define ERR_UMODEUNKNOWNFLAG() (":Unknown MODE flag\r\n") //501
 
