@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 11:58:23 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:11:01 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "ft_irc.hpp"
 #include "Client.hpp"
+#include "Numeric_Replies.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>

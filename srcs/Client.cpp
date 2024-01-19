@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 13:29:42 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:22:26 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@
 /*                                   CLIENT                                   */
 /* -------------------------------------------------------------------------- */
 
-Client::Client(int fd) : _fd(fd), _isLogged(false) {
-	return ;
+Client::Client(int fd) : _fd(fd), _hostname("localhost"), _receivedInfo(false),
+						_isLogged(false),
+						_welcomeSent(false),
+						_isRegistered(false) {
+	return;
 }
 
 Client::~Client() {
-	return ;
+	return;
 }
 
 /* --------------------------------- Getters -------------------------------- */
@@ -50,8 +53,20 @@ std::string Client::getPass() const {
 	return _password;
 }
 
+std::string Client::getHostname() const {
+	return _hostname;
+}
+
 bool Client::isLogged() const {
 	return _isLogged;
+}
+
+bool Client::welcomeSent() const {
+	return _welcomeSent;
+}
+
+bool Client::isRegistered() const {
+	return _isRegistered;
 }
 
 /* --------------------------------- Setters -------------------------------- */
@@ -79,6 +94,18 @@ void Client::setLogged(bool isLogged) {
 void Client::setReceivedInfo(bool receivedInfo) {
 	_receivedInfo = receivedInfo;
 }
+
+void Client::setWelcomeSent(bool welcomeSent) {
+	_welcomeSent = welcomeSent;
+}
+
+void Client::setRegistered(bool isRegistered) {
+	_isRegistered = isRegistered;
+}
+
+void Client::setHostname(std::string hostname) {
+	_hostname = hostname;
+}	
 
 /* --------------------------------- Helpers -------------------------------- */
 

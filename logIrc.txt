@@ -1,0 +1,25 @@
+<< PASS password
+<< NICK PH
+<< USER phv phv localhost :Pierre Henri
+>> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
+<< MODE PH +i
+<< PING oui
+<< PASS password
+<< NICK PH
+<< USER phv phv localhost :Pierre Henri
+>> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
+<< MODE PH +i
+<< PING oui
+<< JOIN #USER
+<< PRIVMSG #USER :hello
+<< PASS password
+<< NICK PH
+<< USER phv phv localhost :Pierre Henri
+>> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
+<< MODE PH +i
+<< PING oui
+<< JOIN #USER
+<< PRIVMSG #USER :hello
+<< PRIVMSG #USER :test
+<< PRIVMSG #USER :quit
+<< QUIT :leaving

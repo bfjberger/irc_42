@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 13:11:48 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:16:02 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,11 @@ public:
 	std::string getUserName() const;
 	std::string getRealName() const;
 	std::string getPass() const;
+	std::string getHostname() const;
 	bool hasReceivedInfo() const;
 	bool isLogged() const;
+	bool welcomeSent() const;
+	bool isRegistered() const;
 
 	// Setters
 	void setNick(std::string nick);
@@ -38,6 +41,9 @@ public:
 	void setRealName(std::string realName);
 	void setLogged(bool isLogged);
 	void setReceivedInfo(bool receivedInfo);
+	void setWelcomeSent(bool welcomeSent);
+	void setRegistered(bool isRegistered);
+	void setHostname(std::string hostname);
 
 	// TODO: Not Implemented yet
 	void logIn();
@@ -53,8 +59,11 @@ private:
 	std::string _nick;
 	std::string _userName;
 	std::string _realName;
+	std::string _hostname;
 	bool _receivedInfo;
 	bool _isLogged;
+	bool _welcomeSent;
+	bool _isRegistered;
 };
 
 #endif // CLIENT_HPP
