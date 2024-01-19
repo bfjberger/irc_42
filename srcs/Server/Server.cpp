@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 17:20:30 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:36:54 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocket
 	}
 }
 
+
 // TODO: Working on it
 void Server::parseMessage(std::string message, int clientSocketFd) {
 	std::vector<std::string> cmds;
@@ -233,6 +234,11 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
 	it->second.printInfo();
 }
 
+
+std::string const &Server::getPass() const
+{
+	return(this->_password);
+}
 /**
  * @brief Runs the server and handles incoming connections and data.
  *

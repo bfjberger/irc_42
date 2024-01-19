@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 17:11:01 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 17:36:24 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ class Server {
 		void	handleMaxClient(int clientSocketFd);
 		void	parseMessage(std::string message, int clientSocketFd);
 		void	fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+		std::string const &getPass() const;
+		
+		
 
 	private:
 		struct sockaddr_in			_serverAddress;
