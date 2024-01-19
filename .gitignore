@@ -4,3 +4,4 @@ a.out
 *.gch
 *.o
 ircserv
+objs/
