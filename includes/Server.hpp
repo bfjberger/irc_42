@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/18 18:08:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/19 11:29:57 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,33 @@
 #define BUFF_SIZE 4096
 
 struct Message {
-    std::string prefix;
-    std::string name;
-    std::string message;
+	std::string	prefix;
+	std::string	name;
+	std::string	message;
 };
 
 class Server {
-public:
-    Server(const std::string port, const std::string password);
-    ~Server();
 
-    void run();
-    void deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
-    void handleMaxClient(int clientSocketFd);
-    void parseMessage(std::string message, int clientSocketFd);
-    void fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+	public:
+		Server(const std::string port, const std::string password);
+		~Server();
 
-private:
-    struct sockaddr_in _serverAddress;
-    std::map<const int, Client> _clients;
-    int _serverSocketFd;
-    std::string _port;
-    std::string _password;
+		void	run();
+		void	deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
+		void	handleMaxClient(int clientSocketFd);
+		void	parseMessage(std::string message, int clientSocketFd);
+		void	fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+
+	private:
+		struct sockaddr_in			_serverAddress;
+		std::map<const int, Client>	_clients;
+
+		int			_serverSocketFd;
+
+		std::string	_port;
+		std::string	_password;
+		std::string	_version;
+		std::string	_name;
 
 /* ------------------------------ REGISTRATION ------------------------------ */
 // TODO: work on the parsing to get the user info -> NICK, USER

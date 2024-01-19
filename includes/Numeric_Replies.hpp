@@ -6,13 +6,24 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/18 18:07:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/19 11:06:52 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #ifndef NUMERIC_REPLIES_HPP
 #define NUMERIC_REPLIES_HPP
+
+/*
+	Generated after the execution of IRC commands following certain conditions
+
+	RPL -> command responses
+	ERR -> error replies
+*/
+
+/* ************************************************************************** */
+/*                             COMMAND RESPONSES                              */
+/* ************************************************************************** */
 
 #define RPL_UMODEIS "<user mode string>" //221
 
@@ -29,6 +40,10 @@
 #define RPL_BANLIST(channel, banid) (channel + " " + banid + "\r\n") //367
 
 #define RPL_ENDOFBANLIST(channel) (channel + " :End of channel ban list\r\n") //368
+
+/* ************************************************************************** */
+/*                               ERRORS REPLIES                               */
+/* ************************************************************************** */
 
 #define ERR_NOSUCHNICK(nickname) (nickname + " :No such nick/channel\r\n") //401
 
