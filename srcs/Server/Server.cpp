@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 13:51:12 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 14:46:19 by bberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocket
 	// TODO: CHECK FOR PASS
 }
 
+
 // TODO: Working on it
 void Server::parseMessage(std::string message, int clientSocketFd) {
 	std::vector<std::string> cmds;
@@ -223,6 +224,11 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
 	it->second.printInfo();
 }
 
+
+std::string const &Server::getPass() const
+{
+	return(this->_password);
+}
 /**
  * @brief Runs the server and handles incoming connections and data.
  *

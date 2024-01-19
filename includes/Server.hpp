@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 11:58:23 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 14:43:11 by bberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ class Server {
 		void	handleMaxClient(int clientSocketFd);
 		void	parseMessage(std::string message, int clientSocketFd);
 		void	fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+		std::string const &getPass() const;
+		
+		
 
 	private:
 		struct sockaddr_in			_serverAddress;
