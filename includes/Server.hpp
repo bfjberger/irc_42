@@ -6,7 +6,7 @@
 /*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 11:49:14 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/19 11:58:23 by pvong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ class Server {
 		~Server();
 
 		void	run();
-        void    addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
+		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
 		void	deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
 		void	handleMaxClient(int clientSocketFd);
 		void	parseMessage(std::string message, int clientSocketFd);
