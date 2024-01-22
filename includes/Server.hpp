@@ -32,11 +32,19 @@
 #define ERR_MAX_CLIENTS "Error: maximum number of clients reached."
 #define BUFF_SIZE 4096
 
-struct Message {
+typedef struct s_Message {
 	std::string	prefix;
-	std::string	name;
-	std::string	message;
-};
+	std::string	command;
+	std::vector<std::string>	params;
+
+	bool hasPrefix;
+	bool hasCommand;
+	// std::string	name;
+	// std::string	message;
+} t_Message;
+
+t_Message	parseCommands(std::string message);
+void 		printMessage(t_Message message);
 
 class Server {
 

@@ -36,21 +36,21 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 		exit(EXIT_FAILURE);
 	}
 
-	_serverAddress.sin_family = AF_INET; // IPv4
-	_serverAddress.sin_addr.s_addr = INADDR_ANY; // bind to all available interfaces
+	_serverAddress.sin_family = AF_INET;					  // IPv4
+	_serverAddress.sin_addr.s_addr = INADDR_ANY;			  // bind to all available interfaces
 	_serverAddress.sin_port = htons(std::atoi(port.c_str())); // convert port to int and convert to network byte order
 
 	int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
 	if (bindResult < 0) {
 		std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
 		close(_serverSocketFd);
-		return ;
+		return;
 	}
 
 	if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
 		std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
 		close(_serverSocketFd);
-		return ;
+		return;
 	}
 
 	std::cout << COLOR("Listening for connections on port ", CYAN) << port << COLOR(" with password: ", CYAN) << password << " ..." << std::endl;
@@ -103,7 +103,7 @@ void Server::deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd) {
 			std::cout << COLOR("Client ", CYAN) << clientSocketFd << COLOR(" disconnected.", CYAN) << std::endl;
 			close(it->fd);
 			it = pollfds.erase(it);
-			break ;
+			break;
 		}
 		it++;
 	}
@@ -144,7 +144,7 @@ void Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
 	pollfds.push_back(clientPollfd);
 	_clients.insert(std::pair<int, Client>(clientSocket, client));
-	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;    
+	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
 }
 
 void Server::handleMaxClient(int clientSocketFd) {
@@ -153,8 +153,6 @@ void Server::handleMaxClient(int clientSocketFd) {
 	close(clientSocketFd);
 }
 
-
-// TODO: Working on the parsing to get the user info -> NICK, USER
 static void splitMessage(std::vector<std::string> &cmds, std::string msg) {
 	int pos = 0;
 	std::string delimiter = "\n";
@@ -176,7 +174,7 @@ std::string tmpFormatString(std::string msg) {
 	if (msg.find(' ') != std::string::npos && msg.find(' ') == 0) {
 		msg.erase(msg.find(' '), 1);
 	}
-	if  (msg.find('\r') != std::string::npos ) {
+	if (msg.find('\r') != std::string::npos) {
 		msg.erase(msg.find('\r'), 1);
 	}
 	return msg;
@@ -184,7 +182,7 @@ std::string tmpFormatString(std::string msg) {
 
 void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string msg) {
 	std::map<const int, Client>::iterator it = clients.find(clientSocketFd);
-	(void) clients, (void) clientSocketFd;
+	(void)clients, (void)clientSocketFd;
 	std::cout << "fillUserInfo msg: " << msg << std::endl;
 	if (msg.find("NICK") != std::string::npos) {
 		msg = tmpFormatString(msg);
@@ -201,14 +199,51 @@ void Server::fillUserInfo(std::map<const int, Client> &clients, int clientSocket
 	}
 }
 
+t_Message parseCommands(std::string message) {
+	t_Message msg;
 
-// TODO: Working on it
+	msg.hasPrefix = false;
+	msg.hasCommand = false;
+	// If the first word of the message has a ':' in the first char then it is a prefix 
+	if (message[0] == ':') {
+		msg.prefix = message.substr(1, message.find(' ') - 1);
+		message.erase(0, message.find(' ') + 1);
+		msg.hasPrefix = true;
+	}
+
+	// Parse the command into msg.command and erase it from the message
+	if (message.find(' ') != std::string::npos) {
+		msg.command = message.substr(0, message.find(' '));
+		message.erase(0, message.find(' ') + 1);
+		if (msg.command == "" || msg.command == "\r") {
+			msg.hasCommand = false;
+		} else {
+			msg.hasCommand = true;
+		}
+	}
+
+	// Parse the params into msg.params and erase it from the message
+	while (message.find(' ') != std::string::npos) {
+		msg.params.push_back(message.substr(0, message.find(' ')));
+		message.erase(0, message.find(' ') + 1);
+	}
+
+	return msg;
+}
+
+void printMessage(t_Message message) {
+	(void) message;
+}
+
+
+
+// Fill registration info
 void Server::parseMessage(std::string message, int clientSocketFd) {
 	std::vector<std::string> cmds;
 	std::map<const int, Client>::iterator it = _clients.find(clientSocketFd);
-	std::cout << "parseMessage msg: " << message << std::endl;
+	// std::cout << "parseMessage msg: " << message << std::endl;
 	splitMessage(cmds, message);
-	std::cout << "cmds size: " << cmds.size() << std::endl;
+	// std::cout << "cmds size: " << cmds.size() << std::endl;
 
 	for (size_t i = 0; i != cmds.size(); i++) {
 		if (it->second.isRegistered() == false) {
@@ -228,16 +263,13 @@ void Server::parseMessage(std::string message, int clientSocketFd) {
 				std::string welcome = RPL_WELCOME(it->second.getNick(), _name, USER_ID(it->second));
 				send(clientSocketFd, welcome.c_str(), welcome.length(), 0);
 			}
-
 		}
 	}
-	it->second.printInfo();
+	// it->second.printInfo();
 }
 
-
-std::string const &Server::getPass() const
-{
-	return(this->_password);
+std::string const &Server::getPass() const {
+	return (this->_password);
 }
 /**
  * @brief Runs the server and handles incoming connections and data.
@@ -273,7 +305,7 @@ void Server::run() {
 
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1) {
 			std::cerr << COLOR("Error: poll failed: ", RED) << strerror(errno) << std::endl;
-			return ;
+			return;
 		}
 		std::vector<pollfd>::iterator it = pollfds.begin();
 		while (it != pollfds.end()) {
@@ -288,7 +320,8 @@ void Server::run() {
 					}
 					if (pollfds.size() - 1 < MAX_SOCKETS) {
 						addClient(clientSocketFd, newPollfds);
-					} else handleMaxClient(clientSocketFd);
+					} else
+						handleMaxClient(clientSocketFd);
 					it++;
 				}
 				// -> if the connection already exists, read the data and parse it
@@ -302,13 +335,13 @@ void Server::run() {
 						deleteClient(pollfds, it->fd);
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
-							break ;
+							break;
 						}
 					} else if (readResult == 0) {
 						deleteClient(pollfds, it->fd);
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
-							break ;
+							break;
 						}
 					} else {
 						std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
@@ -318,22 +351,23 @@ void Server::run() {
 						// Respond to the request
 						// Handle errors and disconnections
 						// Close the socket
-
+						// if the client is not registered
 						parseMessage(buffer, it->fd);
+						// if the client is registered
+						// printMessage(parseCommands(buffer));
 						it++;
 					}
 				}
-			}
-			else if (it->revents & POLLERR) {
+			} else if (it->revents & POLLERR) {
 				if (it->fd == _serverSocketFd) {
 					std::cerr << COLOR("Error: server socket error: ", RED) << strerror(errno) << std::endl;
-					return ;
+					return;
 				} else {
 					std::cerr << COLOR("Error: client socket error: ", RED) << strerror(errno) << std::endl;
 					deleteClient(pollfds, it->fd);
 					if (pollfds.size() == 0) {
 						std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
-						break ;
+						break;
 					}
 				}
 			} else {
@@ -343,5 +377,5 @@ void Server::run() {
 		// add new pollfds to the pollfds vector
 		pollfds.insert(pollfds.end(), newPollfds.begin(), newPollfds.end());
 	}
-	return ;
+	return;
 }
