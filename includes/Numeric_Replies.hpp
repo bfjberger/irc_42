@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/19 17:38:57 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/22 11:24:37 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,13 @@
 
 #define RPL_ENDOFBANLIST(channel) (channel + " :End of channel ban list\r\n") //368
 
-#define RPL_YOUREOPER() (":You are now an IRC operator") //381
+#define RPL_MOTD(text) (":- " + text + "\r\n") //372
+
+#define RPL_MOTDSTART(server) (":- " + server + " Message of the day - \r\n") //375
+
+#define RPL_ENDOFMOTD() (":End of MOTD command\r\n") //376
+
+#define RPL_YOUREOPER() (":You are now an IRC operator\r\n") //381
 
 /* ************************************************************************** */
 /*                               ERRORS REPLIES                               */
@@ -67,6 +73,8 @@
 #define ERR_NOTOPLEVEL(mask) (mask + " :No toplevel domain specified\r\n") //413
 
 #define ERR_WILDTOPLEVEL(maks) (mask + " :Wildcard in toplevel domain\r\n") //414
+
+#define ERR_NOMOTD() (":MOTD File is missing\r\n") //422
 
 #define ERR_NEEDMOREPARAMS(command) (command + " :Not enough parameters\r\n") //461
 
@@ -98,7 +106,11 @@
 
 #define ERR_BADCHANNELKEY(channel) (channel + ":Cannot join channel (+k)\r\n") //475
 
+#define ERR_NOPRIVILEGES() (":Permission Denied- You're not an IRC operator\r\n") //481
+
 #define ERR_CHANOPRIVSNEEDED(channel) (channel + " :You're not channel operator\r\n") //482
+
+#define ERR_CANTKILLSERVER() (":You can't kill a server!\r\n") //483
 
 #define ERR_RESTRICTED() (":Your connection is restricted!\r\n") //484
 
