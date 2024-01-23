@@ -12,6 +12,10 @@ RED = \033[0;31m
 WHITE = \033[0;97m
 
 INCLUDE = -I ./includes/
+INCLUDE += -I ./includes/Commands/
+
+# include all subdirectory within the includes directory
+# INCLUDE += $(shell find ./includes -type d | sed 's/^/-I /')
 
 SRC_PATH = ./srcs/
 FILES = main.cpp \

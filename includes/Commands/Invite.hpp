@@ -15,8 +15,6 @@
 
 #include "ACommand.hpp"
 
-// class ACommand;
-
 class Invite : public ACommand {
 
 	public:

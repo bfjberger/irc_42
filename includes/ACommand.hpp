@@ -13,15 +13,14 @@
 #ifndef ACOMMAND_HPP
 #define ACOMMAND_HPP
 
-#include "Server.hpp"
+// #include "Server.hpp"
+#include <iostream>
 
+class Server;
 class Client;
 typedef struct s_Message t_Message;
-// struct s_Message;
 
 class ACommand {
-
-	private:
 
 	public:
 		ACommand(void);

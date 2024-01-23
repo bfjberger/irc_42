@@ -42,26 +42,26 @@ typedef struct s_Message {
 	bool	hasPrefix;
 	bool	hasCommand;
 	bool	wrongPrefix;
-	// std::string	name;
-	// std::string	message;
 }	t_Message;
 
-#include "ACommand.hpp"
-
+// #include "ACommand.hpp"
 class ACommand;
+#include "Invite.hpp"
 
-// #include "Commands/Join.hpp"
-// #include "Commands/Kick.hpp"
-// #include "Commands/Kill.hpp"
-// #include "Commands/Mode.hpp"
-// #include "Commands/Nick.hpp"
-// #include "Commands/Oper.hpp"
-// #include "Commands/Part.hpp"
-// #include "Commands/Pass.hpp"
-// #include "Commands/Privmsg.hpp"
-// #include "Commands/Quit.hpp"
-// #include "Commands/Topic.hpp"
-// #include "Commands/User.hpp"
+
+
+#include "Commands/Join.hpp"
+#include "Commands/Kick.hpp"
+#include "Commands/Kill.hpp"
+#include "Commands/Mode.hpp"
+#include "Commands/Nick.hpp"
+#include "Commands/Oper.hpp"
+#include "Commands/Part.hpp"
+#include "Commands/Pass.hpp"
+#include "Commands/Privmsg.hpp"
+#include "Commands/Quit.hpp"
+#include "Commands/Topic.hpp"
+#include "Commands/User.hpp"
 
 
 class Server {
@@ -104,16 +104,13 @@ class Server {
 		void		execCommand(t_Message* msg, Client* client);
 
 /* ------------------------------ REGISTRATION ------------------------------ */
-// TODO: work on the parsing to get the user info -> NICK, USER
 // link parsing: https://tools.ietf.org/html/rfc2812#section-2.3.1
-// TODO: work on the commands, PASS, NICK, USER -> RPL_WELCOME
+// TODO: work on the commands
 // link welcome: https://tools.ietf.org/html/rfc2812#section-5.1
 // TODO: work on the replies -> RPL_WELCOME, RPL_YOURHOST, RPL_CREATED, RPL_MYINFO
 
 // TODO: ADD a map of channels
 
 };
-
-#include "Commands/Invite.hpp"
 
 #endif
