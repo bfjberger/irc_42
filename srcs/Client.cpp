@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 17:22:26 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/23 14:49:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,13 @@
 /*                                   CLIENT                                   */
 /* -------------------------------------------------------------------------- */
 
-Client::Client(int fd) : _fd(fd), _hostname("localhost"), _receivedInfo(false),
+Client::Client(int fd) : _fd(fd),
+						_receivedInfo(false),
 						_isLogged(false),
 						_welcomeSent(false),
-						_isRegistered(false) {
+						_isRegistered(false),
+						_isInChannel(false),
+						_hostname("localhost") {
 	return;
 }
 
@@ -29,83 +32,91 @@ Client::~Client() {
 
 /* --------------------------------- Getters -------------------------------- */
 
-bool Client::hasReceivedInfo() const {
-	return _receivedInfo;
-}
-
-int Client::getFd() const {
+int	Client::getFd() const {
 	return _fd;
 }
 
-std::string Client::getNick() const {
-	return _nick;
+bool	Client::hasReceivedInfo() const {
+	return _receivedInfo;
 }
 
-std::string Client::getUserName() const {
-	return _userName;
-}
-
-std::string Client::getRealName() const {
-	return _realName;
-}
-
-std::string Client::getPass() const {
-	return _password;
-}
-
-std::string Client::getHostname() const {
-	return _hostname;
-}
-
-bool Client::isLogged() const {
+bool	Client::isLogged() const {
 	return _isLogged;
 }
 
-bool Client::welcomeSent() const {
+bool	Client::welcomeSent() const {
 	return _welcomeSent;
 }
 
-bool Client::isRegistered() const {
+bool	Client::isRegistered() const {
 	return _isRegistered;
+}
+
+bool	Client::isInChannel(void) const {
+	return (_isInChannel);
+}
+
+std::string	Client::getNick() const {
+	return _nick;
+}
+
+std::string	Client::getUserName() const {
+	return _userName;
+}
+
+std::string	Client::getRealName() const {
+	return _realName;
+}
+
+std::string	Client::getPass() const {
+	return _password;
+}
+
+std::string	Client::getHostname() const {
+	return _hostname;
 }
 
 /* --------------------------------- Setters -------------------------------- */
 
-void Client::setNick(std::string nick) {
-	_nick = nick;
-}
-
-void Client::setUserName(std::string userName) {
-	_userName = userName;
-}
-
-void Client::setRealName(std::string realName) {
-	_realName = realName;
-}
-
-void Client::setPass(std::string pass) {
-	_password = pass;
-}
-
-void Client::setLogged(bool isLogged) {
+void	Client::setLogged(bool isLogged) {
 	_isLogged = isLogged;
 }
 
-void Client::setReceivedInfo(bool receivedInfo) {
+void	Client::setReceivedInfo(bool receivedInfo) {
 	_receivedInfo = receivedInfo;
 }
 
-void Client::setWelcomeSent(bool welcomeSent) {
+void	Client::setWelcomeSent(bool welcomeSent) {
 	_welcomeSent = welcomeSent;
 }
 
-void Client::setRegistered(bool isRegistered) {
+void	Client::setRegistered(bool isRegistered) {
 	_isRegistered = isRegistered;
 }
 
-void Client::setHostname(std::string hostname) {
+void	Client::setInChannel(bool inChannel) {
+	_isInChannel = inChannel;
+}
+
+void	Client::setNick(std::string nick) {
+	_nick = nick;
+}
+
+void	Client::setUserName(std::string userName) {
+	_userName = userName;
+}
+
+void	Client::setRealName(std::string realName) {
+	_realName = realName;
+}
+
+void	Client::setPass(std::string pass) {
+	_password = pass;
+}
+
+void	Client::setHostname(std::string hostname) {
 	_hostname = hostname;
-}	
+}
 
 /* --------------------------------- Helpers -------------------------------- */
 

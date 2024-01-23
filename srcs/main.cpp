@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 12:31:23 by bberger           #+#    #+#             */
-/*   Updated: 2024/01/19 14:42:22 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/23 12:19:13 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,21 @@ int main(int ac, char **av) {
 
 	if (ac != 3) {
 		std::cout << "Usage: ./ft_irc [port] [password]" << std::endl;
-		return (1); 
+		return (1);
 	}
 	std::string port=av[1];
-   
+
 	if (port.find_first_not_of("0123456789", 0) != port.npos)
 	{
 		std::cout << "error port must be a number" << std::endl;
 			return (1);
 	}
- 
+
 	if (std::atoi(av[1]) >= 0 && std::atoi(av[1]) <= 65535)
 	{
-		Server server(av[1], av[2]);
 		try {
-			server.run();	
+			Server server(av[1], av[2]);
+			server.run();
 
 		} catch (std::exception &e) {
 			std::cerr << "Error: " << e.what() << std::endl;
@@ -56,4 +56,3 @@ int main(int ac, char **av) {
 
 	return (0);
 }
-

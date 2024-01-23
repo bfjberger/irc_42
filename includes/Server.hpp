@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 11:03:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 15:44:16 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,29 @@ typedef struct s_Message {
 
 #include "ACommand.hpp"
 
+class ACommand;
+
+// #include "Commands/Join.hpp"
+// #include "Commands/Kick.hpp"
+// #include "Commands/Kill.hpp"
+// #include "Commands/Mode.hpp"
+// #include "Commands/Nick.hpp"
+// #include "Commands/Oper.hpp"
+// #include "Commands/Part.hpp"
+// #include "Commands/Pass.hpp"
+// #include "Commands/Privmsg.hpp"
+// #include "Commands/Quit.hpp"
+// #include "Commands/Topic.hpp"
+// #include "Commands/User.hpp"
+
+
 class Server {
 
 	private:
 		struct sockaddr_in			_serverAddress;
-		std::map<const int, Client>	_clients;
+		std::map<const int, Client *>	_clients;
+
+		std::map<std::string, ACommand *> _commands;
 
 		int			_serverSocketFd;
 
@@ -66,7 +84,7 @@ class Server {
 		~Server();
 
 		//SERVER MANAGEMENT
-		void	deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
+		void	deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it);
 		void	handleMaxClient(int clientSocketFd);
 		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
 		int		acceptSocket(int listenSocket);
@@ -76,16 +94,14 @@ class Server {
 		std::string const &getPass() const;
 
 		//PARSER
-		t_Message	parseCommands(std::string message, Client client);
-		void		parsePrefix(std::string& message, t_Message msg, Client client);
-		void		fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+		t_Message*	parseCommands(std::string message, Client* client);
+		void		parsePrefix(std::string& message, t_Message* msg, Client* client);
+		void		fillUserInfo(std::map<const int, Client *> &clients, int clientSocketFd, std::string message);
 		void		splitMessage(std::vector<std::string> &cmds, std::string msg);
 		void		parser(std::string message, int clientSocketFd);
 
-		// void 		printMessage(t_Message message);
-
 		//EXECUTION
-		void		execCommand(t_Message msg, Client client);
+		void		execCommand(t_Message* msg, Client* client);
 
 /* ------------------------------ REGISTRATION ------------------------------ */
 // TODO: work on the parsing to get the user info -> NICK, USER
@@ -97,5 +113,7 @@ class Server {
 // TODO: ADD a map of channels
 
 };
+
+#include "Commands/Invite.hpp"
 
 #endif

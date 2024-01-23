@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:23 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:47:28 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 14:30:49 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Kill : public ACommand {
 		Kill(void);
 		~Kill(void);
 
-		virtual void	execute(t_Message msg, Client client);
+		virtual void	execute(t_Message* msg, Client* client);
 };
 
 #endif

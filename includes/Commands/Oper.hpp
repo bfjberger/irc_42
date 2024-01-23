@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:40 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:47:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 14:31:01 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Oper : public ACommand {
 		Oper(void);
 		~Oper(void);
 
-		virtual void	execute(t_Message msg, Client client);
+		virtual void	execute(t_Message* msg, Client* client);
 };
 
 #endif

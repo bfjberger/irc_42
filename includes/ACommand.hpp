@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:18:23 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:56:41 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 15:42:13 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "Server.hpp"
 
 class Client;
-// struct t_Message;
+typedef struct s_Message t_Message;
+// struct s_Message;
 
 class ACommand {
 
@@ -26,7 +27,7 @@ class ACommand {
 		ACommand(void);
 		virtual ~ACommand(void);
 
-		virtual void	execute(t_Message msg, Client client) = 0;
+		virtual void	execute(t_Message* msg, Client* client) = 0;
 };
 
 #endif

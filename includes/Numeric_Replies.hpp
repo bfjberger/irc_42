@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:15:20 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 12:08:47 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 	ERR -> error replies
 */
 
-#define USER_ID(user) (user.getNick() + "!" + user.getUserName() + "@" + user.getHostname())
+#define USER_ID(user) (user->getNick() + "!" + user->getUserName() + "@" + user->getHostname())
 #define RPL_WELCOME(nickname, host, user_id) (":" + host + " 001 " + nickname + " :Welcome to the Internet Relay Network " + user_id + "\r\n") //001
 
 /* ************************************************************************** */

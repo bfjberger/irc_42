@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:33 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:47:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 15:37:14 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class User : public ACommand {
 		User(void);
 		~User(void);
 
-		virtual void	execute(t_Message msg, Client client);
+		virtual void	execute(t_Message* msg, Client* client);
 };
 
 #endif

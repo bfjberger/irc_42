@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 09:35:46 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 15:40:34 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@
  * version -> version of the server
  * name -> name of the server
  */
-Server::Server(const std::string port, const std::string password) : _port(port), _password(password), _version("alpha"), _name("oui") {
+Server::Server(const std::string port, const std::string password) : _port(port),
+																	_password(password),
+																	_version("alpha"),
+																	_name("SERVER-BPHK") {
 
 	_serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_serverSocketFd < 0) {
@@ -55,6 +58,20 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 	}
 
 	std::cout << COLOR("Listening for connections on port ", CYAN) << port << COLOR(" with password: ", CYAN) << password << " ..." << std::endl;
+
+	// _commands["PASS"] = new Pass();
+	// _commands["Nick"] = new Nick();
+	// _commands["User"] = new User();
+	// _commands["Join"] = new Join();
+	// _commands["Oper"] = new Oper();
+	// _commands["Mode"] = new Mode();
+	// _commands["Quit"] = new Quit();
+	// _commands["Topic"] = new Topic();
+	_commands["Invite"] = new Invite();
+	// _commands["Kick"] = new Kick();
+	// _commands["Privmsg"] = new Privmsg();
+	// _commands["Kill"] = new Kill();
+	// _commands["Part"] = new Part();
 }
 
 Server::~Server() {
@@ -101,18 +118,18 @@ Server::~Server() {
  * @param pollfds The vector of pollfds representing the connected clients.
  * @param clientSocketFd The socket file descriptor of the client to be deleted.
  */
-void	Server::deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd) {
+void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
 
-	std::vector<pollfd>::iterator it = pollfds.begin();
-	while (it != pollfds.end()) {
-		if (it->fd == clientSocketFd) {
-			std::cout << COLOR("Client ", CYAN) << clientSocketFd << COLOR(" disconnected.", CYAN) << std::endl;
-			close(it->fd);
-			it = pollfds.erase(it);
-			break;
-		}
-		it++;
-	}
+	std::cout << COLOR("Client ", CYAN) << it->fd << COLOR(" disconnected.", CYAN) << std::endl;
+
+	std::map<const int, Client*>::iterator	client = this->_clients.find(it->fd);
+	delete client->second;
+	this->_clients.erase(client);
+
+	close(it->fd);
+
+	pollfds.erase(it);
+
 	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 1 << std::endl;
 }
 
@@ -125,12 +142,13 @@ void	Server::handleMaxClient(int clientSocketFd) {
 
 void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 
-	pollfd clientPollfd;
-	Client client(clientSocket);
+	pollfd	clientPollfd;
+	Client*	client = new Client(clientSocket);
+
 	clientPollfd.fd = clientSocket;
 	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
 	pollfds.push_back(clientPollfd);
-	_clients.insert(std::pair<int, Client>(clientSocket, client));
+	_clients.insert(std::pair<int, Client *>(clientSocket, client));
 	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
 }
 
@@ -207,7 +225,7 @@ void	Server::run() {
 				if (it->fd == _serverSocketFd) {
 					int clientSocketFd = acceptSocket(_serverSocketFd);
 					if (clientSocketFd == -1) {
-						continue;
+						return;
 					}
 					if (pollfds.size() - 1 < MAX_SOCKETS) {
 						addClient(clientSocketFd, newPollfds);
@@ -223,13 +241,13 @@ void	Server::run() {
 
 					if (readResult < 0) {
 						std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
-						deleteClient(pollfds, it->fd);
+						deleteClient(pollfds, it);
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 							break;
 						}
 					} else if (readResult == 0) {
-						deleteClient(pollfds, it->fd);
+						deleteClient(pollfds, it);
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 							break;
@@ -238,14 +256,7 @@ void	Server::run() {
 						std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
 						// TODO: parse the request according to IRC protocol
 
-						// parse the request according to IRC protocol
-						// Respond to the request
-						// Handle errors and disconnections
-						// Close the socket
-						// if the client is not registered
 						parser(buffer, it->fd);
-						// if the client is registered
-						// printMessage(parseCommands(buffer));
 						it++;
 					}
 				}
@@ -255,7 +266,7 @@ void	Server::run() {
 					return;
 				} else {
 					std::cerr << COLOR("Error: client socket error: ", RED) << strerror(errno) << std::endl;
-					deleteClient(pollfds, it->fd);
+					deleteClient(pollfds, it);
 					if (pollfds.size() == 0) {
 						std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 						break;

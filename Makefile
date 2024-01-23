@@ -19,7 +19,20 @@ FILES = main.cpp \
 		Server/Parser.cpp \
 		Server/Execution.cpp \
 		Client.cpp \
-		Signal.cpp
+		ACommand.cpp \
+		Commands/Invite.cpp \
+		Commands/Join.cpp \
+		Commands/Kick.cpp \
+		Commands/Kill.cpp \
+		Commands/Mode.cpp \
+		Commands/Nick.cpp \
+		Commands/Oper.cpp \
+		Commands/Part.cpp \
+		Commands/Pass.cpp \
+		Commands/Privmsg.cpp \
+		Commands/Quit.cpp \
+		Commands/Topic.cpp \
+		Commands/User.cpp
 
 SRCS = ${addprefix ${SRC_PATH}, ${FILES}}
 

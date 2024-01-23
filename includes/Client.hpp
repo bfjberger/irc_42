@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 17:16:02 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/23 14:46:39 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,53 +17,56 @@
 
 class Client {
 
-public:
-	Client(int fd);
-	Client();
-	~Client();
+	private:
+		int 		_fd;
 
-	// Getters
-	int getFd() const;
-	std::string getNick() const;
-	std::string getUserName() const;
-	std::string getRealName() const;
-	std::string getPass() const;
-	std::string getHostname() const;
-	bool hasReceivedInfo() const;
-	bool isLogged() const;
-	bool welcomeSent() const;
-	bool isRegistered() const;
+		bool		_receivedInfo;
+		bool		_isLogged;
+		bool		_welcomeSent;
+		bool		_isRegistered;
+		bool		_isInChannel;
 
-	// Setters
-	void setNick(std::string nick);
-	void setUserName(std::string userName);
-	void setPass(std::string pass);
-	void setRealName(std::string realName);
-	void setLogged(bool isLogged);
-	void setReceivedInfo(bool receivedInfo);
-	void setWelcomeSent(bool welcomeSent);
-	void setRegistered(bool isRegistered);
-	void setHostname(std::string hostname);
+		std::string	_password;
+		std::string	_nick;
+		std::string	_userName;
+		std::string	_realName;
+		std::string	_hostname;
 
-	// TODO: Not Implemented yet
-	void logIn();
+	public:
+		Client(int fd);
+		Client();
+		~Client();
 
-	// Helpers function
-	void printInfo() const;
+		// Getters
+		int			getFd() const;
+		bool		hasReceivedInfo() const;
+		bool		isLogged() const;
+		bool		welcomeSent() const;
+		bool		isRegistered() const;
+		bool		isInChannel(void) const;
+		std::string	getNick() const;
+		std::string	getUserName() const;
+		std::string	getRealName() const;
+		std::string	getPass() const;
+		std::string	getHostname() const;
 
+		// Setters
+		void	setLogged(bool isLogged);
+		void	setReceivedInfo(bool receivedInfo);
+		void	setWelcomeSent(bool welcomeSent);
+		void	setRegistered(bool isRegistered);
+		void	setInChannel(bool inChannel);
+		void	setNick(std::string nick);
+		void	setUserName(std::string userName);
+		void	setPass(std::string pass);
+		void	setRealName(std::string realName);
+		void	setHostname(std::string hostname);
 
+		// TODO: Not Implemented yet
+		void	logIn();
 
-private:
-	int _fd;
-	std::string _password;
-	std::string _nick;
-	std::string _userName;
-	std::string _realName;
-	std::string _hostname;
-	bool _receivedInfo;
-	bool _isLogged;
-	bool _welcomeSent;
-	bool _isRegistered;
+		// Helpers function
+		void	printInfo() const;
 };
 
 #endif // CLIENT_HPP

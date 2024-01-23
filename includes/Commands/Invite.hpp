@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:29:51 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 10:40:10 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 15:44:19 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 
 #include "ACommand.hpp"
 
+// class ACommand;
+
 class Invite : public ACommand {
 
 	public:
 		Invite(void);
 		~Invite(void);
 
-		virtual void	execute(t_Message msg, Client client);
+		virtual void	execute(t_Message* msg, Client* client);
 };
 
 #endif
