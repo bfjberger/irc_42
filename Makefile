@@ -1,5 +1,5 @@
 NAME = ircserv
-PASSWORD = password
+PASSWORD = p
 PORT = 6667
 
 CC = c++

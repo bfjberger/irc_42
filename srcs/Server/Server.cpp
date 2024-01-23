@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 15:40:34 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 16:17:45 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,19 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 
 	std::cout << COLOR("Listening for connections on port ", CYAN) << port << COLOR(" with password: ", CYAN) << password << " ..." << std::endl;
 
-	// _commands["PASS"] = new Pass();
-	// _commands["Nick"] = new Nick();
-	// _commands["User"] = new User();
-	// _commands["Join"] = new Join();
-	// _commands["Oper"] = new Oper();
-	// _commands["Mode"] = new Mode();
-	// _commands["Quit"] = new Quit();
-	// _commands["Topic"] = new Topic();
-	_commands["Invite"] = new Invite();
-	// _commands["Kick"] = new Kick();
-	// _commands["Privmsg"] = new Privmsg();
-	// _commands["Kill"] = new Kill();
-	// _commands["Part"] = new Part();
+	_commands["PASS"] = new Pass();
+	_commands["NICK"] = new Nick();
+	_commands["USER"] = new User();
+	_commands["JOIN"] = new Join();
+	_commands["OPER"] = new Oper();
+	_commands["MODE"] = new Mode();
+	_commands["QUIT"] = new Quit();
+	_commands["TOPIC"] = new Topic();
+	_commands["INVITE"] = new Invite();
+	_commands["KICK"] = new Kick();
+	_commands["PRIVMSG"] = new Privmsg();
+	_commands["KILL"] = new Kill();
+	_commands["PART"] = new Part();
 }
 
 Server::~Server() {

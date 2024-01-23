@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:22:22 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 16:47:04 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
 	}
 }
 
+// TODO: revoir les autres conditions de parsing (parsePrefix semble OK)
 t_Message*	Server::parseCommands(std::string message, Client* client) {
 
 	t_Message*	msg = new t_Message;
@@ -87,7 +88,7 @@ void	Server::fillUserInfo(std::map<const int, Client *> &clients, int clientSock
 		//  setUSER by parsing the msg just after USER and before the first space
 		it->second->setUserName(msg.substr(msg.find("USER") + 5, msg.find(' ')));
 		// setRealName by parsing the msg just after the first : and before the first \r
-		it->second->setRealName(msg.substr(msg.find(':') + 1, msg.find('\r') - 1));
+		it->second->setRealName(msg.substr(msg.find(':') + 1, msg.find('\r')));
 	}
 	else if (msg.find("PASS") != std::string::npos) {
 		msg = tmpFormatString(msg);

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:54:28 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 15:34:08 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/23 16:27:33 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ void	Server::execCommand(t_Message* msg, Client* client) {
 
 	std::cout << "command: " << msg->command << std::endl;
 
-	ACommand*	cmd = _commands.at(msg->command);
+	if (!msg->command.empty())
+		return;
 
-	std::cout << "on est là" << std::endl;
+	ACommand*	cmd = _commands.at(msg->command);
 
 	cmd->execute(msg, client);
 }
