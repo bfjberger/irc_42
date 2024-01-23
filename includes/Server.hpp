@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/19 17:36:24 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/23 11:03:30 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include "ft_irc.hpp"
-#include "Client.hpp"
-#include "Numeric_Replies.hpp"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -28,39 +25,30 @@
 #include <utility>
 #include <poll.h>
 
+#include "ft_irc.hpp"
+#include "Client.hpp"
+#include "Numeric_Replies.hpp"
+
 #define MAX_SOCKETS 10
 #define ERR_MAX_CLIENTS "Error: maximum number of clients reached."
 #define BUFF_SIZE 4096
 
 typedef struct s_Message {
-	std::string	prefix;
-	std::string	command;
+
+	std::string					prefix;
+	std::string					command;
 	std::vector<std::string>	params;
 
-	bool hasPrefix;
-	bool hasCommand;
+	bool	hasPrefix;
+	bool	hasCommand;
+	bool	wrongPrefix;
 	// std::string	name;
 	// std::string	message;
-} t_Message;
+}	t_Message;
 
-t_Message	parseCommands(std::string message);
-void 		printMessage(t_Message message);
+#include "ACommand.hpp"
 
 class Server {
-
-	public:
-		Server(const std::string port, const std::string password);
-		~Server();
-
-		void	run();
-		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
-		void	deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
-		void	handleMaxClient(int clientSocketFd);
-		void	parseMessage(std::string message, int clientSocketFd);
-		void	fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
-		std::string const &getPass() const;
-		
-		
 
 	private:
 		struct sockaddr_in			_serverAddress;
@@ -72,6 +60,32 @@ class Server {
 		std::string	_password;
 		std::string	_version;
 		std::string	_name;
+
+	public:
+		Server(const std::string port, const std::string password);
+		~Server();
+
+		//SERVER MANAGEMENT
+		void	deleteClient(std::vector<pollfd> &pollfds, int clientSocketFd);
+		void	handleMaxClient(int clientSocketFd);
+		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
+		int		acceptSocket(int listenSocket);
+		void	run();
+
+		//GETTER
+		std::string const &getPass() const;
+
+		//PARSER
+		t_Message	parseCommands(std::string message, Client client);
+		void		parsePrefix(std::string& message, t_Message msg, Client client);
+		void		fillUserInfo(std::map<const int, Client> &clients, int clientSocketFd, std::string message);
+		void		splitMessage(std::vector<std::string> &cmds, std::string msg);
+		void		parser(std::string message, int clientSocketFd);
+
+		// void 		printMessage(t_Message message);
+
+		//EXECUTION
+		void		execCommand(t_Message msg, Client client);
 
 /* ------------------------------ REGISTRATION ------------------------------ */
 // TODO: work on the parsing to get the user info -> NICK, USER
