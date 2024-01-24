@@ -115,6 +115,13 @@ void	Server::launch() {
 	_serverAddress.sin_addr.s_addr = INADDR_ANY;			  // bind to all available interfaces
 	_serverAddress.sin_port = htons(std::atoi(_port.c_str())); // convert port to int and convert to network byte order
 
+	int optValue = 1;
+	if (setsockopt(_serverSocketFd, SOL_SOCKET, SO_REUSEPORT, &optValue, sizeof(optValue)) < 0) {
+		std::cerr << COLOR("Error: socket option SO_REUSEPORT failed: ", RED) << strerror(errno) << std::endl;
+		close(_serverSocketFd);
+		return;
+	}
+
 	int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
 	if (bindResult < 0) {
 		std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
