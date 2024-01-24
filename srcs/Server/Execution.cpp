@@ -33,6 +33,10 @@ void	Server::execCommand(t_Message* msg, Client* client) {
 
 	std::cout << msg->command << std::endl;
 
+	// Compare the command with the map of commands and return if not found
+	if (_commands.find(msg->command) == _commands.end())
+		return;
+
 	ACommand*	cmd = _commands.at(msg->command);
 
 	cmd->execute(this, msg, client);

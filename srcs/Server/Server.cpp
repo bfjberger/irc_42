@@ -62,13 +62,13 @@ Server::~Server() {
 
 	for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); it++) {
 		delete it->second;
-		_commands.erase(it);
+		// _commands.erase(it);
 	}
 
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		close(it->first);
 		delete it->second;
-		_clients.erase(it);
+		// _clients.erase(it);
 	}
 }
 
@@ -244,7 +244,7 @@ void	Server::run() {
 	serverPollfd.events = POLLIN;
 	pollfds.push_back(serverPollfd);
 
-	while (true) {
+	while (g_server_running == true) {
 		std::vector<pollfd> newPollfds;
 
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1) {
@@ -253,6 +253,7 @@ void	Server::run() {
 		}
 		std::vector<pollfd>::iterator it = pollfds.begin();
 		while (it != pollfds.end()) {
+
 			// if the data is available to read on the fd/socket
 			// -> if the connection is new, accept it and add it to the pollfds
 			// -> if the connection already exists, read the data and parse it
@@ -272,8 +273,11 @@ void	Server::run() {
 				// -> if the connection already exists, read the data and parse it
 				else {
 					char buffer[BUFF_SIZE];
-					int readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
-					buffer[readResult] = '\0';
+					int readResult;
+					
+					memset(buffer, 0, sizeof(buffer));
+					readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
+					// buffer[readResult] = '\0';
 
 					if (readResult < 0) {
 						std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
