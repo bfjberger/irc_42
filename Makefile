@@ -11,11 +11,17 @@ BLUE = \033[0;34m
 RED = \033[0;31m
 WHITE = \033[0;97m
 
-INCLUDE = -I ./includes/
-INCLUDE += -I ./includes/Commands/
+# Inc_dir = ./includes instead of ./includes/ because of the find command
+INC_DIR = ./includes
+INCLUDE = -I $(INC_DIR)
+INCLUDE += -I $(INC_DIR)/Commands/	
 
 # include all subdirectory within the includes directory
 # INCLUDE += $(shell find ./includes -type d | sed 's/^/-I /')
+
+# Headers files, all files in the includes directory and subdirectory
+
+HDRS = $(shell find $(INC_DIR) -type f -name "*.hpp")
 
 SRC_PATH = ./srcs/
 FILES = main.cpp \
@@ -52,7 +58,7 @@ ${OBJ_DIR}%.o: ${SRC_PATH}%.cpp
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(HDRS)
 	@$(CC) $(FLAGS) ${INCLUDE} $(OBJ) -o $(NAME)
 	@echo "${BLUE}Compiled executable${WHITE}"
 

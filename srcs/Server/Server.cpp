@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 12:51:39 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:59:03 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,7 +286,7 @@ void	Server::run() {
 						}
 					}
 					else {
-						std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
+						std::cout << COLOR("Received: ", CYAN) << "|" << buffer << "|" << std::endl;
 						// TODO: parse the request according to IRC protocol
 
 						parser(buffer, it->fd);

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 12:47:29 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 13:00:26 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,7 @@ class Server {
 // TODO: ADD the management of the channels (if not all done by the commands)
 
 };
+
+void	trimString(std::string &str);
 
 #endif //SERVER_HPP
