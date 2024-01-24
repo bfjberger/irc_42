@@ -113,4 +113,6 @@ class Server {
 
 };
 
+void	trimString(std::string &str);
+
 #endif

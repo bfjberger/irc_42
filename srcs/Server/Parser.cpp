@@ -23,6 +23,16 @@ std::string	tmpFormatString(std::string msg) {
 	return msg;
 }
 
+// a function that trim the string from any carriage return and new line
+void	trimString(std::string &str) {
+
+	if (str.find('\r') != std::string::npos)
+		str.erase(str.find('\r'), 1);
+
+	if (str.find('\n') != std::string::npos)
+		str.erase(str.find('\n'), 1);
+}
+
 void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
 
 	msg->prefix = message.substr(1, message.find(' ') - 1);
@@ -78,7 +88,8 @@ void	Server::fillUserInfo(std::map<const int, Client *> &clients, int clientSock
 	std::map<const int, Client *>::iterator it = clients.find(clientSocketFd);
 	(void)clients, (void)clientSocketFd;
 
-	std::cout << "fillUserInfo msg: " << msg << std::endl;
+	trimString(msg);
+	std::cout << "fillUserInfo msg: |" << msg << "|" << std::endl;
 	if (msg.find("NICK") != std::string::npos) {
 		msg = tmpFormatString(msg);
 		it->second->setNick(msg.substr(msg.find("NICK") + 5));
@@ -87,8 +98,9 @@ void	Server::fillUserInfo(std::map<const int, Client *> &clients, int clientSock
 		msg = tmpFormatString(msg);
 		//  setUSER by parsing the msg just after USER and before the first space
 		it->second->setUserName(msg.substr(msg.find("USER") + 5, msg.find(' ')));
-		// setRealName by parsing the msg just after the first : and before the first \r
-		it->second->setRealName(msg.substr(msg.find(':') + 1, msg.find('\r')));
+		// setRealName by parsing the msg just after the first :
+		if (msg.find(':') != std::string::npos)
+			it->second->setRealName(msg.substr(msg.find(':') + 1));
 	}
 	else if (msg.find("PASS") != std::string::npos) {
 		msg = tmpFormatString(msg);
@@ -122,9 +134,7 @@ void	Server::parser(std::string message, int clientSocketFd) {
 	std::vector<std::string>				cmds;
 	std::map<const int, Client *>::iterator	it = _clients.find(clientSocketFd);
 
-	// std::cout << "parseMessage msg: " << message << std::endl;
 	splitMessage(cmds, message);
-	// std::cout << "cmds size: " << cmds.size() << std::endl;
 
 	for (size_t i = 0; i != cmds.size(); i++) {
 		if (it->second->isRegistered() == false) {

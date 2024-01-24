@@ -22,4 +22,9 @@
 
 #include <iostream>
 
+#define ERROR -1
+#define SUCCESS 1
+#define BREAK 2
+#define CONTINUE 3
+#define RETURN 4
 #endif //FT_IRC_HPP

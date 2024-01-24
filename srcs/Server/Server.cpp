@@ -253,7 +253,7 @@ void	Server::run() {
 							break;
 						}
 					} else {
-						std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
+						std::cout << COLOR("Received: ", CYAN) << "|" << buffer << "|" << std::endl;
 						// TODO: parse the request according to IRC protocol
 
 						parser(buffer, it->fd);
