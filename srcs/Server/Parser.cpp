@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:55:01 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:24:09 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,11 +97,11 @@ void	Server::fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, 
 
 	trimString(msg);
 	std::cout << "fillUserInfo msg: |" << msg << "|" << std::endl;
-	if (msg.find("NICK") != std::string::npos) {
+	if (msg.find("NICK") != std::string::npos || msg.find("nick") != std::string::npos) {
 		msg = tmpFormatString(msg);
 		it->second->setNick(msg.substr(msg.find("NICK") + 5));
 	}
-	else if (msg.find("USER") != std::string::npos) {
+	else if (msg.find("USER") != std::string::npos || msg.find("user") != std::string::npos) {
 		msg = tmpFormatString(msg);
 		//  setUSER by parsing the msg just after USER and before the first space
 		it->second->setUserName(msg.substr(msg.find("USER") + 5, msg.find(' ')));
@@ -109,7 +109,7 @@ void	Server::fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, 
 		if (msg.find(':') != std::string::npos)
 			it->second->setRealName(msg.substr(msg.find(':') + 1));
 	}
-	else if (msg.find("PASS") != std::string::npos) {
+	else if (msg.find("PASS") != std::string::npos || msg.find("pass") != std::string::npos) {
 		msg = tmpFormatString(msg);
 		it->second->setPass(msg.substr(msg.find("PASS") + 5));
 	}

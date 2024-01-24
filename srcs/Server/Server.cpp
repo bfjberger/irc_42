@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 12:59:03 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:41:03 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ Server::~Server() {
 
 	for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); it++) {
 		delete it->second;
-		_commands.erase(it);
+		// _commands.erase(it);
 	}
 
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
 		close(it->first);
 		delete it->second;
-		_clients.erase(it);
+		// _clients.erase(it);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 14:49:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:57:08 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,24 @@ bool	Client::isInChannel(void) const {
 	return (_isInChannel);
 }
 
-std::string	Client::getNick() const {
-	return _nick;
+const std::string&	Client::getNick() const {
+	return (_nick);
 }
 
-std::string	Client::getUserName() const {
-	return _userName;
+const std::string&	Client::getUserName() const {
+	return (_userName);
 }
 
-std::string	Client::getRealName() const {
-	return _realName;
+const std::string&	Client::getRealName() const {
+	return (_realName);
 }
 
-std::string	Client::getPass() const {
-	return _password;
+const std::string&	Client::getPass() const {
+	return (_password);
 }
 
-std::string	Client::getHostname() const {
-	return _hostname;
+const std::string&	Client::getHostname() const {
+	return (_hostname);
 }
 
 /* --------------------------------- Setters -------------------------------- */

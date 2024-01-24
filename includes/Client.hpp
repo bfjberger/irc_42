@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 11:32:49 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:57:30 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ class Client {
 		~Client();
 
 		// Getters
-		int			getFd() const;
-		bool		hasReceivedInfo() const;
-		bool		isLogged() const;
-		bool		welcomeSent() const;
-		bool		isRegistered() const;
-		bool		isInChannel(void) const;
-		std::string	getNick() const;
-		std::string	getUserName() const;
-		std::string	getRealName() const;
-		std::string	getPass() const;
-		std::string	getHostname() const;
+		int					getFd() const;
+		bool				hasReceivedInfo() const;
+		bool				isLogged() const;
+		bool				welcomeSent() const;
+		bool				isRegistered() const;
+		bool				isInChannel(void) const;
+		const std::string&	getNick() const;
+		const std::string&	getUserName() const;
+		const std::string&	getRealName() const;
+		const std::string&	getPass() const;
+		const std::string&	getHostname() const;
 
 		// Setters
 		void	setLogged(bool isLogged);

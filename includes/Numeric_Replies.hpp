@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 11:43:45 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:47:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@
 
 #define ERR_NOTOPLEVEL(mask) (mask + " :No toplevel domain specified\r\n") //413
 
-#define ERR_WILDTOPLEVEL(maks) (mask + " :Wildcard in toplevel domain\r\n") //414
+#define ERR_WILDTOPLEVEL(mask) (mask + " :Wildcard in toplevel domain\r\n") //414
 
-#define ERR_UNKNOWNCOMMAND(command) (command + " :Unknown command\r\n") //421
+#define ERR_UNKNOWNCOMMAND(client, command) (":localhost 421 " + client + " " + command + " :Unknown command\r\n") //421
 
 #define ERR_NOMOTD() (":MOTD File is missing\r\n") //422
 
