@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:54:28 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:32:44 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:34:17 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ void	Server::execCommand(t_Message* msg, Client* client) {
 	}
 
 	std::cout << "out" << std::endl;
+	// Compare the command with the map of commands and return if not found
+	if (_commands.find(msg->command) == _commands.end())
+		return;
+
+	ACommand*	cmd = _commands.at(msg->command);
 
 	cmd->execute(this, msg, client);
 

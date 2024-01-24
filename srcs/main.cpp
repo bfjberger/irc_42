@@ -14,6 +14,14 @@
 #include "Server.hpp"
 
 
+bool g_server_running = true;
+
+static void	signalHandler(int signal) {
+
+	std::cout << COLOR(":Signal ", CYAN) << signal << COLOR(" received. Exiting...", CYAN) << std::endl;
+	g_server_running = false;
+}
+
 int main(int ac, char **av) {
 
 	// Create a socket
@@ -25,6 +33,8 @@ int main(int ac, char **av) {
 	// Respond to the request
 	// Handle errors and disconnections
 	// Close the socket
+
+	signal(SIGINT, signalHandler);
 
 	if (ac != 3) {
 		std::cout << "Usage: ./ft_irc [port] [password]" << std::endl;

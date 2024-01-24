@@ -42,4 +42,6 @@
 #define ERR_MAX_CLIENTS "Error: maximum number of clients reached."
 #define BUFF_SIZE 4096
 
+extern bool g_server_running;
+
 #endif //FT_IRC_HPP

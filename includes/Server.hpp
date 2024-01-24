@@ -64,6 +64,7 @@ class Server {
 		std::string	_password;
 		std::string	_version;
 		std::string	_name;
+		bool		_running;
 
 	public:
 		Server(const std::string port, const std::string password);
