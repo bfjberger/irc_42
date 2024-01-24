@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:41 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:30:57 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:12:40 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Nick : public ACommand {
 		Nick(void);
 		~Nick(void);
 
-		virtual void	execute(t_Message* msg, Client* client);
+		virtual void	execute(Server* server, t_Message* msg, Client* client);
 };
 
-#endif
+#endif //NICK_HPP

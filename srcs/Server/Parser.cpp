@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 12:47:25 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:55:01 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 	msg->hasCommand = false;
 	msg->wrongPrefix = false;
 
+	trimString(message);
+
 	// If the first word of the message has a ':' in the first char then it is a prefix
 	if (message[0] == ':') {
 		parsePrefix(message, msg, client);
@@ -78,6 +80,11 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 	while (message.find(' ') != std::string::npos) {
 		msg->params.push_back(message.substr(0, message.find(' ')));
 		message.erase(0, message.find(' ') + 1);
+	}
+
+	if (message.length() != 0 && message.find(' ') == message.npos) {
+		msg->params.push_back(message.substr(0));
+		message.erase(0, message.length());
 	}
 
 	return (msg);

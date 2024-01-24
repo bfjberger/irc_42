@@ -14,7 +14,7 @@ WHITE = \033[0;97m
 # Inc_dir = ./includes instead of ./includes/ because of the find command
 INC_DIR = ./includes
 INCLUDE = -I $(INC_DIR)
-INCLUDE += -I $(INC_DIR)/Commands/	
+INCLUDE += -I $(INC_DIR)/Commands/
 
 # include all subdirectory within the includes directory
 # INCLUDE += $(shell find ./includes -type d | sed 's/^/-I /')
@@ -52,13 +52,13 @@ OBJ = ${addprefix ${OBJ_DIR}, ${OBJS}}
 
 DIR_DUP = @mkdir -p ${@D}
 
-${OBJ_DIR}%.o: ${SRC_PATH}%.cpp
+${OBJ_DIR}%.o: ${SRC_PATH}%.cpp $(HDRS)
 	@${DIR_DUP}
 	@$(CC) $(FLAGS) ${INCLUDE} -c $< -o $@
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(HDRS)
+$(NAME): $(OBJ)
 	@$(CC) $(FLAGS) ${INCLUDE} $(OBJ) -o $(NAME)
 	@echo "${BLUE}Compiled executable${WHITE}"
 

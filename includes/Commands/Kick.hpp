@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:15 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 14:30:40 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:12:55 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Kick : public ACommand {
 		Kick(void);
 		~Kick(void);
 
-		virtual void	execute(t_Message* msg, Client* client);
+		virtual void	execute(Server* server, t_Message* msg, Client* client);
 };
 
-#endif
+#endif //KICK_HPP

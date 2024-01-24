@@ -6,53 +6,33 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 13:00:26 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:01:14 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <fstream>
-#include <cstdlib>
-#include <unistd.h>
-#include <utility>
-#include <poll.h>
-#include <vector>
-#include <map>
-#include <list>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include "ft_irc.hpp"
 
-#include "Color.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "Numeric_Replies.hpp"
-
-#define MAX_SOCKETS 10
-#define ERR_MAX_CLIENTS "Error: maximum number of clients reached."
-#define BUFF_SIZE 4096
 
 typedef struct s_Message {
 
 	std::string					prefix;
 	std::string					command;
-	std::vector<std::string>	params;
 
+	std::vector<std::string>	params;
 	bool	hasPrefix;
 	bool	hasCommand;
 	bool	wrongPrefix;
 }	t_Message;
 
-// #include "ACommand.hpp"
-class ACommand;
-#include "Invite.hpp"
+#include "ACommand.hpp"
 
+#include "Commands/Invite.hpp"
 #include "Commands/Join.hpp"
 #include "Commands/Kick.hpp"
 #include "Commands/Kill.hpp"
@@ -65,6 +45,8 @@ class ACommand;
 #include "Commands/Quit.hpp"
 #include "Commands/Topic.hpp"
 #include "Commands/User.hpp"
+
+class ACommand;
 
 class Server {
 
