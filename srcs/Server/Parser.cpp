@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 16:47:04 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:47:25 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
 	msg->prefix = message.substr(1, message.find(' ') - 1);
 
 	if (msg->prefix != client->getNick()) {
-		std::cout << COLOR("Invalid prefix in the message", RED) << message << COLOR(" from Client #", RED) << client->getFd() << std::endl;
+		std::cout << COLOR("Invalid prefix in ", RED) << message << COLOR(" from Client #", RED) << client->getFd() << std::endl;
 		msg->wrongPrefix = true;
 	}
 	else {
@@ -73,9 +73,9 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 	return (msg);
 }
 
-void	Server::fillUserInfo(std::map<const int, Client *> &clients, int clientSocketFd, std::string msg) {
+void	Server::fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, std::string msg) {
 
-	std::map<const int, Client *>::iterator it = clients.find(clientSocketFd);
+	std::map<int, Client *>::iterator it = clients.find(clientSocketFd);
 	(void)clients, (void)clientSocketFd;
 
 	std::cout << "fillUserInfo msg: " << msg << std::endl;
@@ -120,7 +120,7 @@ void	Server::parser(std::string message, int clientSocketFd) {
 
 	t_Message*								msg;
 	std::vector<std::string>				cmds;
-	std::map<const int, Client *>::iterator	it = _clients.find(clientSocketFd);
+	std::map<int, Client *>::iterator	it = _clients.find(clientSocketFd);
 
 	// std::cout << "parseMessage msg: " << message << std::endl;
 	splitMessage(cmds, message);

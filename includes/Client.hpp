@@ -6,14 +6,14 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 14:46:39 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:32:49 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-#include "ft_irc.hpp"
+#include "Server.hpp"
 
 class Client {
 

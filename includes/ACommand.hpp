@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:18:23 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 15:42:13 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:43:54 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,4 @@ class ACommand {
 		virtual void	execute(t_Message* msg, Client* client) = 0;
 };
 
-#endif
+#endif //ACOMMAND_HPP

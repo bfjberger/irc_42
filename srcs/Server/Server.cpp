@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/23 16:17:45 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 12:51:39 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,57 +26,50 @@
  *
  * @param port The port number to listen for connections on.
  * @param password The password required for clients to connect to the server.
+ *
  * version -> version of the server
  * name -> name of the server
+ * initialization of the map stocking an instance of all available commands
+ * call the launch method that will start the server
  */
-Server::Server(const std::string port, const std::string password) : _port(port),
-																	_password(password),
-																	_version("alpha"),
-																	_name("SERVER-BPHK") {
+Server::Server(const std::string port, const std::string password) : _port(port), _password(password) {
 
-	_serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
-	if (_serverSocketFd < 0) {
-		std::cerr << COLOR("Error: socket creation failed.", RED) << std::endl;
-		exit(EXIT_FAILURE);
-	}
+	_name = "SERVER-BPHK";
+	_version = "alpha";
 
-	_serverAddress.sin_family = AF_INET;					  // IPv4
-	_serverAddress.sin_addr.s_addr = INADDR_ANY;			  // bind to all available interfaces
-	_serverAddress.sin_port = htons(std::atoi(port.c_str())); // convert port to int and convert to network byte order
-
-	int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
-	if (bindResult < 0) {
-		std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
-		close(_serverSocketFd);
-		return;
-	}
-
-	if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
-		std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
-		close(_serverSocketFd);
-		return;
-	}
-
-	std::cout << COLOR("Listening for connections on port ", CYAN) << port << COLOR(" with password: ", CYAN) << password << " ..." << std::endl;
-
-	_commands["PASS"] = new Pass();
-	_commands["NICK"] = new Nick();
-	_commands["USER"] = new User();
+	_commands["INVITE"] = new Invite();
 	_commands["JOIN"] = new Join();
-	_commands["OPER"] = new Oper();
+	_commands["KICK"] = new Kick();
+	_commands["KILL"] = new Kill();
 	_commands["MODE"] = new Mode();
+	_commands["NICK"] = new Nick();
+	_commands["OPER"] = new Oper();
+	_commands["PART"] = new Part();
+	_commands["PASS"] = new Pass();
+	_commands["PRIVMSG"] = new Privmsg();
 	_commands["QUIT"] = new Quit();
 	_commands["TOPIC"] = new Topic();
-	_commands["INVITE"] = new Invite();
-	_commands["KICK"] = new Kick();
-	_commands["PRIVMSG"] = new Privmsg();
-	_commands["KILL"] = new Kill();
-	_commands["PART"] = new Part();
+	_commands["USER"] = new User();
+
+	Server::launch();
 }
 
 Server::~Server() {
+
 	std::cout << COLOR("Closing server socket...", CYAN) << std::endl;
+
 	close(_serverSocketFd);
+
+	for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); it++) {
+		delete it->second;
+		_commands.erase(it);
+	}
+
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+		close(it->first);
+		delete it->second;
+		_clients.erase(it);
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -109,6 +102,35 @@ Server::~Server() {
 
 /* -------------------------------------------------------------------------- */
 
+void	Server::launch() {
+
+	_serverSocketFd = socket(AF_INET, SOCK_STREAM, 0);
+
+	if (_serverSocketFd < 0) {
+		std::cerr << COLOR("Error: socket creation failed.", RED) << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	_serverAddress.sin_family = AF_INET;					  // IPv4
+	_serverAddress.sin_addr.s_addr = INADDR_ANY;			  // bind to all available interfaces
+	_serverAddress.sin_port = htons(std::atoi(_port.c_str())); // convert port to int and convert to network byte order
+
+	int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
+	if (bindResult < 0) {
+		std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
+		close(_serverSocketFd);
+		return;
+	}
+
+	if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
+		std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
+		close(_serverSocketFd);
+		return;
+	}
+
+	std::cout << COLOR("Listening for connections on port ", CYAN) << _port << COLOR(" with password: ", CYAN) << _password << " ..." << std::endl;
+}
+
 /**
  * @brief Deletes a client from the list of connected clients.
  *
@@ -122,7 +144,7 @@ void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
 
 	std::cout << COLOR("Client ", CYAN) << it->fd << COLOR(" disconnected.", CYAN) << std::endl;
 
-	std::map<const int, Client*>::iterator	client = this->_clients.find(it->fd);
+	std::map<int, Client*>::iterator	client = this->_clients.find(it->fd);
 	delete client->second;
 	this->_clients.erase(client);
 
@@ -136,6 +158,7 @@ void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
 void	Server::handleMaxClient(int clientSocketFd) {
 
 	std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
+
 	send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
 	close(clientSocketFd);
 }
@@ -149,6 +172,7 @@ void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
 	pollfds.push_back(clientPollfd);
 	_clients.insert(std::pair<int, Client *>(clientSocket, client));
+
 	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
 }
 
@@ -171,12 +195,15 @@ int	Server::acceptSocket(int listenSocket) {
 
 	struct sockaddr_in clientAddress;
 	socklen_t clientAddressSize = sizeof(clientAddress);
+
 	int clientSocketFd = accept(listenSocket, (struct sockaddr *)&clientAddress, &clientAddressSize);
 	if (clientSocketFd < 0) {
 		std::cerr << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
 		return (-1);
 	}
+
 	std::cout << COLOR("New connection from ", CYAN) << inet_ntoa(clientAddress.sin_addr) << COLOR(" on clientAddr port ", CYAN) << ntohs(clientAddress.sin_port) << std::endl;
+
 	return (clientSocketFd);
 }
 
@@ -203,6 +230,7 @@ int	Server::acceptSocket(int listenSocket) {
  * @note This function runs indefinitely until an error occurs or all clients disconnect.
  */
 void	Server::run() {
+
 	std::vector<pollfd> pollfds;
 	pollfd serverPollfd;
 	serverPollfd.fd = _serverSocketFd;
@@ -223,13 +251,14 @@ void	Server::run() {
 			// -> if the connection already exists, read the data and parse it
 			if (it->revents && POLLIN) {
 				if (it->fd == _serverSocketFd) {
+
 					int clientSocketFd = acceptSocket(_serverSocketFd);
-					if (clientSocketFd == -1) {
+
+					if (clientSocketFd == -1)
 						return;
-					}
-					if (pollfds.size() - 1 < MAX_SOCKETS) {
+					if (pollfds.size() - 1 < MAX_SOCKETS)
 						addClient(clientSocketFd, newPollfds);
-					} else
+					else
 						handleMaxClient(clientSocketFd);
 					it++;
 				}
@@ -242,17 +271,21 @@ void	Server::run() {
 					if (readResult < 0) {
 						std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
 						deleteClient(pollfds, it);
+
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 							break;
 						}
-					} else if (readResult == 0) {
+					}
+					else if (readResult == 0) {
 						deleteClient(pollfds, it);
+
 						if (pollfds.size() == 0) {
 							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 							break;
 						}
-					} else {
+					}
+					else {
 						std::cout << COLOR("Received: ", CYAN) << buffer << std::endl;
 						// TODO: parse the request according to IRC protocol
 
@@ -260,21 +293,24 @@ void	Server::run() {
 						it++;
 					}
 				}
-			} else if (it->revents & POLLERR) {
+			}
+			else if (it->revents & POLLERR) {
 				if (it->fd == _serverSocketFd) {
 					std::cerr << COLOR("Error: server socket error: ", RED) << strerror(errno) << std::endl;
 					return;
-				} else {
+				}
+				else {
 					std::cerr << COLOR("Error: client socket error: ", RED) << strerror(errno) << std::endl;
 					deleteClient(pollfds, it);
+
 					if (pollfds.size() == 0) {
 						std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
 						break;
 					}
 				}
-			} else {
-				it++;
 			}
+			else
+				it++;
 		}
 		// add new pollfds to the pollfds vector
 		pollfds.insert(pollfds.end(), newPollfds.begin(), newPollfds.end());

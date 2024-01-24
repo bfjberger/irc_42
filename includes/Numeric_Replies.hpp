@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/23 12:08:47 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:43:45 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,4 @@
 
 #define ERR_USERSDONTMATCH() (":Cant change mode for other users\r\n") //502
 
-#endif
+#endif //NUMERIC_REPLIES_HPP
