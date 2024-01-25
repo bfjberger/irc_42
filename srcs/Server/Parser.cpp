@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 16:57:41 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 10:12:13 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,7 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 	return (msg);
 }
 
-void	Server::fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, std::string msg) {
-
-	std::map<int, Client *>::iterator it = clients.find(clientSocketFd);
-	(void)clients, (void)clientSocketFd;
+void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string msg) {
 
 	trimString(msg);
 
@@ -120,13 +117,17 @@ void	Server::fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, 
 	}
 }
 
+/*
+	! * cherche (et trouve) que le \n à la fin de l'input,
+	! * si il y en a avant, ce n'est pas pris en compte
+*/
 void	Server::splitMessage(std::vector<std::string> &cmds, std::string msg) {
 
-	int pos = 0;
-	std::string delimiter = "\n";
-	std::string substr;
+	size_t			pos = 0;
+	std::string	delimiter = "\n";
+	std::string	substr;
 
-	while ((pos = msg.find(delimiter)) != static_cast<int>(std::string::npos)) {
+	while ((pos = msg.find(delimiter)) != msg.npos) {
 		substr = msg.substr(0, pos);
 		cmds.push_back(substr);
 		msg.erase(0, pos + delimiter.length());
@@ -144,14 +145,15 @@ void	Server::parser(std::string message, int clientSocketFd) {
 
 	t_Message*								msg;
 	std::vector<std::string>				cmds;
-	std::map<int, Client *>::iterator	it = _clients.find(clientSocketFd);
+	std::map<int, Client *>::iterator		it = _clients.find(clientSocketFd);
 
 	splitMessage(cmds, message);
 
 	for (size_t i = 0; i != cmds.size(); i++) {
+
 		if (it->second->isRegistered() == false) {
 
-			fillUserInfo(_clients, clientSocketFd, cmds[i]);
+			fillUserInfo(it, cmds[i]);
 
 			if (it->second->getPass() == _password)
 				it->second->setLogged(true);

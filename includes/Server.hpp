@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 14:01:14 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 09:26:37 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class Server {
 
 	private:
 		struct sockaddr_in					_serverAddress;
+
 		std::map<int, Client *>				_clients;
 
 		std::map<std::string, ACommand *>	_commands;
@@ -80,11 +81,12 @@ class Server {
 
 		//GETTER (voir si nécessaire)
 		std::string const &getPass() const;
+		const std::map<int, Client*>&	getClients() const;
 
 		//PARSER
 		t_Message*	parseCommands(std::string message, Client* client);
 		void		parsePrefix(std::string& message, t_Message* msg, Client* client);
-		void		fillUserInfo(std::map<int, Client *> &clients, int clientSocketFd, std::string message);
+		void		fillUserInfo(std::map<int, Client *>::iterator &, std::string message);
 		void		splitMessage(std::vector<std::string> &cmds, std::string msg);
 		void		parser(std::string message, int clientSocketFd);
 

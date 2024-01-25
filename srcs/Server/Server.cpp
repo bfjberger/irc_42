@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 16:50:09 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 10:12:49 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,4 +336,8 @@ void	Server::run() {
 
 std::string const &Server::getPass() const {
 	return (this->_password);
+}
+
+const std::map<int, Client*>&	Server::getClients() const {
+	return (this->_clients);
 }
