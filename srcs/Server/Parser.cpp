@@ -6,31 +6,59 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/25 11:49:28 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:30:24 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-std::string	tmpFormatString(std::string msg) {
+void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string msg) {
 
-	if (msg.find(' ') != std::string::npos && msg.find(' ') == 0)
-		msg.erase(msg.find(' '), 1);
+	trimString(msg);
 
-	if (msg.find('\r') != std::string::npos)
-		msg.erase(msg.find('\r'), 1);
+	std::cout << std::endl << "fillUserInfo msg: |" << msg << "|" << std::endl;
 
-	return msg;
-}
+	std::string	cmd = msg.substr(0, 4);
 
-// a function that trim the string from any carriage return and new line
-void	trimString(std::string &str) {
+	for (size_t i = 0; i != cmd.size(); i++)
+		cmd[i] = toupper(cmd[i]);
 
-	if (str.find('\r') != std::string::npos)
-		str.erase(str.find('\r'), 1);
+	msg.replace(0, 4, cmd);
 
-	if (str.find('\n') != std::string::npos)
-		str.erase(str.find('\n'), 1);
+	if (!cmd.compare("PASS")) {
+		if (msg.size() < 6) {
+			std::string tmp = ERR_NEEDMOREPARAMS(it->second->getNick(), cmd);
+			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
+
+			return;
+		}
+		msg = tmpFormatString(msg);
+		it->second->setPass(msg.substr(5));
+	}
+
+	if (!cmd.compare("USER")) {
+		if (msg.size() < 6) {
+			std::string tmp = ERR_NEEDMOREPARAMS(it->second->getNick(), cmd);
+			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
+
+			return;
+		}
+		msg = tmpFormatString(msg);
+
+		// setUSER by parsing the msg just after USER and before the first space
+		it->second->setUserName(msg.substr(5));
+	}
+
+	if (!cmd.compare("NICK")) {
+		if (msg.size() < 6) {
+			std::string tmp = ERR_NONICKNAMEGIVEN(it->second->getNick());
+			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
+
+			return;
+		}
+		msg = tmpFormatString(msg);
+		it->second->setNick(msg.substr(5));
+	}
 }
 
 void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
@@ -90,70 +118,6 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 	return (msg);
 }
 
-void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string msg) {
-
-	trimString(msg);
-
-	std::cout << std::endl << "fillUserInfo msg: |" << msg << "|" << std::endl;
-
-	std::string	cmd = msg.substr(0, 4);
-
-	for (size_t i = 0; i != cmd.size(); i++)
-		cmd[i] = toupper(cmd[i]);
-
-	msg.replace(0, 4, cmd);
-
-	if (msg.size() < 6) {
-		std::cout << COLOR("Error: ", RED) << std::endl;
-		return;
-	}
-
-	if (!cmd.compare("PASS")) {
-
-		msg = tmpFormatString(msg);
-		it->second->setPass(msg.substr(5));
-	}
-
-	if (!cmd.compare("USER")) {
-		msg = tmpFormatString(msg);
-
-		// setUSER by parsing the msg just after USER and before the first space
-		it->second->setUserName(msg.substr(5));
-
-		// setRealName by parsing the msg just after the first :
-		if (msg.find(':') != msg.npos)
-			it->second->setRealName(msg.substr(msg.find(':') + 1));
-	}
-
-	if (!cmd.compare("NICK")) {
-
-		msg = tmpFormatString(msg);
-		it->second->setNick(msg.substr(5));
-	}
-}
-
-/*
-	! * cherche (et trouve) que le \n à la fin de l'input,
-	! * si il y en a avant, ce n'est pas pris en compte
-*/
-void	Server::splitMessage(std::vector<std::string> &cmds, std::string msg) {
-
-	size_t			pos = 0;
-	std::string	delimiter = "\n";
-	std::string	substr;
-
-	while ((pos = msg.find(delimiter)) != msg.npos) {
-		substr = msg.substr(0, pos);
-		cmds.push_back(substr);
-		msg.erase(0, pos + delimiter.length());
-	}
-
-	// // show parsed message
-	// for (size_t i = 0; i != cmds.size(); i++) {
-	// 	std::cout << "cmds[" << i << "]: " << cmds[i] << std::endl;
-	// }
-}
-
 // Fill registration info if the client is not yet registered
 // Parse the commands if the client is already registered
 void	Server::parser(std::string message, int clientSocketFd) {
@@ -162,7 +126,9 @@ void	Server::parser(std::string message, int clientSocketFd) {
 	std::vector<std::string>				cmds;
 	std::map<int, Client *>::iterator		it = _clients.find(clientSocketFd);
 
-	splitMessage(cmds, message);
+	// splitMessage(cmds, message);
+
+	msg = parseCommands(message, it->second);
 
 	for (size_t i = 0; i != cmds.size(); i++) {
 

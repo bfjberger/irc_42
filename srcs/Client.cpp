@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 15:57:08 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:04:54 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,6 @@ const std::string&	Client::getUserName() const {
 	return (_userName);
 }
 
-const std::string&	Client::getRealName() const {
-	return (_realName);
-}
-
 const std::string&	Client::getPass() const {
 	return (_password);
 }
@@ -106,10 +102,6 @@ void	Client::setUserName(std::string userName) {
 	_userName = userName;
 }
 
-void	Client::setRealName(std::string realName) {
-	_realName = realName;
-}
-
 void	Client::setPass(std::string pass) {
 	_password = pass;
 }
@@ -126,7 +118,6 @@ void Client::printInfo() const {
 	std::cout << "fd: " << _fd << std::endl;
 	std::cout << "nick: " << _nick << std::endl;
 	std::cout << "userName: " << _userName << std::endl;
-	std::cout << "realName: " << _realName << std::endl;
 	std::cout << "password: " << _password << std::endl;
 	std::cout << "receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
 	std::cout << "isLogged: " << std::boolalpha << _isLogged << std::endl;

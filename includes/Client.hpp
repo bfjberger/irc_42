@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/24 15:57:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 14:05:10 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ class Client {
 		std::string	_password;
 		std::string	_nick;
 		std::string	_userName;
-		std::string	_realName;
 		std::string	_hostname;
 
 	public:
@@ -46,7 +45,6 @@ class Client {
 		bool				isInChannel(void) const;
 		const std::string&	getNick() const;
 		const std::string&	getUserName() const;
-		const std::string&	getRealName() const;
 		const std::string&	getPass() const;
 		const std::string&	getHostname() const;
 
@@ -59,7 +57,6 @@ class Client {
 		void	setNick(std::string nick);
 		void	setUserName(std::string userName);
 		void	setPass(std::string pass);
-		void	setRealName(std::string realName);
 		void	setHostname(std::string hostname);
 
 		// TODO: Not Implemented yet

@@ -25,9 +25,10 @@ HDRS = $(shell find $(INC_DIR) -type f -name "*.hpp")
 
 SRC_PATH = ./srcs/
 FILES = main.cpp \
-		Server/Server.cpp \
-		Server/Parser.cpp \
 		Server/Execution.cpp \
+		Server/Parser.cpp \
+		Server/ParserUtils.cpp \
+		Server/Server.cpp \
 		Client.cpp \
 		ACommand.cpp \
 		Commands/Invite.cpp \
