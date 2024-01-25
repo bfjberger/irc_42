@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/25 09:26:37 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 10:38:00 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ class Server {
 		//PARSER
 		t_Message*	parseCommands(std::string message, Client* client);
 		void		parsePrefix(std::string& message, t_Message* msg, Client* client);
-		void		fillUserInfo(std::map<int, Client *>::iterator &, std::string message);
+		void		fillUserInfo(std::map<int, Client *>::iterator &it, std::string message);
 		void		splitMessage(std::vector<std::string> &cmds, std::string msg);
 		void		parser(std::string message, int clientSocketFd);
 

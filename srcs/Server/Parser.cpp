@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/25 10:12:13 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/25 11:49:28 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,26 +94,41 @@ void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string msg
 
 	trimString(msg);
 
-	std::cout << "fillUserInfo msg: |" << msg << "|" << std::endl;
+	std::cout << std::endl << "fillUserInfo msg: |" << msg << "|" << std::endl;
 
-	if (msg.find("NICK") != std::string::npos || msg.find("nick") != std::string::npos) {
-		msg = tmpFormatString(msg);
-		it->second->setNick(msg.substr(msg.find("NICK") + 5));
-		it->second->setNick(msg.substr(msg.find("nick") + 5));
+	std::string	cmd = msg.substr(0, 4);
+
+	for (size_t i = 0; i != cmd.size(); i++)
+		cmd[i] = toupper(cmd[i]);
+
+	msg.replace(0, 4, cmd);
+
+	if (msg.size() < 6) {
+		std::cout << COLOR("Error: ", RED) << std::endl;
+		return;
 	}
-	else if (msg.find("USER") != std::string::npos || msg.find("user") != std::string::npos) {
+
+	if (!cmd.compare("PASS")) {
+
 		msg = tmpFormatString(msg);
-		//  setUSER by parsing the msg just after USER and before the first space
-		it->second->setUserName(msg.substr(msg.find("USER") + 5, msg.find(' ')));
-		it->second->setUserName(msg.substr(msg.find("user") + 5, msg.find(' ')));
+		it->second->setPass(msg.substr(5));
+	}
+
+	if (!cmd.compare("USER")) {
+		msg = tmpFormatString(msg);
+
+		// setUSER by parsing the msg just after USER and before the first space
+		it->second->setUserName(msg.substr(5));
+
 		// setRealName by parsing the msg just after the first :
-		if (msg.find(':') != std::string::npos)
+		if (msg.find(':') != msg.npos)
 			it->second->setRealName(msg.substr(msg.find(':') + 1));
 	}
-	else if (msg.find("PASS") != std::string::npos || msg.find("pass") != std::string::npos) {
+
+	if (!cmd.compare("NICK")) {
+
 		msg = tmpFormatString(msg);
-		it->second->setPass(msg.substr(msg.find("PASS") + 5));
-		it->second->setPass(msg.substr(msg.find("pass") + 5));
+		it->second->setNick(msg.substr(5));
 	}
 }
 
@@ -140,7 +155,7 @@ void	Server::splitMessage(std::vector<std::string> &cmds, std::string msg) {
 }
 
 // Fill registration info if the client is not yet registered
-// Parse the commands if he is
+// Parse the commands if the client is already registered
 void	Server::parser(std::string message, int clientSocketFd) {
 
 	t_Message*								msg;
