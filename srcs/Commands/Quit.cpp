@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:10 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/25 10:08:59 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 15:28:12 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,19 @@ Quit::Quit(void) {}
 
 Quit::~Quit(void) {}
 
-/*
-Excepting ->
-	(with one param)
-		kikinoxx [~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip] has quit [Quit: aurevoir]
-	(with multiple param)
-		kikinoxx [~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip] has quit [Quit: goodbye old friend may the force be with you]
-	(with no param)
-		kikinoxx [~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip] has quit [Quit: leaving]
-
-Ours ->
-	(with one param)
-		k [localhost] has quit [Quit: aurevoir]
-
-	(with multiple param)
-		k [localhost] has quit [Quit: goodbye old friend may the force be with you]
-
-	(with no param)
-		k [localhost] has quit [Quit: leaving]
+/**
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.1.7
+ *
+ * Parameter:
+ * 		[ <quit message> ]
+ *
+ * If no parameter is passed, the default quit message is send by the client.
+ * If a parameter is passed, it's content is added to the message send by the client.
+ * 	before the server close the connection between him and the client.
+ *
+ * @param server The server object.
+ * @param msg The message object containing the command and parameters.
+ * @param client The client object.
 */
 void	Quit::execute(Server* server, t_Message* msg, Client* client) {
 

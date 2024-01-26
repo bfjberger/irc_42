@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/25 14:04:54 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 15:59:05 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ Client::Client(int fd) : _fd(fd),
 						_welcomeSent(false),
 						_isRegistered(false),
 						_isInChannel(false),
+						_isOperator(false),
 						_hostname("localhost") {
 	return;
 }
@@ -33,27 +34,31 @@ Client::~Client() {
 /* --------------------------------- Getters -------------------------------- */
 
 int	Client::getFd() const {
-	return _fd;
+	return (_fd);
 }
 
 bool	Client::hasReceivedInfo() const {
-	return _receivedInfo;
+	return (_receivedInfo);
 }
 
 bool	Client::isLogged() const {
-	return _isLogged;
+	return (_isLogged);
 }
 
 bool	Client::welcomeSent() const {
-	return _welcomeSent;
+	return (_welcomeSent);
 }
 
 bool	Client::isRegistered() const {
-	return _isRegistered;
+	return (_isRegistered);
 }
 
-bool	Client::isInChannel(void) const {
+bool	Client::isInChannel() const {
 	return (_isInChannel);
+}
+
+bool	Client::isOperator() const {
+	return (_isOperator);
 }
 
 const std::string&	Client::getNick() const {
@@ -94,6 +99,10 @@ void	Client::setInChannel(bool inChannel) {
 	_isInChannel = inChannel;
 }
 
+void	Client::setOperator(bool isOperator) {
+	_isOperator = isOperator;
+}
+
 void	Client::setNick(std::string nick) {
 	_nick = nick;
 }
@@ -115,11 +124,11 @@ void	Client::setHostname(std::string hostname) {
 void Client::printInfo() const {
 	std::cout << "----------------------------------------" << std::endl;
 	std::cout << "Client info:" << std::endl;
-	std::cout << "fd: " << _fd << std::endl;
-	std::cout << "nick: " << _nick << std::endl;
-	std::cout << "userName: " << _userName << std::endl;
-	std::cout << "password: " << _password << std::endl;
-	std::cout << "receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
-	std::cout << "isLogged: " << std::boolalpha << _isLogged << std::endl;
+	std::cout << "\tfd: " << _fd << std::endl;
+	std::cout << "\tnick: " << _nick << std::endl;
+	std::cout << "\tuserName: " << _userName << std::endl;
+	std::cout << "\tpassword: " << _password << std::endl;
+	std::cout << "\treceivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
+	std::cout << "\tisLogged: " << std::boolalpha << _isLogged << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
 }

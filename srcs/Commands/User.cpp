@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:12 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 11:50:54 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 15:27:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,20 @@ User::User(void) {}
 
 User::~User(void) {}
 
+/**
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.1.3
+ *
+ * Parameters:
+ *		<user>
+ *
+ * If the number of parameters is not valid, the corresponding error message is sent to the client.
+ * If the client is already registered, the correspond error message is sent.
+ * If the username is valid and available, it is set as the client's username.
+ *
+ * @param server The server object.
+ * @param msg The message object containing the command and parameters.
+ * @param client The client object.
+*/
 void	User::execute(Server* server, t_Message* msg, Client* client) {
 
 	(void) server;
