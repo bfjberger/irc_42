@@ -30,6 +30,8 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
+#define RPL_NICKCHANGE(client, nickname) (":localhost 421 " + client + " " + nickname + " :Nickname changed from " + client + " to " + nickname + "\r\n") //NICK
+
 #define RPL_UMODEIS() (": localhost 221" + "<user mode string>\r\n") //221
 
 #define RPL_AWAY() (": localhost 301" + "<nick> :<away message>\r\n") //301
