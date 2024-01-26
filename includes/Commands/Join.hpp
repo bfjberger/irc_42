@@ -15,6 +15,7 @@
 #define JOIN_HPP
 
 #include "ACommand.hpp"
+#include "Channel.hpp"
 
 class Join : public ACommand {
 

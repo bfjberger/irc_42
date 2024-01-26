@@ -4,7 +4,7 @@ PORT = 6667
 
 CC = c++
 #FLAGS = -Wall -Wextra -Werror -fsanitize=address -fpermissive -std=c++98 -I./srcs
-FLAGS = -Wall -Wextra -Werror -pedantic -std=c++98 #-g3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -pedantic -std=c++98 -g3 -fsanitize=address
 RM = /bin/rm -rf
 
 BLUE = \033[0;34m
@@ -30,6 +30,7 @@ FILES = main.cpp \
 		Server/ParserUtils.cpp \
 		Server/Server.cpp \
 		Client.cpp \
+		Channel.cpp \
 		ACommand.cpp \
 		Commands/Invite.cpp \
 		Commands/Join.cpp \

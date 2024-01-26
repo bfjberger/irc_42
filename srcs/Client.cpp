@@ -22,7 +22,8 @@ Client::Client(int fd) : _fd(fd),
 						_welcomeSent(false),
 						_isRegistered(false),
 						_isInChannel(false),
-						_hostname("localhost") {
+						_hostname("localhost"),
+						_currentChannel("") {
 	return;
 }
 
@@ -72,6 +73,10 @@ const std::string&	Client::getHostname() const {
 	return (_hostname);
 }
 
+const std::string&	Client::getCurrentChannel() const {
+	return (_currentChannel);
+}
+
 /* --------------------------------- Setters -------------------------------- */
 
 void	Client::setLogged(bool isLogged) {
@@ -110,6 +115,18 @@ void	Client::setHostname(std::string hostname) {
 	_hostname = hostname;
 }
 
+void	Client::setCurrentChannel(std::string channel) {
+	_currentChannel = channel;
+}
+
+/* ----------------------------- Client methods ----------------------------- */
+
+void	Client::sendMessage(std::string& message) {
+	std::cout << COLOR("Sending message to client ", CYAN) << _fd << std::endl;
+	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
+	::send(_fd, message.c_str(), message.length(), 0);
+}
+
 /* --------------------------------- Helpers -------------------------------- */
 
 void Client::printInfo() const {
@@ -119,7 +136,10 @@ void Client::printInfo() const {
 	std::cout << "nick: " << _nick << std::endl;
 	std::cout << "userName: " << _userName << std::endl;
 	std::cout << "password: " << _password << std::endl;
+	std::cout << "currentChannel: " << _currentChannel << std::endl;
 	std::cout << "receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
 	std::cout << "isLogged: " << std::boolalpha << _isLogged << std::endl;
+	std::cout << "isRegistered: " << std::boolalpha << _isRegistered << std::endl;
+	std::cout << "isInChannel: " << std::boolalpha << _isInChannel << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
 }

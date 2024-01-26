@@ -70,6 +70,11 @@ Server::~Server() {
 		delete it->second;
 		// _clients.erase(it);
 	}
+
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+		delete it->second;
+		// _channels.erase(it);
+	}	
 }
 
 /* -------------------------------------------------------------------------- */
@@ -136,6 +141,10 @@ void	Server::launch() {
 	}
 
 	std::cout << COLOR("Listening for connections on port ", CYAN) << _port << COLOR(" with password: ", CYAN) << _password << " ..." << std::endl;
+}
+
+void	Server::addChannel(Channel* channel) {
+	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));
 }
 
 /**
@@ -340,4 +349,15 @@ std::string const &Server::getPass() const {
 
 const std::map<int, Client*>&	Server::getClients() const {
 	return (this->_clients);
+}
+
+const std::map<std::string, Channel*>&	Server::getChannels() const {
+	return (this->_channels);
+}
+
+Channel*	Server::getChannel(std::string channelName) {
+	std::map<std::string, Channel*>::iterator it = this->_channels.find(channelName);
+	if (it != this->_channels.end())
+		return (it->second);
+	return (NULL);
 }

@@ -30,6 +30,7 @@ class Client {
 		std::string	_nick;
 		std::string	_userName;
 		std::string	_hostname;
+		std::string _currentChannel;
 
 	public:
 		Client(int fd);
@@ -47,6 +48,7 @@ class Client {
 		const std::string&	getUserName() const;
 		const std::string&	getPass() const;
 		const std::string&	getHostname() const;
+		const std::string&	getCurrentChannel() const;
 
 		// Setters
 		void	setLogged(bool isLogged);
@@ -58,6 +60,10 @@ class Client {
 		void	setUserName(std::string userName);
 		void	setPass(std::string pass);
 		void	setHostname(std::string hostname);
+		void	setCurrentChannel(std::string channel);
+
+		// Clients Methods
+		void	sendMessage(std::string& message);
 
 		// TODO: Not Implemented yet
 		void	logIn();
