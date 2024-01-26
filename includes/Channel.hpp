@@ -14,7 +14,9 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "Server.hpp"
+#include "ft_irc.hpp"
+
+class Client;
 
 class Channel {
 
@@ -22,6 +24,7 @@ class Channel {
 		std::string	_name;
 		std::string	_topic;
 		std::string	_password;
+		std::map<std::string, Client*>	_clients;
 
 		int		userLimit;
 
@@ -45,6 +48,15 @@ class Channel {
 		void			setTopic(std::string& topic);
 		void			setPassword(std::string& password);
 
+		//Channel Methods
+		void			addClient(Client* client);
+		void			removeClient(Client* client);
+		void			sendMessageToAllClients(std::string& message);
+		void			sendToAllButOne(std::string& message, Client* client);
+
 };
+
+#include "Client.hpp"
+#include "Server.hpp"
 
 #endif //CHANNEL_HPP

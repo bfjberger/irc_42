@@ -74,15 +74,18 @@ class Server {
 
 		//SERVER MANAGEMENT
 		void	launch();
-		void	deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it);
+		void	addChannel(Channel* channel);
 		void	handleMaxClient(int clientSocketFd);
 		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
+		void	deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it);
 		int		acceptSocket(int listenSocket);
 		void	run();
 
 		//GETTER (voir si nécessaire)
 		std::string const &getPass() const;
 		const std::map<int, Client*>&	getClients() const;
+		const std::map<std::string, Channel*>&	getChannels() const;
+		Channel*	getChannel(std::string channelName);
 
 		//PARSER
 		t_Message*	parseCommands(std::string message, Client* client);

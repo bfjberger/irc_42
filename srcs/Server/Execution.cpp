@@ -27,8 +27,17 @@ void	Server::execCommand(std::string message, Client* client) {
 
 	// Compare the command with the map of commands and return if not found
 	if (_commands.find(msg->command) == _commands.end()) {
-		std::string tmp = ERR_UNKNOWNCOMMAND(client->getNick(), msg->command);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		if (client->isInChannel() == true) {
+			Channel* channel = getChannel(client->getCurrentChannel());
+			if (channel != NULL) {
+				channel->sendToAllButOne(message, client);
+			}	
+		}
+		
+		else {
+			std::string tmp = ERR_UNKNOWNCOMMAND(client->getNick(), msg->command);
+			send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		}
 	}
 	else {
 		ACommand*	cmd = _commands.at(msg->command);
