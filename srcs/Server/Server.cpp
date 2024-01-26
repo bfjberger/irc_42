@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/25 10:37:49 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 16:32:29 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ Server::~Server() {
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
 		delete it->second;
 		// _channels.erase(it);
-	}	
+	}
 }
 
 /* -------------------------------------------------------------------------- */
@@ -286,7 +286,6 @@ void	Server::run() {
 
 					// memset(buffer, 0, sizeof(buffer));
 					readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
-					buffer[readResult] = '\0';
 
 					if (readResult < 0) {
 						std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
@@ -306,6 +305,7 @@ void	Server::run() {
 						}
 					}
 					else {
+						buffer[readResult] = '\0';
 						std::string	tmp(buffer);
 						std::cout << COLOR("Received: ", CYAN) << "|" << tmp.substr(0, tmp.size() - 1) << "|" << std::endl;
 						// TODO: parse the request according to IRC protocol

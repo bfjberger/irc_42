@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:01 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 16:09:13 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 16:30:13 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 				params += " ";
 		}
 		std::string	tmp = "You were removed from the server because " + params + "\r\n";
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
 
-		close(client->getFd());
+		close(it->second->getFd());
 	}
 }
