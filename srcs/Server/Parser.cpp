@@ -6,103 +6,83 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:30:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 13:23:38 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string msg) {
+void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string message) {
 
-	trimString(msg);
+	t_Message*	msg = new t_Message;
 
-	std::cout << std::endl << "fillUserInfo msg: |" << msg << "|" << std::endl;
-
-	std::string	cmd = msg.substr(0, 4);
-
-	for (size_t i = 0; i != cmd.size(); i++)
-		cmd[i] = toupper(cmd[i]);
-
-	msg.replace(0, 4, cmd);
-
-	if (!cmd.compare("PASS")) {
-		if (msg.size() < 6) {
-			std::string tmp = ERR_NEEDMOREPARAMS(it->second->getNick(), cmd);
-			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
-
-			return;
-		}
-		msg = tmpFormatString(msg);
-		it->second->setPass(msg.substr(5));
+	msg = parseCommands(message, it->second);
+	if (msg->error == true) {
+		delete msg;
+		return ;
 	}
 
-	if (!cmd.compare("USER")) {
-		if (msg.size() < 6) {
-			std::string tmp = ERR_NEEDMOREPARAMS(it->second->getNick(), cmd);
-			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
+	trimString(message);
 
-			return;
-		}
-		msg = tmpFormatString(msg);
+	std::cout << std::endl << "fillUserInfo msg: |" << message << "|" << std::endl;
 
-		// setUSER by parsing the msg just after USER and before the first space
-		it->second->setUserName(msg.substr(5));
-	}
+	if (!msg->command.compare("PASS"))
+		_commands[msg->command]->execute(this, msg, it->second);
 
-	if (!cmd.compare("NICK")) {
-		if (msg.size() < 6) {
+	if (!msg->command.compare("USER"))
+		_commands[msg->command]->execute(this, msg, it->second);
+
+	if (!msg->command.compare("NICK")) {
+		if (message.size() < 6) {
 			std::string tmp = ERR_NONICKNAMEGIVEN(it->second->getNick());
 			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
 
 			return;
 		}
-		msg = tmpFormatString(msg);
-		it->second->setNick(msg.substr(5));
+		message = tmpFormatString(message);
+		it->second->setNick(message.substr(5));
+		// _commands[msg->command]->execute(this, msg, it->second);
 	}
+
+	delete msg;
 }
 
-void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
-
-	msg->prefix = message.substr(1, message.find(' ') - 1);
-
-	if (msg->prefix != client->getNick()) {
-		std::cout << COLOR("Invalid prefix in ", RED) << message << COLOR(" from Client #", RED) << client->getFd() << std::endl;
-		msg->wrongPrefix = true;
-	}
-	else {
-		msg->hasPrefix = true;
-		message.erase(0, message.find(' ') + 1);
-	}
-}
-
-// TODO: revoir les autres conditions de parsing (parsePrefix semble OK)
 t_Message*	Server::parseCommands(std::string message, Client* client) {
 
 	t_Message*	msg = new t_Message;
 
 	msg->hasPrefix = false;
 	msg->hasCommand = false;
-	msg->wrongPrefix = false;
+	msg->error = false;
 
 	trimString(message);
 
 	// If the first word of the message has a ':' in the first char then it is a prefix
 	if (message[0] == ':') {
 		parsePrefix(message, msg, client);
-		if (msg->wrongPrefix == true)
+		if (msg->error == true)
 			return (msg);
 	}
 
-	// Parse the command into msg.command and erase it from the message
+	// Parse the command into msg.command
 	if (message.find(' ') != std::string::npos) {
-
 		msg->command = message.substr(0, message.find(' '));
 		message.erase(0, message.find(' ') + 1);
-		if (msg->command == "" || msg->command == "\r")
-			msg->hasCommand = false;
-		else
-			msg->hasCommand = true;
 	}
+	else {
+		msg->command = message;
+		message.erase(0);
+	}
+
+	if (msg->command == "\r" || msg->command.empty())
+		msg->error = true;
+
+	if (msg->command[0] == '/')
+		msg->command = msg->command.erase(0, 1);
+
+	// Put the command in uppercase
+	for (size_t i = 0; i < msg->command.size(); i++)
+		msg->command[i] = toupper(msg->command[i]);
 
 	// Parse the params into msg.params and erase it from the message
 	while (message.find(' ') != std::string::npos) {
@@ -122,13 +102,10 @@ t_Message*	Server::parseCommands(std::string message, Client* client) {
 // Parse the commands if the client is already registered
 void	Server::parser(std::string message, int clientSocketFd) {
 
-	t_Message*								msg;
-	std::vector<std::string>				cmds;
-	std::map<int, Client *>::iterator		it = _clients.find(clientSocketFd);
+	std::vector<std::string>			cmds;
+	std::map<int, Client *>::iterator	it = _clients.find(clientSocketFd);
 
-	// splitMessage(cmds, message);
-
-	msg = parseCommands(message, it->second);
+	splitMessage(cmds, message);
 
 	for (size_t i = 0; i != cmds.size(); i++) {
 
@@ -146,19 +123,12 @@ void	Server::parser(std::string message, int clientSocketFd) {
 				it->second->setRegistered(true);
 				std::string welcome = RPL_WELCOME(it->second->getNick(), _name, USER_ID(it->second));
 				send(clientSocketFd, welcome.c_str(), welcome.length(), 0);
+				it->second->setWelcomeSent(true);
 			}
 
 			it->second->printInfo();
 		}
-		else {
-			msg = parseCommands(message, it->second);
-			if (msg->wrongPrefix == true) {
-				delete msg;
-				return ;
-			}
-			else
-				execCommand(msg, it->second);
-		}
+		else
+			execCommand(cmds[i], it->second);
 	}
-	// it->second.printInfo();
 }

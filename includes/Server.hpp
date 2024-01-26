@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/25 14:18:18 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 11:18:48 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,10 @@ typedef struct s_Message {
 	std::string					command;
 
 	std::vector<std::string>	params;
+
 	bool	hasPrefix;
 	bool	hasCommand;
-	bool	wrongPrefix;
+	bool	error;
 }	t_Message;
 
 #include "ACommand.hpp"
@@ -91,7 +92,7 @@ class Server {
 		void		parser(std::string message, int clientSocketFd);
 
 		//EXECUTION
-		void		execCommand(t_Message* msg, Client* client);
+		void		execCommand(std::string message, Client* client);
 
 /* ------------------------------ REGISTRATION ------------------------------ */
 // link parsing: https://tools.ietf.org/html/rfc2812#section-2.3.1

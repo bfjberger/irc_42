@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 14:17:00 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/25 14:28:41 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 13:11:19 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,22 @@ std::string	tmpFormatString(std::string msg) {
 	if (msg.find('\r') != std::string::npos)
 		msg.erase(msg.find('\r'), 1);
 
-	return msg;
+	return (msg);
+}
+
+void	Server::parsePrefix(std::string &message, t_Message* msg, Client* client) {
+
+	msg->prefix = message.substr(1, message.find(' ') - 1);
+
+	if (msg->prefix != client->getNick()) {
+		std::string	tmp = "Invalid prefix in " + message + "\n";
+		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		msg->error = true;
+	}
+	else {
+		msg->hasPrefix = true;
+		message.erase(0, message.find(' ') + 1);
+	}
 }
 
 // a function that trim the string from any carriage return and new line
@@ -39,7 +54,7 @@ void	trimString(std::string &str) {
 */
 void	Server::splitMessage(std::vector<std::string> &cmds, std::string msg) {
 
-	size_t			pos = 0;
+	size_t		pos = 0;
 	std::string	delimiter = "\n";
 	std::string	substr;
 
@@ -50,7 +65,7 @@ void	Server::splitMessage(std::vector<std::string> &cmds, std::string msg) {
 	}
 
 	// // show parsed message
-	for (size_t i = 0; i != cmds.size(); i++) {
-		std::cout << "cmds[" << i << "]: " << cmds[i] << std::endl;
-	}
+	// for (size_t i = 0; i != cmds.size(); i++) {
+	// 	std::cout << "cmds[" << i << "]: " << cmds[i] << std::endl;
+	// }
 }
