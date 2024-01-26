@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 10:46:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:17:25 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
-#define RPL_NICKCHANGE(client, nickname) (":localhost 421 " + client + " " + nickname + " :Nickname changed from " + client + " to " + nickname + "\r\n") //NICK
+#define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
 
 #define RPL_UMODEIS() (": localhost 221" + "<user mode string>\r\n") //221
 

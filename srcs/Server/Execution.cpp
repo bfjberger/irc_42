@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:54:28 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 13:19:54 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:17:12 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 /*
 	! * msg is new
-
-	voir comment gérer le / si ca convient avec le fillUserInfo()
 */
 void	Server::execCommand(std::string message, Client* client) {
-
 
 	t_Message*	msg;
 

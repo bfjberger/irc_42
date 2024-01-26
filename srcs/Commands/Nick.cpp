@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:05:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:19:32 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.empty()) {
 		std::string errEmpty;
-		if (client->isLogged() == true)
+		if (client->isRegistered() == true)
 			errEmpty = ERR_NONICKNAMEGIVEN(client->getNick());
 		else
 			errEmpty = ERR_NONICKNAMEGIVEN(placeHolder);
 		send(client->getFd(), errEmpty.c_str(), errEmpty.size(), 0);
-		std::cout << COLOR("Send to client: ", CYAN) << errEmpty << std::endl;
+		// std::cout << COLOR("Send to client: ", CYAN) << errEmpty << std::endl;
 		return;
 	}
 
@@ -61,32 +61,33 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (nickname.size() > 9) {
 		std::string errSize;
-		if (client->isLogged() == true)
+		if (client->isRegistered() == true)
 			errSize = ERR_ERRONEUSNICKNAME(client->getNick(), nickname);
 		else
 			errSize = ERR_ERRONEUSNICKNAME(placeHolder, nickname);
 		send(client->getFd(), errSize.c_str(), errSize.size(), 0);
-		std::cout << COLOR("Send to client: ", CYAN) << errSize << std::endl;
+		// std::cout << COLOR("Send to client: ", CYAN) << errSize << std::endl;
 		return;
-	} 
-	
+	}
+
 	else if (isNicknameUsed(nickname, server->getClients())) {
 		std::string errUsed;
-		if (client->isLogged() == true)
+		if (client->isRegistered() == true)
 			errUsed = ERR_NICKNAMEINUSE(client->getNick(), nickname);
 		else
 			errUsed = ERR_NICKNAMEINUSE(placeHolder, nickname);
 		send(client->getFd(), errUsed.c_str(), errUsed.size(), 0);
-		std::cout << COLOR("Send to client: ", CYAN) << errUsed << std::endl;
+		// std::cout << COLOR("Send to client: ", CYAN) << errUsed << std::endl;
 		return;
-	} 
-	
+	}
+
 	else {
 		std::string rplNick;
-		if (client->isLogged() == true) {
-			rplNick = RPL_NICKCHANGE(client->getNick(), nickname);
+		if (client->isRegistered() == true) {
+			std::string	tmp = BOLD_TEXT + nickname + RESET;
+			rplNick = RPL_NICKCHANGE(tmp);
 			send(client->getFd(), rplNick.c_str(), rplNick.size(), 0);
-			std::cout << COLOR("Send to client: ", CYAN) << rplNick << std::endl;
+			// std::cout << COLOR("Send to client: ", CYAN) << rplNick << std::endl;
 		}
 		client->setNick(nickname);
 	}

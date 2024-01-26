@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:01:38 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 13:23:38 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:15:25 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,8 @@ void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string mes
 	if (!msg->command.compare("USER"))
 		_commands[msg->command]->execute(this, msg, it->second);
 
-	if (!msg->command.compare("NICK")) {
-		if (message.size() < 6) {
-			std::string tmp = ERR_NONICKNAMEGIVEN(it->second->getNick());
-			send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
-
-			return;
-		}
-		message = tmpFormatString(message);
-		it->second->setNick(message.substr(5));
-		// _commands[msg->command]->execute(this, msg, it->second);
-	}
+	if (!msg->command.compare("NICK"))
+		_commands[msg->command]->execute(this, msg, it->second);
 
 	delete msg;
 }

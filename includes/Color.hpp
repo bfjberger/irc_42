@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Color.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvong <marvin@42lausanne.ch>               +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 13:24:48 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/17 13:53:20 by pvong            ###   ########.fr       */
+/*   Updated: 2024/01/26 14:17:41 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 #define BOLDMAGENTA "\033[1m\033[35m" /* Bold Magenta */
 #define BOLDCYAN "\033[1m\033[36m"    /* Bold Cyan */
 #define BOLDWHITE "\033[1m\033[37m"   /* Bold White */
+
+#define BOLD_TEXT "\033[1m"
 
 #define COLOR(text, color) color << text << RESET
 
