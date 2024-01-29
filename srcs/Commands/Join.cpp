@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:02 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 15:33:47 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,14 @@ Join::~Join(void) {}
  *
  * At the creation of a channel, every other arguments, outside the channel name, are ignored
  *
- * If the client is already in too much channel
+ * If the client is already in too many channel, the corresponding error message is sent to the client.
  * If the number of parameters is not valid, the corresponding error message is sent to the client.
+ * If the channel name is not valid, the corresponding error message is sent to the client.
+ * If the channel does not exist yet, it is created in channelCreation()
+ * If the channel has a password, it is handled in joinChannelPassword()
+ * If the channel has a user limit,
+ * 		if the limit is reached, the corresponding error message is sent to the client
+ * 		if the limit is not reached, the joining is handled in joinChannel()
  *
  * @param server The server Object.
  * @param msg The message object containing the command and parameters.
@@ -112,6 +118,12 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
+	if (channelName[0] != '#') {
+		std::string	response = "A '#' is needed at the beginning of the channel name.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
+		return;
+	}
+
 	// Check if the channel already exists
 	Channel* channel = server->getChannel(channelName);
 	if (channel == NULL) {
@@ -127,7 +139,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if the channel has a user limit
 	if (channel->getL() == true) {
-		if (channel->getUserLimit() < channel->getClients().size() + 1) {
+		if (channel->getUserLimit() == channel->getClients().size()) {
 			std::string	response = ERR_CHANNELISFULL(client->getNick(), channel->getName());
 			send(client->getFd(), response.c_str(), response.size(), 0);
 		}
@@ -135,4 +147,6 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 			joinChannel(server, msg, client, channel);
 		return;
 	}
+
+	joinChannel(server, msg, client, channel);
 }

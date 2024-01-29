@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 17:17:11 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 17:01:58 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 #define RPL_AWAY() (": localhost 301" + "<nick> :<away message>\r\n") //301
 
-#define RPL_CHANNELMODEIS() (": localhost 324" + "<channel> <mode> <mode params>\r\n") //324
+#define RPL_CHANNELMODEIS(channel, mode) (": localhost 324" + channel + "[" + mode + "]\r\n") //324
 
 #define RPL_NOTOPIC(client, channel) (":localhost 331 " + client + " " + channel + " :No topic is set\r\n") //331
 
@@ -90,7 +90,7 @@
 
 #define ERR_NICKCOLLISION(client, nick) (":localhost 436 " + client + " " + nick + " :Nickname collision KILL\r\n") //436
 
-#define ERR_NOTONCHANNEL(channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
+#define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
 
 #define ERR_USERONCHANNEL(client, user, channel) (":localhost 443 " + client + " " + user + " " + channel + " :is already on channel\r\n") //443
 
