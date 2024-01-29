@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Numeric_Replies.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
+/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 17:17:11 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 16:17:16 by bberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@
 
 #define ERR_NICKCOLLISION(client, nick) (":localhost 436 " + client + " " + nick + " :Nickname collision KILL\r\n") //436
 
-#define ERR_NOTONCHANNEL(channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
+#define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
 
 #define ERR_USERONCHANNEL(client, user, channel) (":localhost 443 " + client + " " + user + " " + channel + " :is already on channel\r\n") //443
 
