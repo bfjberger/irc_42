@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:29:51 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:12:59 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 12:52:11 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ class Join : public ACommand {
 	public:
 		Join(void);
 		~Join(void);
+
+		void			channelCreation(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			joinChannelPassword(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			joinChannel(Server* server, t_Message* msg, Client* client, Channel* channel);
 
 		virtual void	execute(Server* server, t_Message* msg, Client* client);
 };

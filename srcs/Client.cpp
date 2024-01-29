@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/26 16:27:10 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:20:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ Client::Client(int fd) : _fd(fd),
 						_isInChannel(false),
 						_isOperator(false),
 						_hostname("localhost"),
-						_currentChannel("") {
+						_currentChannel(""),
+						_maxChannels(5) {
 	return;
 }
 
@@ -80,6 +81,14 @@ const std::string&	Client::getHostname() const {
 
 const std::string&	Client::getCurrentChannel() const {
 	return (_currentChannel);
+}
+
+const std::map<Channel*, bool>&	Client::getChannels() const {
+	return (_channels);
+}
+
+const size_t&	Client::getMaxChannels() const {
+	return (_maxChannels);
 }
 
 /* --------------------------------- Setters -------------------------------- */
@@ -141,14 +150,14 @@ void	Client::sendMessage(std::string& message) {
 void Client::printInfo() const {
 	std::cout << "----------------------------------------" << std::endl;
 	std::cout << "Client info:" << std::endl;
-	std::cout << "\tfd: " << _fd << std::endl;
-	std::cout << "\tnick: " << _nick << std::endl;
-	std::cout << "\tuserName: " << _userName << std::endl;
-	std::cout << "\tpassword: " << _password << std::endl;
-	std::cout << "currentChannel: " << _currentChannel << std::endl;
-	std::cout << "\treceivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
-	std::cout << "\tisLogged: " << std::boolalpha << _isLogged << std::endl;
-	std::cout << "isRegistered: " << std::boolalpha << _isRegistered << std::endl;
-	std::cout << "isInChannel: " << std::boolalpha << _isInChannel << std::endl;
+	std::cout << "   fd: " << _fd << std::endl;
+	std::cout << "   nick: " << _nick << std::endl;
+	std::cout << "   userName: " << _userName << std::endl;
+	std::cout << "   password: " << _password << std::endl;
+	std::cout << "   currentChannel: " << _currentChannel << std::endl;
+	std::cout << "   receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
+	std::cout << "   isLogged: " << std::boolalpha << _isLogged << std::endl;
+	std::cout << "   isRegistered: " << std::boolalpha << _isRegistered << std::endl;
+	std::cout << "   isInChannel: " << std::boolalpha << _isInChannel << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
 }

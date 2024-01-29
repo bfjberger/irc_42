@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/26 14:57:25 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:18:21 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CLIENT_HPP
 
 #include "Server.hpp"
+
+class Channel;
 
 class Client {
 
@@ -33,6 +35,10 @@ class Client {
 		std::string	_hostname;
 		std::string _currentChannel;
 
+		std::map<Channel*, bool>	_channels;
+
+		size_t	_maxChannels;
+
 	public:
 		Client(int fd);
 		Client();
@@ -51,6 +57,8 @@ class Client {
 		const std::string&	getPass() const;
 		const std::string&	getHostname() const;
 		const std::string&	getCurrentChannel() const;
+		const std::map<Channel*, bool>&	getChannels() const;
+		const size_t&		getMaxChannels() const;
 
 		// Setters
 		void	setLogged(bool isLogged);

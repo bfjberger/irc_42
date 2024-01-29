@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/19 14:15:06 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:05:21 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ Channel::Channel(const std::string& name) {
 	_name = name;
 	_topic = "";
 	_password = "";
-	userLimit = -1;
+	_userLimit = -1;
 	i = false;
 	t = false;
 	k = false;
@@ -30,7 +30,7 @@ Channel::Channel(const std::string& name) {
 }
 
 Channel::~Channel(void) {
-	
+
 	// std::map<std::string, Client*>::const_iterator it = _clients.begin();
 	// while (it != _clients.end()) {
 	// 	// it->second->setCurrentChannel("");
@@ -45,18 +45,43 @@ Channel::~Channel(void) {
 /* ************************************************************************** */
 
 std::string	Channel::getName(void) const {
-
 	return (_name);
 }
 
 std::string	Channel::getTopic(void) const {
-
 	return (_topic);
 }
 
 std::string	Channel::getPassword(void) const {
-
 	return (_password);
+}
+
+size_t	Channel::getUserLimit() const {
+	return (_userLimit);
+}
+
+bool	Channel::getI() const {
+	return (i);
+}
+
+bool	Channel::getT() const {
+	return (t);
+}
+
+bool	Channel::getK() const {
+	return (k);
+}
+
+bool	Channel::getO() const {
+	return (o);
+}
+
+bool	Channel::getL() const {
+	return (l);
+}
+
+const std::map<std::string, Client*>&	Channel::getClients() const {
+	return (_clients);
 }
 
 /* ************************************************************************** */
@@ -64,18 +89,39 @@ std::string	Channel::getPassword(void) const {
 /* ************************************************************************** */
 
 void	Channel::setName(std::string& name) {
-
 	_name = name;
 }
 
 void	Channel::setTopic(std::string& topic) {
-
 	_topic = topic;
 }
 
 void	Channel::setPassword(std::string& password) {
-
 	_password = password;
+}
+
+void	Channel::setUserLimit(size_t i) {
+	_userLimit = i;
+}
+
+void	Channel::setI(bool status) {
+	i = status;
+}
+
+void	Channel::setT(bool status) {
+	t = status;
+}
+
+void	Channel::setK(bool status) {
+	k = status;
+}
+
+void	Channel::setO(bool status) {
+	o = status;
+}
+
+void	Channel::setL(bool status) {
+	l = status;
 }
 
 /* ************************************************************************** */
