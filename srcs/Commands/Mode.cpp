@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 10:58:35 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:07:33 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,8 @@ void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* 
 void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
-	(void) client;
 
-	if (!msg->params[1].compare("+k") && channel->getPassword()) {
+	if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) {
 		channel->setK(true);
 		channel->setPassword(msg->params[2]);
 		std::string	response;
