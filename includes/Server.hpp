@@ -74,14 +74,22 @@ class Server {
 
 		//SERVER MANAGEMENT
 		void	launch();
-		void	addChannel(Channel* channel);
+		int		createClientConnection(std::vector<pollfd>& pollfds, std::vector<pollfd>& newPollfds);
+		int		handleExistingConnection(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
+		int		handlePollout(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
+		int		handlePollErr(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
 		void	handleMaxClient(int clientSocketFd);
-		void	addClient(int clientSocketFd, std::vector<pollfd> &pollfds);
-		void	deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it);
 		int		acceptSocket(int listenSocket);
 		void	run();
 
-		//GETTER (voir si nécessaire)
+		//CLIENT
+		void	addClient(int clientSocketFd, std::vector<pollfd>& pollfds);
+		void	deleteClient(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
+
+		//CHANNEL
+		void	addChannel(Channel* channel);
+
+		//GETTER
 		std::string const &getPass() const;
 		const std::map<int, Client*>&	getClients() const;
 		const std::map<std::string, Channel*>&	getChannels() const;
@@ -97,7 +105,7 @@ class Server {
 		//EXECUTION
 		void		execCommand(std::string message, Client* client);
 
-/* ------------------------------ REGISTRATION ------------------------------ */
+/* ---------------------------- LINKS AND OTHERS ---------------------------- */
 // link parsing: https://tools.ietf.org/html/rfc2812#section-2.3.1
 // TODO: work on the commands
 // link welcome: https://tools.ietf.org/html/rfc2812#section-5.1

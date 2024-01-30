@@ -17,6 +17,8 @@
 
 class Channel;
 
+class Server;
+
 class Client {
 
 	private:
@@ -28,6 +30,7 @@ class Client {
 		bool		_isRegistered;
 		bool		_isInChannel;
 		bool		_isOperator;
+		bool		_deconnection;
 
 		std::string	_password;
 		std::string	_nick;
@@ -52,6 +55,7 @@ class Client {
 		bool				isRegistered() const;
 		bool				isInChannel() const;
 		bool				isOperator() const;
+		bool				getDeconnection() const;
 		const std::string&	getNick() const;
 		const std::string&	getUserName() const;
 		const std::string&	getPass() const;
@@ -59,6 +63,7 @@ class Client {
 		const std::string&	getCurrentChannel() const;
 		const std::map<Channel*, bool>&	getChannels() const;
 		const size_t&		getMaxChannels() const;
+		static Client*				getClientByFd(Server* server, int clientFd);
 
 		// Setters
 		void	setLogged(bool isLogged);
@@ -72,6 +77,7 @@ class Client {
 		void	setPass(std::string pass);
 		void	setHostname(std::string hostname);
 		void	setCurrentChannel(std::string channel);
+		void	setDeconnection(bool deconnection);
 
 		// Clients Methods
 		void	sendMessage(std::string& message);
