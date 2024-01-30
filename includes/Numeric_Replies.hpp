@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 09:57:31 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 13:53:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 #define RPL_AWAY() (": localhost 301" + "<nick> :<away message>\r\n") //301
 
-#define RPL_CHANNELMODEIS(channel, mode) (": localhost 324" + channel + "[" + mode + "]\r\n") //324
+#define RPL_CHANNELMODEIS(channel, mode) (": localhost 324 " + channel + " [" + mode + "]\r\n") //324
 
 #define RPL_NOTOPIC(client, channel) (":localhost 331 " + client + " " + channel + " :No topic is set\r\n") //331
 

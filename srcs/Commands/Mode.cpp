@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 13:36:04 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:26:24 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ Mode::~Mode(void) {}
 void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
-	(void) msg;
 
 	if (!msg->params[1].compare("+i")) {
 		channel->setI(true);
@@ -55,7 +54,6 @@ void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* 
 void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
-	(void) client;
 
 	std::string	params;
 	std::vector<std::string>::iterator	it = msg->params.begin() + 2;
@@ -75,13 +73,13 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 
 	(void) server;
 
-	if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is not yet set
+	if (!msg->params[1].compare("+k") && channel->getPassword().empty()) { //set the key and the key is not yet set
 		channel->setK(true);
 		channel->setPassword(msg->params[2]);
 		std::string	response = "A key was successfully setup for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
-	else if (!msg->params[1].compare("+k") && channel->getPassword().empty()) { //set the key and the key is already set
+	else if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is already set
 		std::string	response = ERR_KEYSET(client->getNick(), channel->getName());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
@@ -104,16 +102,19 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 		return;
 	}
 
-	std::map<Channel*, bool>	chanList = client->getChannels();
-	std::map<Channel*, bool>::iterator it = chanList.find(channel);
+	// std::map<Channel*, bool>	chanList = client->getChannels();
+	// std::map<Channel*, bool>::iterator it = chanList.find(channel);
 
 	if (!msg->params[1].compare("+o")) {
-		it->second = true;
+		clientChanging->changeOpStatus(channel, true, client);
+		// it->second = true;
 		std::string	response = "You promoted " + clientChanging->getNick() + " to channel operator of channel " + channel->getName() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 	else if (clientChanging->getFd() == client->getFd()) {
-		it->second = false;
+		clientChanging->changeOpStatus(channel, false, client);
+		std::cout << clientChanging->getChannels().at(channel).second << std::endl;
+		// it->second = false;
 		std::string	response = "You demoted yourself from channel operator of the channel " + channel->getName() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
