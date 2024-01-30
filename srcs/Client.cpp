@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 13:34:14 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:19:25 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,19 @@ void	Client::sendMessage(std::string& message) {
 void	Client::addChannel(Channel* chan, bool chanOp) {
 
 	_channels.insert(std::pair<Channel*, bool>(chan, chanOp));
+}
+
+void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {
+
+	std::map<Channel*, bool>::iterator it = _channels.find(chan);
+
+	if (it == _channels.end()) {
+		std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
+		return;
+	}
+
+	it->second = chanOp;
 }
 
 /* --------------------------------- Helpers -------------------------------- */

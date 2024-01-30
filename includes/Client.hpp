@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 13:33:02 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:18:42 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ class Client {
 		void	sendMessage(std::string& message);
 
 		void	addChannel(Channel* chan, bool chanOp);
+		void	changeOpStatus(Channel* chan, bool chanOp, Client* client);
 
 		// TODO: Not Implemented yet
 		void	logIn();
