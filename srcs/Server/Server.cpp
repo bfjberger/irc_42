@@ -143,10 +143,6 @@ void	Server::launch() {
 	std::cout << COLOR("Listening for connections on port ", CYAN) << _port << COLOR(" with password: ", CYAN) << _password << " ..." << std::endl;
 }
 
-void	Server::addChannel(Channel* channel) {
-	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));
-}
-
 /**
  * @brief Deletes a client from the list of connected clients.
  *
@@ -385,4 +381,16 @@ Channel*	Server::getChannel(std::string channelName) {
 	if (it != this->_channels.end())
 		return (it->second);
 	return (NULL);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             CHANNEL MANAGEMENT                             */
+/* -------------------------------------------------------------------------- */
+
+void	Server::addChannel(Channel* channel) {
+	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));
+}
+
+void	Server::removeChannel(std::string channelName) {
+	this->_channels.erase(channelName);
 }

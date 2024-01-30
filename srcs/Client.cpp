@@ -174,6 +174,11 @@ void	Client::addChannel(Channel* chan, bool chanOp) {
 	_channels.insert(std::pair<Channel*, bool>(chan, chanOp));
 }
 
+void	Client::removeChannel(Channel* chan) {
+
+	_channels.erase(chan);
+}
+
 void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {
 
 	std::map<Channel*, bool>::iterator it = _channels.find(chan);
