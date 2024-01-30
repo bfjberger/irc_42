@@ -63,15 +63,30 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
+	std::map<Channel*, bool>    other = client->getChannels();
+	std::map<Channel*, bool>::iterator it = other.find(tmp);
+	if (it == other.end())
+		std::cout << "Enter in here" << std::endl;
+	if (it->second == false)
+	{
+		std::string tmp3 = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
+		send(client->getFd(), tmp3.c_str(), tmp3.size(), 0);
+		return;
+	}
+	
+	std::string	params;
+	std::vector<std::string>::iterator	it = msg->params.begin() + 1;
+	for (; it != msg->params.end(); it++) {
+		params += *it;
+		if (it + 1 != msg->params.end())
+			params += " ";
+	}
 
-	// if (it == other.end())
-	// 	std::cout << "Enter in here" << std::endl;
-	// if (it->second == false)
-	// {
-	// 	std::string tmp3 = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
-	// 	send(client->getFd(), tmp3.c_str(), tmp3.size(), 0);
-	// 	return;
-	// }
+	tmp->setTopic(params);
+
+	std::string	response = "The topic of the channel " + tmp->getName() + " is now " + params + "\r\n";
+	send(client->getFd(), response.c_str(), response.size(), 0);
+
 }
 
 
