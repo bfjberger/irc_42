@@ -33,10 +33,10 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
 		return;
 	}
-	if (!msg->params[1])
+	if (msg->params[1].empty())
 	{
 		std::string _topic = tmp->getTopic();
-		if (!_topic)
+		if (!_topic.empty())
 		{
 			_topic = RPL_NOTOPIC(client->getNick(), nameChannel);
 		}
@@ -49,7 +49,7 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	std::map<std::string, Client*>    clientsList = tmp6->getClients();
+	std::map<std::string, Client*>    clientsList = tmp->getClients();
 	std::map<std::string, Client*>::iterator it2 = clientsList.begin();
     for (; it2 != clientsList.end(); ++it2) 
 	{
@@ -63,8 +63,6 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	std::map<Channel*, bool>    other = client->getChannels();
-	std::map<Channel*, bool>::iterator it = other.find(tmp);
 	if (it == other.end())
 		std::cout << "Enter in here" << std::endl;
 	if (it->second == false)
@@ -73,12 +71,12 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		send(client->getFd(), tmp3.c_str(), tmp3.size(), 0);
 		return;
 	}
-	
+
 	std::string	params;
-	std::vector<std::string>::iterator	it = msg->params.begin() + 1;
-	for (; it != msg->params.end(); it++) {
-		params += *it;
-		if (it + 1 != msg->params.end())
+	std::vector<std::string>::iterator	it3 = msg->params.begin() + 1;
+	for (; it3 != msg->params.end(); it3++) {
+		params += *it3;
+		if (it3 + 1 != msg->params.end())
 			params += " ";
 	}
 
