@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 11:53:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:30:10 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ class Channel {
 		bool	getL() const;
 
 		const std::map<std::string, Client*>&	getClients() const;
-		Client*	getClient(std::string clientName);
+		Client*									getClient(std::string clientName);
 
 		//Setters
 		void	setName(std::string name);
