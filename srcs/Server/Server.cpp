@@ -144,51 +144,6 @@ void	Server::launch() {
 }
 
 /**
- * @brief Deletes a client from the list of connected clients.
- *
- * This function removes the client with the specified socket file descriptor from the vector of pollfds.
- * It also closes the client socket and prints a message indicating that the client has been disconnected.
- *
- * @param pollfds The vector of pollfds representing the connected clients.
- * @param clientSocketFd The socket file descriptor of the client to be deleted.
- */
-void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
-
-	std::cout << COLOR("Client ", CYAN) << it->fd << COLOR(" disconnected.", CYAN) << std::endl;
-
-	std::map<int, Client*>::iterator	client = this->_clients.find(it->fd);
-	delete client->second;
-	this->_clients.erase(client);
-
-	close(it->fd);
-
-	pollfds.erase(it);
-
-	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 1 << std::endl;
-}
-
-void	Server::handleMaxClient(int clientSocketFd) {
-
-	std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
-
-	send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
-	close(clientSocketFd);
-}
-
-void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
-
-	pollfd	clientPollfd;
-	Client*	client = new Client(clientSocket);
-
-	clientPollfd.fd = clientSocket;
-	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
-	pollfds.push_back(clientPollfd);
-	_clients.insert(std::pair<int, Client *>(clientSocket, client));
-
-	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
-}
-
-/**
  * @brief Accepts a new client connection on the given listen socket.
  *      The client socket is added to the pollfds vector.
  *
@@ -217,6 +172,14 @@ int	Server::acceptSocket(int listenSocket) {
 	std::cout << COLOR("New connection from ", CYAN) << inet_ntoa(clientAddress.sin_addr) << COLOR(" on clientAddr port ", CYAN) << ntohs(clientAddress.sin_port) << std::endl;
 
 	return (clientSocketFd);
+}
+
+void	Server::handleMaxClient(int clientSocketFd) {
+
+	std::cout << COLOR(ERR_MAX_CLIENTS, RED) << std::endl;
+
+	send(clientSocketFd, ERR_MAX_CLIENTS, strlen(ERR_MAX_CLIENTS), 0);
+	close(clientSocketFd);
 }
 
 int	Server::createClientConnection(std::vector<pollfd> &pollfds, std::vector<pollfd> &newPollfds) {
@@ -385,8 +348,77 @@ Channel*	Server::getChannel(std::string channelName) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                              CLIENT MANAGEMENT                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * @brief Deletes a client from the list of connected clients.
+ *
+ * This function removes the client with the specified socket file descriptor from the vector of pollfds.
+ * It also closes the client socket and prints a message indicating that the client has been disconnected.
+ *
+ * @param pollfds The vector of pollfds representing the connected clients.
+ * @param clientSocketFd The socket file descriptor of the client to be deleted.
+ */
+void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
+
+	std::cout << COLOR("Client ", CYAN) << it->fd << COLOR(" disconnected.", CYAN) << std::endl;
+
+	std::map<int, Client*>::iterator	client = this->_clients.find(it->fd);
+	delete client->second;
+	this->_clients.erase(client);
+
+	close(it->fd);
+
+	pollfds.erase(it);
+
+	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 1 << std::endl;
+}
+
+void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
+
+	pollfd	clientPollfd;
+	Client*	client = new Client(clientSocket);
+
+	clientPollfd.fd = clientSocket;
+	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
+	pollfds.push_back(clientPollfd);
+	_clients.insert(std::pair<int, Client *>(clientSocket, client));
+
+	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
+}
+
+
+bool	Server::isNick(std::string nick) {
+	std::map<int, Client*>::iterator it = this->_clients.begin();
+	while (it != this->_clients.end()) {
+		if (it->second->getNick() == nick)
+			return (true);
+		it++;
+	}
+	return (false);
+}
+
+Client*	Server::getClient(std::string nick) {
+	std::map<int, Client*>::iterator it = this->_clients.begin();
+	while (it != this->_clients.end()) {
+		if (it->second->getNick() == nick)
+			return (it->second);
+		it++;
+	}
+	return (NULL);
+}
+
+/* -------------------------------------------------------------------------- */
 /*                             CHANNEL MANAGEMENT                             */
 /* -------------------------------------------------------------------------- */
+
+bool	Server::isChannel(std::string channelName) {
+	std::map<std::string, Channel*>::iterator it = this->_channels.find(channelName);
+	if (it != this->_channels.end())
+		return (true);
+	return (false);
+}
 
 void	Server::addChannel(Channel* channel) {
 	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));

@@ -21,5 +21,39 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	(void) server;
 	(void) msg;
 	(void) client;
-	std::cout << "privmsg" << std::endl;
+
+	if (msg->params.size() < 2) {
+		std::string errNeedMore = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		send(client->getFd(), errNeedMore.c_str(), errNeedMore.size(), 0);
+		return;
+	}
+
+	if (server->isChannel(msg->params[0]) == true) {
+		Channel* channel = server->getChannel(msg->params[0]);
+		if (channel != NULL) {
+			std::string tmp = msg->params[1] + "\r\n";
+			channel->sendMessageToAllClients(tmp);
+		}
+		else {
+			std::string errNoChannel = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
+			send(client->getFd(), errNoChannel.c_str(), errNoChannel.size(), 0);
+		}
+	}
+	else if (server->isNick(msg->params[0]) == true) {
+		Client* target = server->getClient(msg->params[0]);
+		if (target != NULL) {
+			std::string tmp = msg->params[1] + "\r\n";
+			std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << msg->params[1], GREEN) << std::endl;
+			send(target->getFd(), tmp.c_str(), tmp.size(), 0);
+		}
+		else {
+			std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+			send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+		}
+	}
+	else {
+		std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+	}
+
 }
