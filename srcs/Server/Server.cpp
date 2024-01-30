@@ -256,7 +256,8 @@ int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<p
 	else {
 		buffer[readResult] = '\0';
 		std::string	tmp(buffer);
-		std::cout << COLOR("Received: ", CYAN) << "|" << tmp.substr(0, tmp.size() - 1) << "|" << std::endl;
+		trimString(tmp);
+		std::cout << COLOR("Received: ", CYAN) << "|" << tmp << "|" << std::endl;
 		parser(buffer, it->fd);
 	}
 	return (0);
