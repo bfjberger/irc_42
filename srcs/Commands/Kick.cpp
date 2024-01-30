@@ -6,7 +6,7 @@
 /*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:00 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 17:17:30 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/30 11:19:06 by bberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	Kick::execute(Server* server, t_Message* msg, Client* client) {
 		send(client->getFd(), tmp2.c_str(), tmp2.size(), 0);
 		return;
     }
-
+	//  check avec la fonction join et la maniere de set la luist de channel et la liste des clients de chaque channel
     std::map<Channel*, bool>    other = client->getChannels();
     std::map<Channel*, bool>::iterator it = other.find(tmp);
 	if (it == other.end())
