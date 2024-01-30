@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Numeric_Replies.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bberger <bberger@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 16:17:16 by bberger          ###   ########.fr       */
+/*   Updated: 2024/01/30 09:57:31 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 
 #define RPL_AWAY() (": localhost 301" + "<nick> :<away message>\r\n") //301
 
-#define RPL_CHANNELMODEIS() (": localhost 324" + "<channel> <mode> <mode params>\r\n") //324
+#define RPL_CHANNELMODEIS(channel, mode) (": localhost 324" + channel + "[" + mode + "]\r\n") //324
 
 #define RPL_NOTOPIC(client, channel) (":localhost 331 " + client + " " + channel + " :No topic is set\r\n") //331
 
@@ -89,6 +89,8 @@
 #define ERR_NICKNAMEINUSE(client, nick) (":localhost 433 " + client + " " + nick + " :Nickname is already in use\r\n") //433
 
 #define ERR_NICKCOLLISION(client, nick) (":localhost 436 " + client + " " + nick + " :Nickname collision KILL\r\n") //436
+
+#define ERR_USERNOTINCHANNEL(client, nick, channel) (":locahost 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n") //441
 
 #define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
 
