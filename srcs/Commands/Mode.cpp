@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 15:26:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:35:50 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 
 	if (!msg->params[1].compare("+o")) {
 		clientChanging->changeOpStatus(channel, true, client);
-		// it->second = true;
 		std::string	response = "You promoted " + clientChanging->getNick() + " to channel operator of channel " + channel->getName() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
@@ -219,15 +218,9 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 
-	std::map<int, Client*>	clients = server->getClients();
+	Client*	clientChanging = server->getClient(msg->params[0]);
 
-	std::map<int, Client*>::const_iterator it;
-	for (it = clients.begin(); it != clients.end(); ++it) {
-		if (it->second->getNick() == msg->params[0])
-			break;
-	}
-
-	if (it == clients.end()) { // couldn't find a user
+	if (!clientChanging) { // couldn't find a user
 		std::string	response = ERR_USERSDONTMATCH(client->getNick());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}

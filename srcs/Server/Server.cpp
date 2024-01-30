@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/26 16:32:29 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:16:52 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,23 +325,32 @@ void	Server::run() {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                   GETTER                                   */
+/*                                  GETTERS                                   */
 /* -------------------------------------------------------------------------- */
 
 std::string const &Server::getPass() const {
-	return (this->_password);
+	return (_password);
 }
 
 const std::map<int, Client*>&	Server::getClients() const {
-	return (this->_clients);
+	return (_clients);
+}
+
+Client*	Server::getClient(std::string nickname) {
+	std::map<int, Client*>::iterator it;
+	for (it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->second->getNick() == nickname)
+			return (it->second);
+	}
+	return (NULL);
 }
 
 const std::map<std::string, Channel*>&	Server::getChannels() const {
-	return (this->_channels);
+	return (_channels);
 }
 
 Channel*	Server::getChannel(std::string channelName) {
-	std::map<std::string, Channel*>::iterator it = this->_channels.find(channelName);
+	std::map<std::string, Channel*>::iterator it = _channels.find(channelName);
 	if (it != this->_channels.end())
 		return (it->second);
 	return (NULL);

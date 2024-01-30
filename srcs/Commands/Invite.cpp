@@ -29,3 +29,17 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	(void) msg;
 	std::cout << "invite" << std::endl;
 }
+
+// - Paramètres:
+//     - `<nickname> <channel>`
+// - utiliser pour inviter un user, identifié par `<nickname>`, sur un channel, identifié par `<channel>`
+// - il n’y a pas de conditions sur l’existence ou la validité du channel où l’on invite ce user
+// - pour inviter un user sur un channel en invite only, le client envoyant cette commande doit être un channel operator sur ce channel
+// - Numeric Replies:
+//     - `ERR_NEEDMOREPARAMS`
+//     - `ERR_NOSUCHNICK`
+//     - `ERR_NOTONCHANNEL`
+//     - `ERR_USERONCHANNEL`
+//     - `ERR_CHANOPRIVSNEEDED`
+//     - `RPL_INVITING`
+//     - `RPL_AWAY`

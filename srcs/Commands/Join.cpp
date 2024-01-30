@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 13:34:58 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 16:46:42 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	Join::joinChannelPassword(Server* server, t_Message* msg, Client* client, C
 	if (msg->params.size() < 2) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
 		send(client->getFd(), response.c_str(), response.size(), 0);
+		return;
 	}
 
 	if (msg->params[1] != channel->getPassword()) {

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 15:19:25 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:29:32 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,12 +181,12 @@ void	Client::removeChannel(Channel* chan) {
 
 void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {
 
-	std::map<Channel*, bool>::iterator it = _channels.find(chan);
+	std::map<Channel*, bool>::iterator	it = _channels.find(chan);
 
 	if (it == _channels.end()) {
-		std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
-		return;
+			std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
+			send(client->getFd(), response.c_str(), response.size(), 0);
+			return;
 	}
 
 	it->second = chanOp;

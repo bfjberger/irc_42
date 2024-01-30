@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/26 11:18:48 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:15:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,14 @@ class Server {
 		void	addChannel(Channel* channel);
 		void	removeChannel(std::string channelName);
 
-		//GETTER
+		//GETTERS
 		std::string const &getPass() const;
+
 		const std::map<int, Client*>&	getClients() const;
+		Client*							getClient(std::string nickname);
+
 		const std::map<std::string, Channel*>&	getChannels() const;
-		Channel*	getChannel(std::string channelName);
+		Channel*								getChannel(std::string channelName);
 
 		//PARSER
 		t_Message*	parseCommands(std::string message, Client* client);
