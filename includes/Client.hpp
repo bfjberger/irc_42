@@ -83,6 +83,7 @@ class Client {
 		void	sendMessage(std::string& message);
 
 		void	addChannel(Channel* chan, bool chanOp);
+		void	removeChannel(Channel* chan);
 		void	changeOpStatus(Channel* chan, bool chanOp, Client* client);
 
 		// TODO: Not Implemented yet

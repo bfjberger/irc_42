@@ -164,12 +164,19 @@ void	Client::setDeconnection(bool deconnection) {
 void	Client::sendMessage(std::string& message) {
 	std::cout << COLOR("Sending message to client ", CYAN) << _fd << std::endl;
 	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
+	if (message.find("\r\n") == std::string::npos)
+		message += "\r\n";
 	::send(_fd, message.c_str(), message.length(), 0);
 }
 
 void	Client::addChannel(Channel* chan, bool chanOp) {
 
 	_channels.insert(std::pair<Channel*, bool>(chan, chanOp));
+}
+
+void	Client::removeChannel(Channel* chan) {
+
+	_channels.erase(chan);
 }
 
 void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {

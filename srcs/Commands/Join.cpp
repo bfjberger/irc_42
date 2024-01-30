@@ -109,6 +109,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	if (msg->params.size() < 1) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
 		send(client->getFd(), response.c_str(), response.size(), 0);
+		return;
 	}
 
 	std::string channelName = msg->params[0];

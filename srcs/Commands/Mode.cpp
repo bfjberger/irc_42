@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 16:43:41 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 17:35:50 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	}
 	else if (clientChanging->getFd() == client->getFd()) {
 		clientChanging->changeOpStatus(channel, false, client);
+		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
+		// it->second = false;
 		std::string	response = "You demoted yourself from channel operator of the channel " + channel->getName() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}

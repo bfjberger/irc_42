@@ -143,10 +143,6 @@ void	Server::launch() {
 	std::cout << COLOR("Listening for connections on port ", CYAN) << _port << COLOR(" with password: ", CYAN) << _password << " ..." << std::endl;
 }
 
-void	Server::addChannel(Channel* channel) {
-	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));
-}
-
 /**
  * @brief Deletes a client from the list of connected clients.
  *
@@ -260,7 +256,8 @@ int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<p
 	else {
 		buffer[readResult] = '\0';
 		std::string	tmp(buffer);
-		std::cout << COLOR("Received: ", CYAN) << "|" << tmp.substr(0, tmp.size() - 1) << "|" << std::endl;
+		trimString(tmp);
+		std::cout << COLOR("Received: ", CYAN) << "|" << tmp << "|" << std::endl;
 		parser(buffer, it->fd);
 	}
 	return (0);
@@ -394,4 +391,16 @@ Channel*	Server::getChannel(std::string channelName) {
 	if (it != this->_channels.end())
 		return (it->second);
 	return (NULL);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             CHANNEL MANAGEMENT                             */
+/* -------------------------------------------------------------------------- */
+
+void	Server::addChannel(Channel* channel) {
+	this->_channels.insert(std::pair<std::string, Channel*>(channel->getName(), channel));
+}
+
+void	Server::removeChannel(std::string channelName) {
+	this->_channels.erase(channelName);
 }

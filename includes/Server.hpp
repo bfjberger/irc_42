@@ -88,6 +88,7 @@ class Server {
 
 		//CHANNEL
 		void	addChannel(Channel* channel);
+		void	removeChannel(std::string channelName);
 
 		//GETTERS
 		std::string const &getPass() const;
