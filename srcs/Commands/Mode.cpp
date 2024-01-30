@@ -113,7 +113,7 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	}
 	else if (clientChanging->getFd() == client->getFd()) {
 		clientChanging->changeOpStatus(channel, false, client);
-		std::cout << clientChanging->getChannels().at(channel).second << std::endl;
+		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
 		// it->second = false;
 		std::string	response = "You demoted yourself from channel operator of the channel " + channel->getName() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
