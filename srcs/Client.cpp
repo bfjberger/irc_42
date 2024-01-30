@@ -23,6 +23,7 @@ Client::Client(int fd) : _fd(fd),
 						_isRegistered(false),
 						_isInChannel(false),
 						_isOperator(false),
+						_deconnection(false),
 						_hostname("localhost"),
 						_currentChannel(""),
 						_maxChannels(5) {
@@ -63,6 +64,10 @@ bool	Client::isOperator() const {
 	return (_isOperator);
 }
 
+bool	Client::getDeconnection() const {
+	return (_deconnection);
+}
+
 const std::string&	Client::getNick() const {
 	return (_nick);
 }
@@ -89,6 +94,19 @@ const std::map<Channel*, bool>&	Client::getChannels() const {
 
 const int&	Client::getMaxChannels() const {
 	return (_maxChannels);
+}
+
+Client*	Client::getClientByFd(Server* server, int clientFd) {
+	std::map<int, Client*> clientsList = server->getClients();
+	Client* client = NULL;
+
+	try {
+		client = clientsList.at(clientFd);
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return (client);
 }
 
 /* --------------------------------- Setters -------------------------------- */
@@ -135,6 +153,10 @@ void	Client::setHostname(std::string hostname) {
 
 void	Client::setCurrentChannel(std::string channel) {
 	_currentChannel = channel;
+}
+
+void	Client::setDeconnection(bool deconnection) {
+	_deconnection = deconnection;
 }
 
 /* ----------------------------- Client methods ----------------------------- */

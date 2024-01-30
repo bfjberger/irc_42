@@ -32,7 +32,7 @@
 
 #include "Color.hpp"
 
-#define ERROR -1
+#define FAILURE -1
 #define SUCCESS 1
 #define BREAK 2
 #define CONTINUE 3

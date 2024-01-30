@@ -223,6 +223,77 @@ int	Server::acceptSocket(int listenSocket) {
 	return (clientSocketFd);
 }
 
+int	Server::createClientConnection(std::vector<pollfd> &pollfds, std::vector<pollfd> &newPollfds) {
+
+	int clientSocketFd = acceptSocket(_serverSocketFd);
+
+	if (clientSocketFd == -1) {
+		std::cout << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
+		return (CONTINUE);
+	}
+	if (pollfds.size() - 1 < MAX_SOCKETS)
+		addClient(clientSocketFd, newPollfds);
+	else
+		handleMaxClient(clientSocketFd);
+	return (0);
+}
+
+int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
+
+	// Client* client = Client::getClientByFd(this, it->fd);
+	char buffer[BUFF_SIZE];
+	int readResult;
+
+	memset(buffer, 0, sizeof(buffer));
+	readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
+
+	if (readResult < 0) {
+		std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
+		deleteClient(pollfds, it);
+		return (BREAK);
+	}
+	else if (readResult == 0) {
+		deleteClient(pollfds, it);
+		std::cout << COLOR("[SERVER] A Client just disconnected.", YELLOW) << std::endl;
+		return (BREAK);
+	}
+	else {
+		buffer[readResult] = '\0';
+		std::string	tmp(buffer);
+		std::cout << COLOR("Received: ", CYAN) << "|" << tmp.substr(0, tmp.size() - 1) << "|" << std::endl;
+		parser(buffer, it->fd);
+	}
+	return (0);
+}
+
+int	Server::handlePollout(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
+
+	Client* client = Client::getClientByFd(this, it->fd);
+	if (client == NULL) {
+		std::cout << COLOR("Error: client not found.", RED) << std::endl;
+	}
+	else {
+		if (client->getDeconnection() == true) {
+			deleteClient(pollfds, it);
+			return (BREAK);
+		}
+	}
+	return (0);
+}
+
+int	Server::handlePollErr(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
+
+	if (it->fd == _serverSocketFd) {
+		std::cerr << COLOR("Error: server socket error: ", RED) << strerror(errno) << std::endl;
+		return (FAILURE);
+	}
+	else {
+		deleteClient(pollfds, it);
+		return (BREAK);
+	}
+	return (0);
+}
+
 /**
  * @brief Runs the server and handles incoming connections and data.
  *
@@ -257,81 +328,35 @@ void	Server::run() {
 		std::vector<pollfd> newPollfds;
 
 		if (poll(&pollfds[0], pollfds.size(), -1) == -1) {
+			if (g_server_running == false)
+				return;
 			std::cerr << COLOR("Error: poll failed: ", RED) << strerror(errno) << std::endl;
 			return;
 		}
 		std::vector<pollfd>::iterator it = pollfds.begin();
 		while (it != pollfds.end()) {
-
-			// if the data is available to read on the fd/socket
-			// -> if the connection is new, accept it and add it to the pollfds
-			// -> if the connection already exists, read the data and parse it
-			if (it->revents && POLLIN) {
+			if (it->revents & POLLIN) { // if the data is available to read on the fd/socket
 				if (it->fd == _serverSocketFd) {
-
-					int clientSocketFd = acceptSocket(_serverSocketFd);
-
-					if (clientSocketFd == -1)
-						return;
-					if (pollfds.size() - 1 < MAX_SOCKETS)
-						addClient(clientSocketFd, newPollfds);
-					else
-						handleMaxClient(clientSocketFd);
-					it++;
+					if (createClientConnection(pollfds, newPollfds) == CONTINUE)
+						continue;
 				}
-				// -> if the connection already exists, read the data and parse it
-				else {
-					char buffer[BUFF_SIZE];
-					int readResult;
-
-					// memset(buffer, 0, sizeof(buffer));
-					readResult = recv(it->fd, buffer, BUFF_SIZE, 0);
-
-					if (readResult < 0) {
-						std::cerr << COLOR("Error: socket reading failed: ", RED) << strerror(errno) << std::endl;
-						deleteClient(pollfds, it);
-
-						if (pollfds.size() == 0) {
-							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
-							break;
-						}
-					}
-					else if (readResult == 0) {
-						deleteClient(pollfds, it);
-
-						if (pollfds.size() == 0) {
-							std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
-							break;
-						}
-					}
-					else {
-						buffer[readResult] = '\0';
-						std::string	tmp(buffer);
-						std::cout << COLOR("Received: ", CYAN) << "|" << tmp.substr(0, tmp.size() - 1) << "|" << std::endl;
-						// TODO: parse the request according to IRC protocol
-
-						parser(buffer, it->fd);
-						it++;
-					}
-				}
-			}
-			else if (it->revents & POLLERR) {
-				if (it->fd == _serverSocketFd) {
-					std::cerr << COLOR("Error: server socket error: ", RED) << strerror(errno) << std::endl;
-					return;
-				}
-				else {
-					std::cerr << COLOR("Error: client socket error: ", RED) << strerror(errno) << std::endl;
-					deleteClient(pollfds, it);
-
-					if (pollfds.size() == 0) {
-						std::cout << COLOR("No more clients connected. Exiting...", CYAN) << std::endl;
+				else { // if the connection already exists, read the data and parse it
+					if (handleExistingConnection(pollfds, it) == BREAK)
 						break;
-					}
 				}
 			}
-			else
-				it++;
+			else if (it->revents & POLLOUT) {
+				// if the data is available to write on the fd/socket
+				if (handlePollout(pollfds, it) == BREAK)
+					break;
+			}
+			else if (it->revents & POLLERR) { // if an error occurred on the fd/socket
+				if (handlePollErr(pollfds, it) == BREAK)
+					break;
+				else
+					return;
+			}
+			it++;
 		}
 		// add new pollfds to the pollfds vector
 		pollfds.insert(pollfds.end(), newPollfds.begin(), newPollfds.end());

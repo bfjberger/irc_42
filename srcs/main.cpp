@@ -18,7 +18,7 @@ bool g_server_running = true;
 
 static void	signalHandler(int signal) {
 
-	std::cout << COLOR(":Signal ", CYAN) << signal << COLOR(" received. Exiting...", CYAN) << std::endl;
+	std::cout << COLOR(" :Signal ", CYAN) << signal << COLOR(" received. Exiting...", CYAN) << std::endl;
 	g_server_running = false;
 }
 
