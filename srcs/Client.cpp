@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 10:26:57 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 13:34:14 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ const std::map<Channel*, bool>&	Client::getChannels() const {
 	return (_channels);
 }
 
-const size_t&	Client::getMaxChannels() const {
+const int&	Client::getMaxChannels() const {
 	return (_maxChannels);
 }
 
@@ -165,6 +165,11 @@ void	Client::sendMessage(std::string& message) {
 	std::cout << COLOR("Sending message to client ", CYAN) << _fd << std::endl;
 	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
 	::send(_fd, message.c_str(), message.length(), 0);
+}
+
+void	Client::addChannel(Channel* chan, bool chanOp) {
+
+	_channels.insert(std::pair<Channel*, bool>(chan, chanOp));
 }
 
 /* --------------------------------- Helpers -------------------------------- */

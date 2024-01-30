@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 10:33:46 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 13:34:58 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 	client->setInChannel(true);
 
 	//add the channel to which the client is part of and indicate he is an operator on this one
-	std::map<Channel*, bool>	chanList = client->getChannels();
-	chanList.insert(std::pair<Channel*, bool>(channel, true));
+	client->addChannel(channel, true);
+	// std::map<Channel*, bool>	chanList = client->getChannels();
+	// chanList.insert(std::pair<Channel*, bool>(channel, true));
 
 	channel->addClient(client);
 
@@ -81,8 +82,9 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	client->setInChannel(true);
 
 	//add the channel to which the client is part of and indicate he is not an operator
-	std::map<Channel*, bool>	chanList = client->getChannels();
-	chanList.insert(std::pair<Channel*, bool>(channel, false));
+	client->addChannel(channel, false);
+	// std::map<Channel*, bool>	chanList = client->getChannels();
+	// chanList.insert(std::pair<Channel*, bool>(channel, false));
 
 	// Add the client to the channel
 	channel->addClient(client);
@@ -96,7 +98,7 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 void Join::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if the client is not in too many channel
-	if (client->getChannels().size() == client->getMaxChannels()) {
+	if (static_cast<int>(client->getChannels().size()) == client->getMaxChannels()) {
 		std::string	response = ERR_TOOMANYCHANNELS(client->getNick(), msg->params[0]);
 		send(client->getFd(), response.c_str(), response.size(), 0);
 		return;

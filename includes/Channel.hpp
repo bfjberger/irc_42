@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 10:46:48 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:53:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ class Channel {
 		int	_userLimit;
 
 		bool	i;
-		// bool	t;
 		bool	k;
-		// bool	o;
 		bool	l;
 
 	public:
@@ -45,9 +43,7 @@ class Channel {
 
 		int	getUserLimit() const;
 		bool	getI() const;
-		// bool	getT() const;
 		bool	getK() const;
-		// bool	getO() const;
 		bool	getL() const;
 
 		const std::map<std::string, Client*>&	getClients() const;
@@ -60,9 +56,7 @@ class Channel {
 
 		void	setUserLimit(int i);
 		void	setI(bool status);
-		// void	setT(bool status);
 		void	setK(bool status);
-		// void	setO(bool status);
 		void	setL(bool status);
 
 		//Channel Methods
