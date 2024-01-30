@@ -86,7 +86,6 @@ class Server {
 		void	addClient(int clientSocketFd, std::vector<pollfd>& pollfds);
 		void	deleteClient(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
 		bool	isNick(std::string nick);
-		Client*	getClient(std::string nick);
 
 		//CHANNEL
 		bool	isChannel(std::string channelName);

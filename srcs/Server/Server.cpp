@@ -336,15 +336,6 @@ const std::map<int, Client*>&	Server::getClients() const {
 	return (_clients);
 }
 
-Client*	Server::getClient(std::string nickname) {
-	std::map<int, Client*>::iterator it;
-	for (it = _clients.begin(); it != _clients.end(); ++it) {
-		if (it->second->getNick() == nickname)
-			return (it->second);
-	}
-	return (NULL);
-}
-
 const std::map<std::string, Channel*>&	Server::getChannels() const {
 	return (_channels);
 }
