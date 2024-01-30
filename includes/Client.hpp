@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 10:27:02 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 13:33:02 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Client {
 
 		std::map<Channel*, bool>	_channels;
 
-		size_t	_maxChannels;
+		int	_maxChannels;
 
 	public:
 		Client(int fd);
@@ -58,7 +58,7 @@ class Client {
 		const std::string&	getHostname() const;
 		const std::string&	getCurrentChannel() const;
 		const std::map<Channel*, bool>&	getChannels() const;
-		const size_t&		getMaxChannels() const;
+		const int&		getMaxChannels() const;
 
 		// Setters
 		void	setLogged(bool isLogged);
@@ -75,6 +75,8 @@ class Client {
 
 		// Clients Methods
 		void	sendMessage(std::string& message);
+
+		void	addChannel(Channel* chan, bool chanOp);
 
 		// TODO: Not Implemented yet
 		void	logIn();

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 11:07:33 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 13:36:04 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,61 +25,70 @@ Mode::~Mode(void) {}
  *
  * Parameters CHANNEL mode:
  * 		<channel> {[+|-]|i|t|k|o|l} [<topic>] [<key>] [<user>] [<limit>]
+ * you can't remove the topic, only change it with +t
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.
  * @param client The client object.
 */
 
-// ! Do we send the changes of modes (+/-) to the channel or only to the client requesting the change
-// ! for the error we can keep to the requesting client but for the successful ones ??
+// TODO send the successful modification of a channel to the channel
+// TODO send the failed modification of a channel to the client requesting the changes
 
 void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
 	(void) msg;
-	(void) client;
-	(void) channel;
 
 	if (!msg->params[1].compare("+i")) {
 		channel->setI(true);
+		std::string	response = "The channel " + channel->getName() + " is now in invite-only mode.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 	else {
 		channel->setI(false);
+		std::string	response = "The channel " + channel->getName() + " is no longer in invite-only mode.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 }
 
 void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
-	(void) msg;
 	(void) client;
-	(void) channel;
 
-	if (!msg->params[1].compare("+t")) {
+	std::string	params;
+	std::vector<std::string>::iterator	it = msg->params.begin() + 2;
+	for (; it != msg->params.end(); it++) {
+		params += *it;
+		if (it + 1 != msg->params.end())
+			params += " ";
 	}
-	else {
-	}
+
+	channel->setTopic(params);
+
+	std::string	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
+	send(client->getFd(), response.c_str(), response.size(), 0);
 }
 
 void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
 
-	if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) {
+	if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is not yet set
 		channel->setK(true);
 		channel->setPassword(msg->params[2]);
-		std::string	response;
+		std::string	response = "A key was successfully setup for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
-	else if (!msg->params[1].compare("+k") && channel->getPassword().empty()) {
-		std::string	response;
+	else if (!msg->params[1].compare("+k") && channel->getPassword().empty()) { //set the key and the key is already set
+		std::string	response = ERR_KEYSET(client->getNick(), channel->getName());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
-	else {
+	else { //remove the key
 		channel->setK(false);
 		channel->setPassword("");
-		std::string	response;
+		std::string	response = "The key was successfully removed for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 }
@@ -176,7 +185,14 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	}
 
 	std::map<Channel*, bool>			chans = client->getChannels();
+
 	std::map<Channel*, bool>::iterator	it = chans.find(channel);
+
+	if (it == chans.end()) {
+		std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
+		return;
+	}
 
 	if (it->second == false) { // the user is not channel operator
 		std::string	response = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
@@ -186,7 +202,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 	if (!msg->params[1].compare("+i") || !msg->params[1].compare("-i"))
 		handleInvit(server, msg, client, channel);
-	else if (!msg->params[1].compare("+t") || !msg->params[1].compare("-t"))
+	else if (!msg->params[1].compare("+t"))
 		handleTopic(server, msg, client, channel);
 	else if (!msg->params[1].compare("+k") || !msg->params[1].compare("-k"))
 		handleKey(server, msg, client, channel);

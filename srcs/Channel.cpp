@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 10:47:00 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 11:53:54 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ Channel::Channel(const std::string& name) {
 	_password = "";
 	_userLimit = -1;
 	i = false;
-	// t = false;
 	k = false;
-	// o = false;
 	l = false;
 }
 
@@ -64,17 +62,9 @@ bool	Channel::getI() const {
 	return (i);
 }
 
-// bool	Channel::getT() const {
-// 	return (t);
-// }
-
 bool	Channel::getK() const {
 	return (k);
 }
-
-// bool	Channel::getO() const {
-// 	return (o);
-// }
 
 bool	Channel::getL() const {
 	return (l);
@@ -115,17 +105,9 @@ void	Channel::setI(bool status) {
 	i = status;
 }
 
-// void	Channel::setT(bool status) {
-// 	t = status;
-// }
-
 void	Channel::setK(bool status) {
 	k = status;
 }
-
-// void	Channel::setO(bool status) {
-// 	o = status;
-// }
 
 void	Channel::setL(bool status) {
 	l = status;
