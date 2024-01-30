@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:26 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 15:29:09 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 08:50:52 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@ class Mode : public ACommand {
 	public:
 		Mode(void);
 		~Mode(void);
+
+		void			handleInvit(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			handleTopic(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			handleKey(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			handleChanOp(Server* server, t_Message* msg, Client* client, Channel* channel);
+		void			handleLimit(Server* server, t_Message* msg, Client* client, Channel* channel);
 
 		void			channelMode(Server* server, t_Message* msg, Client* client);
 		void			userMode(Server* server, t_Message* msg, Client* client);

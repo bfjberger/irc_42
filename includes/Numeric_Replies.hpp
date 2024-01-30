@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 17:20:19 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 09:57:31 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@
 #define ERR_NICKNAMEINUSE(client, nick) (":localhost 433 " + client + " " + nick + " :Nickname is already in use\r\n") //433
 
 #define ERR_NICKCOLLISION(client, nick) (":localhost 436 " + client + " " + nick + " :Nickname collision KILL\r\n") //436
+
+#define ERR_USERNOTINCHANNEL(client, nick, channel) (":locahost 441 " + client + " " + nick + " " + channel + " :They aren't on that channel\r\n") //441
 
 #define ERR_NOTONCHANNEL(client, channel) (":localhost 442 " + client + " " + channel + " :You're not on that channel\r\n") //442
 

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 15:33:47 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 10:33:46 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,13 +139,19 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if the channel has a user limit
 	if (channel->getL() == true) {
-		if (channel->getUserLimit() == channel->getClients().size()) {
+		if (channel->getUserLimit() == static_cast<int>(channel->getClients().size())) {
 			std::string	response = ERR_CHANNELISFULL(client->getNick(), channel->getName());
 			send(client->getFd(), response.c_str(), response.size(), 0);
 		}
 		else
 			joinChannel(server, msg, client, channel);
 		return;
+	}
+
+	// TODO à faire quand INVITE sera fait
+	// Check if the channel is in invite-only
+	if (channel->getI() == true) {
+
 	}
 
 	joinChannel(server, msg, client, channel);
