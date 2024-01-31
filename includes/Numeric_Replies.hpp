@@ -31,7 +31,9 @@
 /* ************************************************************************** */
 
 // PING
-# define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n")
+#define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n") // PONG
+
+#define RPL_JOIN(client, channel) (":" + USER_ID(client) + " JOIN " + channel + "\r\n") //JOIN
 
 #define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
 

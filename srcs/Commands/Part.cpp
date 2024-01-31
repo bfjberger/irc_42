@@ -48,14 +48,12 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	std::map<Channel*, bool>    other = client->getChannels();
 	std::map<Channel*, bool>::iterator it = other.find(channel);
 
-	// std::string rpl = client->getNick() + " parts from " + nameChannel;
 	std::string rpl = ":" + USER_ID(client) + " PART " + nameChannel;
 	if (msg->params.size() == 1) {
 		rpl += " .\r\n";
-		// rpl += " " + client->getNick() + "\r\n";
 	}
 	else
-		rpl += " [" + getParams(msg, 1) + "]\r\n";
+		rpl += " " + getParams(msg, 1) + "\r\n";
 	it->first->sendMessageToAllClients(rpl);
 	
 	client->removeChannel(channel);

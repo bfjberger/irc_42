@@ -55,7 +55,7 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	// std::string	response = ":localhost " + client->getNick() + " " + channel->getName() + " :You have joined the newly created channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be IRSSI compliant
 	// send(client->getFd(), response.c_str(), response.length(), 0);
-	std::string response2 = ":" + USER_ID(client) + " JOIN " + msg->params[0] + "\r\n";
+	std::string response2 = RPL_JOIN(client, msg->params[0]);
 	client->sendMessage(response2);
 	// send(client->getFd(), response2.c_str(), response2.size(), 0);
 	// client->printInfo();
@@ -95,7 +95,7 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	// std::string response = "You have joined channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be IRSSI compliant
 	// response = ":" + client->getNick() + " " + channel->getName() + " :You have joined channel " + msg->params[0] + "\r\n";
 	// send(client->getFd(), response.c_str(), response.length(), 0);
-	std::string response2 = ":" + USER_ID(client) + " JOIN " + msg->params[0] + "\r\n";
+	std::string response2 = RPL_JOIN(client, msg->params[0]);
 	client->sendMessage(response2);
 	// send(client->getFd(), response2.c_str(), response2.length(), 0);
 
