@@ -33,7 +33,16 @@ void	Server::execCommand(std::string message, Client* client) {
 				channel->sendToAllButOne(message, client);
 			}	
 		}
-		
+		else if (msg->command == "PONG")
+		{
+			std::string pingMsg = "PING :\r\n";
+			send(client->getFd(), pingMsg.c_str(), pingMsg.size(), 0);
+		}
+		else if (msg->command == "PING")
+		{
+			std::string pongMsg = "PONG :\r\n";
+			send(client->getFd(), pongMsg.c_str(), pongMsg.size(), 0);
+		}
 		else {
 			std::string tmp = ERR_UNKNOWNCOMMAND(client->getNick(), msg->command);
 			send(client->getFd(), tmp.c_str(), tmp.size(), 0);
