@@ -26,10 +26,14 @@ typedef struct s_Message {
 
 	std::vector<std::string>	params;
 
+	// A function that returns a string from all the params
+
 	bool	hasPrefix;
 	bool	hasCommand;
 	bool	error;
 }	t_Message;
+
+	std::string	getParams(t_Message* msg, int index = 0);
 
 #include "ACommand.hpp"
 

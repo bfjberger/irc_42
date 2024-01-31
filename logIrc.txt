@@ -1,25 +1,17 @@
-<< PASS password
-<< NICK PH
-<< USER phv phv localhost :Pierre Henri
->> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
-<< MODE PH +i
-<< PING oui
-<< PASS password
-<< NICK PH
-<< USER phv phv localhost :Pierre Henri
->> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
-<< MODE PH +i
-<< PING oui
-<< JOIN #USER
-<< PRIVMSG #USER :hello
-<< PASS password
-<< NICK PH
-<< USER phv phv localhost :Pierre Henri
->> :oui 001 PH :Welcome to the Internet Relay Network PH!phv @localhost
-<< MODE PH +i
-<< PING oui
-<< JOIN #USER
-<< PRIVMSG #USER :hello
-<< PRIVMSG #USER :test
-<< PRIVMSG #USER :quit
-<< QUIT :leaving
+<< PASS p
+<< NICK second
+<< USER pvong pvong localhost :Pierre-Henri Vong
+>> :SERVER-BPHK 001 second :Welcome to the Internet Relay Network second!pvong@localhost
+<< MODE second +i
+>> :localhost 501 second :Unknown MODE flag
+<< PING SERVER-BPHK
+>> :localhost 421 second PING :Unknown command
+<< JOIN #user
+>> You have joined the newly created channel #user
+<< PRIVMSG #user :hello
+>> :hello
+<< PART #user
+>> second parts from #user second
+>> 
+<< KICK #user second :
+>> :localhost 403 second #user :No such channel
