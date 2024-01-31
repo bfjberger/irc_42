@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 16:46:42 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/31 13:55:24 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 
 	//add the channel to which the client is part of and indicate he is not an operator
 	client->addChannel(channel, false);
-	// std::map<Channel*, bool>	chanList = client->getChannels();
-	// chanList.insert(std::pair<Channel*, bool>(channel, false));
 
 	// Add the client to the channel
 	channel->addClient(client);
@@ -93,6 +91,10 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	// Send a response to the client
 	std::string response = "You have joined channel " + msg->params[0] + "\r\n";
 	send(client->getFd(), response.c_str(), response.length(), 0);
+
+	std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n";
+	channel->sendToAllButOne(toChan, client);
+
 	client->printInfo();
 }
 
@@ -152,10 +154,15 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	// TODO à faire quand INVITE sera fait
 	// Check if the channel is in invite-only
 	if (channel->getI() == true) {
-
+		if (channel->getInvitedClientVector(client->getNick()))
+			joinChannel(server, msg, client, channel);
+		else {
+			std::string	response = ERR_INVITEONLYCHAN(client->getNick(), channel->getName());
+			send(client->getFd(), response.c_str(), response.size(), 0);
+		}
+		return;
 	}
 
 	joinChannel(server, msg, client, channel);

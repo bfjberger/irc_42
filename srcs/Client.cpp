@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 17:29:32 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/31 11:15:25 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,6 @@ const std::string&	Client::getCurrentChannel() const {
 	return (_currentChannel);
 }
 
-const std::map<Channel*, bool>&	Client::getChannels() const {
-	return (_channels);
-}
-
 const int&	Client::getMaxChannels() const {
 	return (_maxChannels);
 }
@@ -107,6 +103,19 @@ Client*	Client::getClientByFd(Server* server, int clientFd) {
 		std::cerr << e.what() << std::endl;
 	}
 	return (client);
+}
+
+const std::map<Channel*, bool>&	Client::getChannels() const {
+	return (_channels);
+}
+
+std::map<Channel*, bool>::iterator	Client::getChannel(std::string channelName) {
+	std::map<Channel*, bool>::iterator	it = _channels.begin();
+	for (; it != _channels.end(); ++it) {
+		if (it->first->getName() == channelName)
+			break;
+	}
+	return (it);
 }
 
 /* --------------------------------- Setters -------------------------------- */
@@ -181,15 +190,16 @@ void	Client::removeChannel(Channel* chan) {
 
 void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {
 
-	std::map<Channel*, bool>::iterator	it = _channels.find(chan);
+	std::map<Channel*, bool>::iterator	it = getChannel(chan->getName());
 
 	if (it == _channels.end()) {
-			std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
-			send(client->getFd(), response.c_str(), response.size(), 0);
-			return;
+		std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
+		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
-
-	it->second = chanOp;
+	else {
+		removeChannel(chan);
+		addChannel(chan, chanOp);
+	}
 }
 
 /* --------------------------------- Helpers -------------------------------- */

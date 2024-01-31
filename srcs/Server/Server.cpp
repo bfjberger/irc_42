@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 17:16:52 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/01/30 18:13:29 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,6 +336,15 @@ const std::map<int, Client*>&	Server::getClients() const {
 	return (_clients);
 }
 
+Client*	Server::getClient(std::string nickname) {
+	std::map<int, Client*>::iterator it = this->_clients.begin();
+	for (; it != this->_clients.end(); ++it) {
+		if (it->second->getNick() == nickname)
+			return (it->second);
+	}
+	return (NULL);
+}
+
 const std::map<std::string, Channel*>&	Server::getChannels() const {
 	return (_channels);
 }
@@ -397,16 +406,6 @@ bool	Server::isNick(std::string nick) {
 		it++;
 	}
 	return (false);
-}
-
-Client*	Server::getClient(std::string nick) {
-	std::map<int, Client*>::iterator it = this->_clients.begin();
-	while (it != this->_clients.end()) {
-		if (it->second->getNick() == nick)
-			return (it->second);
-		it++;
-	}
-	return (NULL);
 }
 
 /* -------------------------------------------------------------------------- */
