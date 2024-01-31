@@ -64,6 +64,15 @@ bool	Client::isOperator() const {
 	return (_isOperator);
 }
 
+bool	Client::isOperator(Channel* chan) const {
+	std::map<Channel*, bool>::const_iterator	it = _channels.find(chan);
+
+	if (it == _channels.end()) {
+		return (false);
+	}
+	return (it->second);
+}
+
 bool	Client::getDeconnection() const {
 	return (_deconnection);
 }

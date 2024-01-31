@@ -30,6 +30,8 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
+#define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
+
 #define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
 
 #define RPL_UMODEIS(client, string) (": localhost 221 " + client + " Your user mode is [" + string + "]\r\n") //221

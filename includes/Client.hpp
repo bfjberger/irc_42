@@ -55,6 +55,7 @@ class Client {
 		bool				isRegistered() const;
 		bool				isInChannel() const;
 		bool				isOperator() const;
+		bool				isOperator(Channel* chan) const;
 		bool				getDeconnection() const;
 		const std::string&	getNick() const;
 		const std::string&	getUserName() const;

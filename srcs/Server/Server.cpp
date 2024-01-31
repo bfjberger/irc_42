@@ -13,6 +13,27 @@
 #include "Server.hpp"
 
 /* -------------------------------------------------------------------------- */
+/*                               STRUCT MESSAGE                               */
+/* -------------------------------------------------------------------------- */
+
+std::string getParams(t_Message* msg, int index) {
+
+	std::string params;
+
+	if (index < 0)
+		return (params);
+	else if (index >= (int)msg->params.size())
+		return (params);
+
+	for (size_t i = index; i < msg->params.size(); i++) {
+		params += msg->params[i];
+		if (i < msg->params.size() - 1)
+			params += " ";
+	}
+	return (params);
+}
+
+/* -------------------------------------------------------------------------- */
 /*                           CONSTRUCTOR/DESTRUCTOR                           */
 /* -------------------------------------------------------------------------- */
 
@@ -199,7 +220,6 @@ int	Server::createClientConnection(std::vector<pollfd> &pollfds, std::vector<pol
 
 int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
 
-	// Client* client = Client::getClientByFd(this, it->fd);
 	char buffer[BUFF_SIZE];
 	int readResult;
 
