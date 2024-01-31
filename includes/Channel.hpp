@@ -66,8 +66,8 @@ class Channel {
 		//Channel Methods
 		void			addClient(Client* client);
 		void			removeClient(Client* client);
-		void			sendMessageToAllClients(std::string& message);
-		void			sendToAllButOne(std::string& message, Client* client);
+		void			sendMessageToAllClients(std::string& message, int flag = 0);
+		void			sendToAllButOne(std::string& message, Client* client, int flag = 0);
 		void			deleteInvitedClient(std::string invitedClient); 
 
 

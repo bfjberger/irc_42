@@ -53,9 +53,12 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	channel->addClient(client);
 
-	std::string	response = "You have joined the newly created channel " + msg->params[0] + "\r\n";
-	send(client->getFd(), response.c_str(), response.size(), 0);
-	client->printInfo();
+	// std::string	response = ":localhost " + client->getNick() + " " + channel->getName() + " :You have joined the newly created channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be RFC compliant
+	// send(client->getFd(), response.c_str(), response.length(), 0);
+	std::string response2 = ":" + client->getNick() + " JOIN " + msg->params[0] + "\r\n";
+	client->sendMessage(response2);
+	// send(client->getFd(), response2.c_str(), response2.size(), 0);
+	// client->printInfo();
 }
 
 void	Join::joinChannelPassword(Server* server, t_Message* msg, Client* client, Channel* channel) {
@@ -89,11 +92,16 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	channel->addClient(client);
 
 	// Send a response to the client
-	std::string response = "You have joined channel " + msg->params[0] + "\r\n";
-	send(client->getFd(), response.c_str(), response.length(), 0);
+	// std::string response = "You have joined channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be RFC compliant
+	// response = ":" + client->getNick() + " " + channel->getName() + " :You have joined channel " + msg->params[0] + "\r\n";
+	// send(client->getFd(), response.c_str(), response.length(), 0);
+	std::string response2 = ":" + client->getNick() + " JOIN " + msg->params[0] + "\r\n";
+	client->sendMessage(response2);
+	// send(client->getFd(), response2.c_str(), response2.length(), 0);
 
-	std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n";
-	channel->sendToAllButOne(toChan, client);
+	// std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n"; // TODO : Change this message to be RFC compliant
+	// channel->sendToAllButOne(toChan, client);
+	channel->sendToAllButOne(response2, client);
 
 	client->printInfo();
 }

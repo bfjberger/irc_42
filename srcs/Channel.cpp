@@ -142,21 +142,29 @@ void	Channel::removeClient(Client* client) {
 	_clients.erase(client->getNick());
 }
 
-void	Channel::sendMessageToAllClients(std::string& message) {
+void	Channel::sendMessageToAllClients(std::string& message, int flag) {
 
+	(void) flag;
+	std::string msg = message;
 	std::map<std::string, Client*>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
-		it->second->sendMessage(message);
+		it->second->sendMessage(msg);
 		it++;
 	}
+	std::cout << COLOR("Sending message to all clients in channel ", CYAN) << _name << std::endl;
+	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
 }
 
-void	Channel::sendToAllButOne(std::string& message, Client* client){
-
+void	Channel::sendToAllButOne(std::string& message, Client* client, int flag){
+	(void) flag;
+	std::string msg = message;
+	if (flag == ISINCHANNEL) {
+		msg = ":" + client->getNick() + " " + message;
+	}
 	std::map<std::string, Client*>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
 		if (it->second != client)
-			it->second->sendMessage(message);
+			it->second->sendMessage(msg);
 		it++;
 	}
 	std::cout << COLOR("Sending message to all clients in channel ", CYAN) << _name << std::endl;

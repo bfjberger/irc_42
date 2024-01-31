@@ -83,7 +83,7 @@ class Client {
 		void	setDeconnection(bool deconnection);
 
 		// Clients Methods
-		void	sendMessage(std::string& message);
+		void	sendMessage(std::string& message, int flag = SHOW_MSG);
 
 		void	addChannel(Channel* chan, bool chanOp);
 		void	removeChannel(Channel* chan);

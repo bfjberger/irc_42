@@ -36,7 +36,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	// params[1+] is the message to send
 	if (msg->params.size() < 2) {
 		std::string errNeedMore = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), errNeedMore.c_str(), errNeedMore.size(), 0);
+		client->sendMessage(errNeedMore);
 		return;
 	}
 
@@ -52,7 +52,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		}
 		else {
 			std::string errNoChannel = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
-			send(client->getFd(), errNoChannel.c_str(), errNoChannel.size(), 0);
+			client->sendMessage(errNoChannel);
 		}
 	}
 
@@ -63,15 +63,15 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		if (target != NULL) {
 			std::string rplPrivmsg = RPL_PRIVMSG(client->getNick(), rplMsg);
 			std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
-			send(target->getFd(), rplPrivmsg.c_str(), rplPrivmsg.size(), 0);
+			target->sendMessage(rplPrivmsg);
 		}
 		else {
 			std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-			send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+			client->sendMessage(errNoNick);
 		}
 	}
 	else {
 		std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-		send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+		client->sendMessage(errNoNick);
 	}
 }

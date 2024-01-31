@@ -38,6 +38,9 @@
 #define CONTINUE 3
 #define RETURN 4
 
+#define ISINCHANNEL 1
+#define SHOW_MSG 1
+
 #define MAX_SOCKETS 10
 #define ERR_MAX_CLIENTS "Error: maximum number of clients reached."
 #define BUFF_SIZE 4096
