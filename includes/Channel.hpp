@@ -25,6 +25,8 @@ class Channel {
 		std::string	_topic;
 		std::string	_password;
 		std::map<std::string, Client*>	_clients;
+		// vector de strings pour checker la liste des clients qui ont ete invite a joindre un channel
+		std::vector<std::string> invitedClientVector;
 
 		int	_userLimit;
 
@@ -40,6 +42,7 @@ class Channel {
 		std::string	getName(void) const;
 		std::string	getTopic(void) const;
 		std::string	getPassword(void) const;
+		bool getInvitedClientVector(std::string ClientInvited) const;
 
 		int	getUserLimit() const;
 		bool	getI() const;
@@ -53,6 +56,7 @@ class Channel {
 		void	setName(std::string name);
 		void	setTopic(std::string topic);
 		void	setPassword(std::string password);
+		void 	setInvitedClientVector(std::string ClientInvited);
 
 		void	setUserLimit(int i);
 		void	setI(bool status);
@@ -64,6 +68,8 @@ class Channel {
 		void			removeClient(Client* client);
 		void			sendMessageToAllClients(std::string& message);
 		void			sendToAllButOne(std::string& message, Client* client);
+		void			deleteInvitedClient(std::string invitedClient); 
+
 
 };
 

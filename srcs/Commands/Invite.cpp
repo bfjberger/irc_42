@@ -40,6 +40,7 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
 		return;
 	}
+	
 	std::string nameChannel = msg->params[1];
 
 	Channel *channel = server->getChannel(nameChannel);
@@ -70,6 +71,29 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 			return;
 	}
 
+	std::map<Channel *, bool> other = client->getChannels();
+	std::map<Channel *, bool>::iterator it_2 = other.find(channel);
+	if (it_2 == other.end()) {
+		std::cout << COLOR("red", "ERROR: ") << "Client " << client->getNick() << " is not in channel " << nameChannel << std::endl;
+		return;
+	}
+	if (it_2->second == false) {
+		std::string errNotOperator = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
+		send(client->getFd(), errNotOperator.c_str(), errNotOperator.size(), 0);
+		return;
+	}
+
+	std::string rpl_invit = RPL_INVITING(it->first, nameChannel, client->getNick()); 
+	send(it->second->getFd(), rpl_invit.c_str(), rpl_invit.size(), 0);
+	rpl_invit = "An invitation has been sent to " + it->first + "\r\n";
+	send(client->getFd(), rpl_invit.c_str(), rpl_invit.size(), 0);
+
+	channel->setInvitedClientVector(it->first);
+	
+
+
+
+
 }
 
 // - Paramètres:
@@ -77,7 +101,8 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 // - utiliser pour inviter un user, identifié par `<nickname>`, sur un channel, identifié par `<channel>`
 // - il n’y a pas de conditions sur l’existence ou la validité du channel où l’on invite ce user
 // - pour inviter un user sur un channel en invite only, le client envoyant cette commande doit être un channel operator sur ce channel
-// - Numeric Replies:
-//     - `ERR_CHANOPRIVSNEEDED`
-//     - `RPL_INVITING`
-//     - `RPL_AWAY`
+
+
+
+
+

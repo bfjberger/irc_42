@@ -81,6 +81,16 @@ Client*	Channel::getClient(std::string clientName) {
 	return (NULL);
 }
 
+bool Channel::getInvitedClientVector(std::string ClientInvited) const
+{
+	for(std::vector<std::string>::const_iterator it = invitedClientVector.begin(); it !=  invitedClientVector.end(); it++)
+	{
+		if (!it->compare(ClientInvited))
+			return (true);
+	}
+	return(false);
+}
+
 /* ************************************************************************** */
 /*                                   SETTERS                                  */
 /* ************************************************************************** */
@@ -111,6 +121,11 @@ void	Channel::setK(bool status) {
 
 void	Channel::setL(bool status) {
 	l = status;
+}
+
+void 	Channel::setInvitedClientVector(std::string clientInvited)
+{
+	invitedClientVector.push_back(clientInvited);
 }
 
 /* ************************************************************************** */
@@ -147,3 +162,8 @@ void	Channel::sendToAllButOne(std::string& message, Client* client){
 	std::cout << COLOR("Sending message to all clients in channel ", CYAN) << _name << std::endl;
 	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
 }
+
+void	Channel::deleteInvitedClient(std::string invitedClient)
+{
+	invitedClientVector.erase(std::remove(invitedClientVector.begin(), invitedClientVector.end(), invitedClient));
+} 
