@@ -151,6 +151,7 @@ void	Channel::sendMessageToAllClients(std::string& message, int flag) {
 		it->second->sendMessage(msg);
 		it++;
 	}
+	trimString(msg);
 	std::cout << COLOR("Sending message to all clients in channel ", CYAN) << _name << std::endl;
 	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
 }
@@ -164,7 +165,7 @@ void	Channel::sendToAllButOne(std::string& message, Client* client, int flag){
 	std::map<std::string, Client*>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
 		if (it->second != client)
-			it->second->sendMessage(msg);
+			it->second->sendMessage(msg, 0);
 		it++;
 	}
 	std::cout << COLOR("Sending message to all clients in channel ", CYAN) << _name << std::endl;

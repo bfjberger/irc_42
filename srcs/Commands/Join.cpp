@@ -17,7 +17,7 @@ Join::Join(void) {}
 Join::~Join(void) {}
 
 /**
- * https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.1
+ * https://datatracker.ietf.org/doc/html/IRSSI2812#section-3.2.1
  *
  * Parameters:
  * 		<channel> [<key>]
@@ -53,9 +53,9 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	channel->addClient(client);
 
-	// std::string	response = ":localhost " + client->getNick() + " " + channel->getName() + " :You have joined the newly created channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be RFC compliant
+	// std::string	response = ":localhost " + client->getNick() + " " + channel->getName() + " :You have joined the newly created channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be IRSSI compliant
 	// send(client->getFd(), response.c_str(), response.length(), 0);
-	std::string response2 = ":" + client->getNick() + " JOIN " + msg->params[0] + "\r\n";
+	std::string response2 = ":" + USER_ID(client) + " JOIN " + msg->params[0] + "\r\n";
 	client->sendMessage(response2);
 	// send(client->getFd(), response2.c_str(), response2.size(), 0);
 	// client->printInfo();
@@ -92,18 +92,18 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	channel->addClient(client);
 
 	// Send a response to the client
-	// std::string response = "You have joined channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be RFC compliant
+	// std::string response = "You have joined channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be IRSSI compliant
 	// response = ":" + client->getNick() + " " + channel->getName() + " :You have joined channel " + msg->params[0] + "\r\n";
 	// send(client->getFd(), response.c_str(), response.length(), 0);
-	std::string response2 = ":" + client->getNick() + " JOIN " + msg->params[0] + "\r\n";
+	std::string response2 = ":" + USER_ID(client) + " JOIN " + msg->params[0] + "\r\n";
 	client->sendMessage(response2);
 	// send(client->getFd(), response2.c_str(), response2.length(), 0);
 
-	// std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n"; // TODO : Change this message to be RFC compliant
+	// std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n"; // TODO : Change this message to be IRSSI compliant
 	// channel->sendToAllButOne(toChan, client);
 	channel->sendToAllButOne(response2, client);
 
-	client->printInfo();
+	// client->printInfo();
 }
 
 void Join::execute(Server* server, t_Message* msg, Client* client) {
@@ -111,14 +111,14 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if the client is not in too many channel
 	if (static_cast<int>(client->getChannels().size()) == client->getMaxChannels()) {
 		std::string	response = ERR_TOOMANYCHANNELS(client->getNick(), msg->params[0]);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
 	// Check if there is enough parameters
 	if (msg->params.size() < 1) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -128,13 +128,13 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	if (channelName.find(' ') != channelName.npos || channelName.find(',') != channelName.npos || \
 		channelName.find(7) != channelName.npos || channelName.size() > 50) {
 		std::string	response = ERR_NOSUCHCHANNEL(client->getNick(), channelName);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
 	if (channelName[0] != '#') {
 		std::string	response = "A '#' is needed at the beginning of the channel name.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -155,7 +155,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	if (channel->getL() == true) {
 		if (channel->getUserLimit() == static_cast<int>(channel->getClients().size())) {
 			std::string	response = ERR_CHANNELISFULL(client->getNick(), channel->getName());
-			send(client->getFd(), response.c_str(), response.size(), 0);
+			client->sendMessage(response);
 		}
 		else
 			joinChannel(server, msg, client, channel);
@@ -168,7 +168,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 			joinChannel(server, msg, client, channel);
 		else {
 			std::string	response = ERR_INVITEONLYCHAN(client->getNick(), channel->getName());
-			send(client->getFd(), response.c_str(), response.size(), 0);
+			client->sendMessage(response);
 		}
 		return;
 	}
