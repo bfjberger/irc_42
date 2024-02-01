@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 09:54:28 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 14:17:12 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:06:44 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,15 @@ void	Server::execCommand(std::string message, Client* client) {
 			Channel* channel = getChannel(client->getCurrentChannel());
 			if (channel != NULL) {
 				channel->sendToAllButOne(message, client, ISINCHANNEL);
-			}	
+			}
 		}
 		else if (msg->command == "PING")
 		{
 			std::string pongMsg = ":" + RPL_PONG(USER_ID(client), msg->params[0]);
 			client->sendMessage(pongMsg);
+		}
+		else if (msg->command == "STOP") {
+			g_server_running = false;
 		}
 		else {
 			std::string tmp = ERR_UNKNOWNCOMMAND(client->getNick(), msg->command);

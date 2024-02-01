@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:05:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:14:31 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Privmsg::~Privmsg(void) {}
 /**
  * Executes the PRIVMSG command.
  * Sends a message to either a channel or a client.
- * 
+ *
  * @param server The server instance.
  * @param msg The message containing the command and parameters.
  * @param client The client who sent the command.
@@ -30,6 +30,11 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	std::string rplMsg = getParams(msg, 1) + "\r\n";
 	if (rplMsg[0] == ':') {
 		rplMsg.erase(0, 1);
+	}
+
+	if (msg->params.size() >= 1 && msg->params[0] == server->getBot()->getName()) {
+		server->getBot()->handleBot(server, msg, client);
+		return;
 	}
 
 	// msg->params[0] is the channel or the client to send the message to

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 18:13:29 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:10:15 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,21 +81,24 @@ Server::~Server() {
 
 	close(_serverSocketFd);
 
-	for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); it++) {
+	for (std::map<std::string, ACommand*>::iterator it = _commands.begin(); it != _commands.end(); ++it) {
 		delete it->second;
 		// _commands.erase(it);
 	}
 
-	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++) {
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		close(it->first);
 		delete it->second;
 		// _clients.erase(it);
 	}
 
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++) {
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it) {
 		delete it->second;
 		// _channels.erase(it);
 	}
+
+	close(_bot.first);
+	delete _bot.second;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -160,6 +163,47 @@ void	Server::launch() {
 		close(_serverSocketFd);
 		return;
 	}
+
+	//BOT HANDLING
+	int	botSocket = socket(AF_INET, SOCK_STREAM, 0);
+
+	Bot* bot = new Bot(botSocket);
+
+	struct sockaddr_in	botAddress = bot->getBotAddress();
+
+	if (botSocket < 0) {
+		std::cerr << COLOR("Error: bot socket creation failed.", RED) << std::endl;
+		exit(EXIT_FAILURE);
+	}
+
+	botAddress.sin_family = AF_INET;					  // IPv4
+	botAddress.sin_addr.s_addr = INADDR_ANY;			  // bind to all available interfaces
+	botAddress.sin_port = htons(std::atoi(_port.c_str())); // convert port to int and convert to network byte order
+
+	int optValue2 = 1;
+	if (setsockopt(botSocket, SOL_SOCKET, SO_REUSEPORT, &optValue2, sizeof(optValue2)) < 0) {
+		std::cerr << COLOR("Error: bot socket option SO_REUSEPORT failed: ", RED) << strerror(errno) << std::endl;
+		close(botSocket);
+		return;
+	}
+
+	int bindResult2 = bind(botSocket, (struct sockaddr *)&botAddress, sizeof(botAddress));
+	if (bindResult2 < 0) {
+		std::cerr << COLOR("Error: bot socket binding failed: ", RED) << strerror(errno) << std::endl;
+		close(botSocket);
+		return;
+	}
+
+	if (listen(botSocket, MAX_SOCKETS) < 0) {
+		std::cerr << COLOR("Error: bot socket listening failed: ", RED) << strerror(errno) << std::endl;
+		close(botSocket);
+		return;
+	}
+
+	_bot = std::pair<int, Bot*>(botSocket, bot);
+
+	std::cout << COLOR("Added bot ", CYAN) << bot->getName() << COLOR(" on port ", CYAN) << botSocket << std::endl;
+	//BACK TO NORMAL
 
 	std::cout << COLOR("Listening for connections on port ", CYAN) << _port << COLOR(" with password: ", CYAN) << _password << " ..." << std::endl;
 }
@@ -304,6 +348,12 @@ void	Server::run() {
 	serverPollfd.events = POLLIN;
 	pollfds.push_back(serverPollfd);
 
+	pollfd	botPollfd;
+
+	botPollfd.fd = _bot.second->getFd();
+	botPollfd.events = POLLIN;
+	pollfds.push_back(botPollfd);
+
 	while (g_server_running == true) {
 		std::vector<pollfd> newPollfds;
 
@@ -376,6 +426,10 @@ Channel*	Server::getChannel(std::string channelName) {
 	return (NULL);
 }
 
+Bot*	Server::getBot() const {
+	return (_bot.second);
+}
+
 /* -------------------------------------------------------------------------- */
 /*                              CLIENT MANAGEMENT                             */
 /* -------------------------------------------------------------------------- */
@@ -416,7 +470,6 @@ void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 
 	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
 }
-
 
 bool	Server::isNick(std::string nick) {
 	std::map<int, Client*>::iterator it = this->_clients.begin();

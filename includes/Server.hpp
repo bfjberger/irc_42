@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/30 17:15:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:05:07 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@ typedef struct s_Message {
 	bool	error;
 }	t_Message;
 
-	std::string	getParams(t_Message* msg, int index = 0);
+std::string	getParams(t_Message* msg, int index = 0);
 
+#include "Bot.hpp"
 #include "ACommand.hpp"
 
 #include "Commands/Invite.hpp"
@@ -50,6 +51,8 @@ typedef struct s_Message {
 #include "Commands/Quit.hpp"
 #include "Commands/Topic.hpp"
 #include "Commands/User.hpp"
+
+class Bot;
 
 class ACommand;
 
@@ -71,6 +74,8 @@ class Server {
 		std::string	_version;
 		std::string	_name;
 		bool		_running;
+
+		std::pair<int, Bot*>		_bot;
 
 	public:
 		Server(const std::string port, const std::string password);
@@ -104,6 +109,8 @@ class Server {
 
 		const std::map<std::string, Channel*>&	getChannels() const;
 		Channel*								getChannel(std::string channelName);
+
+		Bot*	getBot() const;
 
 		//PARSER
 		t_Message*	parseCommands(std::string message, Client* client);

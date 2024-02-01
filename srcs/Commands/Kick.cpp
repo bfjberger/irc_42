@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:00 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 13:45:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:12:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ Kick::Kick(void) {}
 
 Kick::~Kick(void) {}
 
+/*
+	Alternative to the for loop when getting the kick message from a vector into a single string
+
+	std::string params;
+	std::vector<std::string>::iterator it = msg->params.begin() + 2;
+	for (; it != msg->params.end(); ++it)
+		params.append(*it + " ");
+*/
 void Kick::execute(Server *server, t_Message *msg, Client *client) {
 
 	if (msg->params.size() < 2) {
@@ -79,7 +87,7 @@ void Kick::execute(Server *server, t_Message *msg, Client *client) {
 
 	// erase the client from the channel's clients list
 	clientsList.erase(it2);
-	
+
 	// if the channel is empty, delete it
 	if (channel->getClients().size() == 0)
 		server->removeChannel(channel->getName());
