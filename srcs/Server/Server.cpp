@@ -72,6 +72,7 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 	_commands["TOPIC"] = new Topic();
 	_commands["USER"] = new User();
 
+
 	Server::launch();
 }
 
