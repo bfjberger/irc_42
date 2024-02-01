@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 14:05:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:14:31 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Privmsg::~Privmsg(void) {}
 /**
  * Executes the PRIVMSG command.
  * Sends a message to either a channel or a client.
- * 
+ *
  * @param server The server instance.
  * @param msg The message containing the command and parameters.
  * @param client The client who sent the command.
@@ -32,11 +32,16 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		rplMsg.erase(0, 1);
 	}
 
+	if (msg->params.size() >= 1 && msg->params[0] == server->getBot()->getName()) {
+		server->getBot()->handleBot(server, msg, client);
+		return;
+	}
+
 	// msg->params[0] is the channel or the client to send the message to
 	// params[1+] is the message to send
 	if (msg->params.size() < 2) {
 		std::string errNeedMore = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), errNeedMore.c_str(), errNeedMore.size(), 0);
+		client->sendMessage(errNeedMore);
 		return;
 	}
 
@@ -44,15 +49,23 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	// send the message to all the clients in the channel
 	if (server->isChannel(msg->params[0]) == true) {
 		Channel* channel = server->getChannel(msg->params[0]);
-		if (channel != NULL) {
+		// If the client is not in the channel send an error message
+		if (channel != NULL && channel->isClientInChannel(client->getNick()) == false) {
+			std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), msg->params[0]);
+			client->sendMessage(errNotOnChannel);
+			return;
+		}
+		// If the client is in the channel send the message to all the clients in the channel
+		else if (channel != NULL) {
 			std::string clientNick = client->getNick();
 			std::string tmp = ":" + clientNick + "!" + client->getUserName() + "@" + client->getHostname() + " PRIVMSG " + msg->params[0];
 			tmp += " " + rplMsg + "\r\n";
 			channel->sendToAllButOne(tmp, client);
 		}
+		// If the channel does not exist send an error message
 		else {
 			std::string errNoChannel = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
-			send(client->getFd(), errNoChannel.c_str(), errNoChannel.size(), 0);
+			client->sendMessage(errNoChannel);
 		}
 	}
 
@@ -63,15 +76,15 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		if (target != NULL) {
 			std::string rplPrivmsg = RPL_PRIVMSG(client->getNick(), rplMsg);
 			std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
-			send(target->getFd(), rplPrivmsg.c_str(), rplPrivmsg.size(), 0);
+			target->sendMessage(rplPrivmsg);
 		}
 		else {
 			std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-			send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+			client->sendMessage(errNoNick);
 		}
 	}
 	else {
 		std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-		send(client->getFd(), errNoNick.c_str(), errNoNick.size(), 0);
+		client->sendMessage(errNoNick);
 	}
 }

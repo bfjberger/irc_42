@@ -14,7 +14,7 @@
 
 void	Server::fillUserInfo(std::map<int, Client *>::iterator &it, std::string message) {
 
-	t_Message*	msg = new t_Message;
+	t_Message*	msg;
 
 	msg = parseCommands(message, it->second);
 	if (msg->error == true) {

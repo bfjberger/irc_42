@@ -21,8 +21,8 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 
 	if (msg->params.size() < 1)
 	{
-		std::string	tmp = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(errNeedMoreParams);
 		return;
 	}
 
@@ -31,47 +31,33 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 
     if (!channel)
 	{
-		std::string	tmp2 = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
-		send(client->getFd(), tmp2.c_str(), tmp2.size(), 0);
+		std::string	errNoSuchChannel = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
+		client->sendMessage(errNoSuchChannel);
 		return;
     }
 
 
 	std::map<std::string, Client*>    clientsList = channel->getClients();
-	// std::map<std::string, Client*>::iterator it2 = clientsList.begin();
-    // for (; it2 != clientsList.end(); ++it2)
-	// {
-    //     if (it2->first == msg->params[1])
-    //         break;
-    // }
 
 	if (clientsList.find(client->getNick()) == clientsList.end())
 	{
-	std::string tmp4 = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
-		send(client->getFd(), tmp4.c_str(), tmp4.size(), 0);
+		std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
+		client->sendMessage(errNotOnChannel);
 		return;
 	}
 	std::map<Channel*, bool>    other = client->getChannels();
 	std::map<Channel*, bool>::iterator it = other.find(channel);
 
-	std::string rpl = client->getNick() + " parts from " + nameChannel;
-	if (msg->params.size() == 1)
-		rpl += " " + client->getNick() + "\r\n";
-	else {
-		std::string	params;
-		std::vector<std::string>::iterator	it = msg->params.begin() + 1;
-		for (; it != msg->params.end(); it++) {
-			params += *it;
-			if (it + 1 != msg->params.end())
-				params += " ";
-		}
-		rpl += " " + params + "\r\n";
+	std::string rpl = ":" + USER_ID(client) + " PART " + nameChannel;
+	if (msg->params.size() == 1) {
+		rpl += " .\r\n";
 	}
+	else
+		rpl += " " + getParams(msg, 1) + "\r\n";
 	it->first->sendMessageToAllClients(rpl);
-
-	channel->removeClient(client);
-
+	
 	client->removeChannel(channel);
+	channel->removeClient(client);
 
 	if (channel->getClients().size() == 0)
 		server->removeChannel(channel->getName());

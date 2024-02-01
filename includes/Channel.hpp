@@ -43,6 +43,7 @@ class Channel {
 		std::string	getTopic(void) const;
 		std::string	getPassword(void) const;
 		bool getInvitedClientVector(std::string ClientInvited) const;
+		bool	isClientInChannel(std::string clientName) const;
 
 		int	getUserLimit() const;
 		bool	getI() const;
@@ -66,8 +67,8 @@ class Channel {
 		//Channel Methods
 		void			addClient(Client* client);
 		void			removeClient(Client* client);
-		void			sendMessageToAllClients(std::string& message);
-		void			sendToAllButOne(std::string& message, Client* client);
+		void			sendMessageToAllClients(std::string& message, int flag = 0);
+		void			sendToAllButOne(std::string& message, Client* client, int flag = 0);
 		void			deleteInvitedClient(std::string invitedClient); 
 
 

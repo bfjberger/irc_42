@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:58 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/31 14:18:05 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:11:10 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,16 @@ Invite::Invite(void) {}
 Invite::~Invite(void) {}
 
 /**
- * 
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.7
+ *
+ * Parameters:
+ * 		<nickname> <channel>
+ *
+ *
+ *
+ * @param server The server Object.
+ * @param msg The message object containing the command and parameters.
+ * @param client The client object.
 */
 
 void	Invite::execute(Server* server, t_Message* msg, Client* client) {

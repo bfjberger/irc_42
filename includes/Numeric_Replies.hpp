@@ -30,6 +30,11 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
+// PING
+#define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n") // PONG
+
+#define RPL_JOIN(client, channel) (":" + USER_ID(client) + " JOIN " + channel + "\r\n") //JOIN
+
 #define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
 
 #define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
