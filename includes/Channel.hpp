@@ -43,6 +43,7 @@ class Channel {
 		std::string	getTopic(void) const;
 		std::string	getPassword(void) const;
 		bool getInvitedClientVector(std::string ClientInvited) const;
+		bool	isClientInChannel(std::string clientName) const;
 
 		int	getUserLimit() const;
 		bool	getI() const;

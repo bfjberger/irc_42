@@ -44,12 +44,20 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	// send the message to all the clients in the channel
 	if (server->isChannel(msg->params[0]) == true) {
 		Channel* channel = server->getChannel(msg->params[0]);
-		if (channel != NULL) {
+		// If the client is not in the channel send an error message
+		if (channel != NULL && channel->isClientInChannel(client->getNick()) == false) {
+			std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), msg->params[0]);
+			client->sendMessage(errNotOnChannel);
+			return;
+		}
+		// If the client is in the channel send the message to all the clients in the channel
+		else if (channel != NULL) {
 			std::string clientNick = client->getNick();
 			std::string tmp = ":" + clientNick + "!" + client->getUserName() + "@" + client->getHostname() + " PRIVMSG " + msg->params[0];
 			tmp += " " + rplMsg + "\r\n";
 			channel->sendToAllButOne(tmp, client);
 		}
+		// If the channel does not exist send an error message
 		else {
 			std::string errNoChannel = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
 			client->sendMessage(errNoChannel);

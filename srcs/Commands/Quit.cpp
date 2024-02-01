@@ -38,8 +38,7 @@ void	Quit::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.empty()) {
 		quitMsg += "leaving]\n\r";
-		send(client->getFd(), quitMsg.c_str(), quitMsg.size(), 0);
-
+		client->sendMessage(quitMsg);
 		close(client->getFd());
 	}
 	else {
@@ -51,8 +50,7 @@ void	Quit::execute(Server* server, t_Message* msg, Client* client) {
 		}
 
 		quitMsg += params + "]\n\r";
-		send(client->getFd(), quitMsg.c_str(), quitMsg.size(), 0);
-
+		client->sendMessage(quitMsg);
 		close(client->getFd());
 	}
 }

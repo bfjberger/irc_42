@@ -30,7 +30,7 @@ void	Server::execCommand(std::string message, Client* client) {
 		if (client->isInChannel() == true) {
 			Channel* channel = getChannel(client->getCurrentChannel());
 			if (channel != NULL) {
-				channel->sendToAllButOne(message, client);
+				channel->sendToAllButOne(message, client, ISINCHANNEL);
 			}	
 		}
 		else if (msg->command == "PING")
