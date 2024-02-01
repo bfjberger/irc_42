@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/01 15:10:15 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/01 15:55:59 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,10 @@ int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<p
 		deleteClient(pollfds, it);
 		std::cout << COLOR("[SERVER] A Client just disconnected.", YELLOW) << std::endl;
 		return (BREAK);
+	}
+	else if (readResult > 100) {
+		std::cout << COLOR("Buffer too long.", RED) << std::endl;
+		return (CONTINUE);
 	}
 	else {
 		buffer[readResult] = '\0';
