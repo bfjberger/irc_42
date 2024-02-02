@@ -1,0 +1,281 @@
+<< CAP LS 302
+<< JOIN :
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Checking Ident
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** No Ident response
+>> :atw.hu.eu.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK bb
+<< USER bberger bberger irc.dal.net :Benoit Berger
+>> :atw.hu.eu.dal.net 001 bb :Welcome to the DALnet IRC Network bb!~bberger@185.25.195.181
+<< MODE bb +i
+>> :atw.hu.eu.dal.net 002 bb :Your host is atw.hu.eu.dal.net, running version bahamut-2.2.3
+>> :atw.hu.eu.dal.net 003 bb :This server was created Tue Dec 12 2023 at 01:47:04 AM CET
+>> :atw.hu.eu.dal.net 004 bb atw.hu.eu.dal.net bahamut-2.2.3 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :atw.hu.eu.dal.net 005 bb NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :atw.hu.eu.dal.net 005 bb CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :atw.hu.eu.dal.net 251 bb :There are 69 users and 7683 invisible on 37 servers
+>> :atw.hu.eu.dal.net 252 bb 79 :IRC Operators online
+>> :atw.hu.eu.dal.net 254 bb 3827 :channels formed
+>> :atw.hu.eu.dal.net 255 bb :I have 1314 clients and 1 servers
+>> :atw.hu.eu.dal.net 265 bb :Current local users: 1314 Max: 2113
+>> :atw.hu.eu.dal.net 266 bb :Current global users: 7752 Max: 12060
+>> :atw.hu.eu.dal.net NOTICE bb :*** Notice -- motd was last changed at 20/1/2021 6:02
+>> :atw.hu.eu.dal.net 375 bb :- atw.hu.eu.dal.net Message of the Day - 
+>> :atw.hu.eu.dal.net 372 bb :-20/1/2021 6:02
+>> :atw.hu.eu.dal.net 372 bb :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :atw.hu.eu.dal.net 372 bb :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :- Server Policies:
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :-    *   We reserve the right to deny access to this server without
+>> :atw.hu.eu.dal.net 372 bb :-        warning or explanation
+>> :atw.hu.eu.dal.net 372 bb :-    *   No malicious bots, including flood and nick/channel chasers
+>> :atw.hu.eu.dal.net 372 bb :-    *   No channel filler bots/clients/psybncs
+>> :atw.hu.eu.dal.net 372 bb :-          - A channel filler is a client, bnc, or bot which is
+>> :atw.hu.eu.dal.net 372 bb :-            connected just to fill a channel and make it look
+>> :atw.hu.eu.dal.net 372 bb :-            bigger
+>> :atw.hu.eu.dal.net 372 bb :-    *   Operator impersonation, spamming, or any other abuse will
+>> :atw.hu.eu.dal.net 372 bb :-        cause you to be banned from this server
+>> :atw.hu.eu.dal.net 372 bb :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :atw.hu.eu.dal.net 372 bb :-    *   Please have fun and enjoy DALnet!
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :-      ///admins////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             //
+>> :atw.hu.eu.dal.net 372 bb :-      //  [ Hidden  - administrator             ]    //
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             // 
+>> :atw.hu.eu.dal.net 372 bb :-      //  [ koszik  - assistant administrator   ]    //
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             //
+>> :atw.hu.eu.dal.net 372 bb :-      ///operators/////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             //
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             //
+>> :atw.hu.eu.dal.net 372 bb :-      //                                             //
+>> :atw.hu.eu.dal.net 372 bb :-      /////////////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :- For IRCop assistance, please /join #operhelp or message one of our
+>> :atw.hu.eu.dal.net 372 bb :- friendly server staff listed above.
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :- For multilingual information:  <http://docs.dal.net/>
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 372 bb :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :atw.hu.eu.dal.net 372 bb :- 
+>> :atw.hu.eu.dal.net 376 bb :End of /MOTD command.
+>> :bb MODE bb :+iH
+>> :NickServ!service@dal.net NOTICE bb :This nick is owned by someone else. Please choose another.
+>> :NickServ!service@dal.net NOTICE bb :If this is your nick, type: /msg NickServ@services.dal.net IDENTIFY <password>
+>> :NickServ!service@dal.net NOTICE bb :Your nick will be changed in 60 seconds if you do not comply.
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bb
+--> lag pong
+<< NICK bbr
+>> :bb!~bberger@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip NICK :bbr
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip PRIVMSG bbr :DCC SEND test.txt 168560387 53036 2
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip PRIVMSG bbr :DCC SEND test.txt 168560387 53072 8
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :bbr
+--> lag pong
+<< QUIT :leaving
+<< CAP LS 302
+<< JOIN :
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Checking Ident
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** Found your hostname
+>> :sakura.jp.as.dal.net NOTICE AUTH :*** No Ident response
+>> :sakura.jp.as.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK bb
+<< USER bberger bberger irc.dal.net :Benoit Berger
+>> :sakura.jp.as.dal.net 001 bb :Welcome to the DALnet IRC Network bb!~bberger@185.25.195.181
+<< MODE bb +i
+>> :sakura.jp.as.dal.net 002 bb :Your host is sakura.jp.as.dal.net, running version bahamut-2.2.2
+>> :sakura.jp.as.dal.net 003 bb :This server was created Tue 23 Aug UTC at 2022 02:59:44 AM
+>> :sakura.jp.as.dal.net 004 bb sakura.jp.as.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :sakura.jp.as.dal.net 005 bb NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :sakura.jp.as.dal.net 005 bb CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :sakura.jp.as.dal.net 251 bb :There are 69 users and 7699 invisible on 37 servers
+>> :sakura.jp.as.dal.net 252 bb 79 :IRC Operators online
+>> :sakura.jp.as.dal.net 254 bb 3822 :channels formed
+>> :sakura.jp.as.dal.net 255 bb :I have 1827 clients and 1 servers
+>> :sakura.jp.as.dal.net 265 bb :Current local users: 1827 Max: 3677
+>> :sakura.jp.as.dal.net 266 bb :Current global users: 7768 Max: 12059
+>> :sakura.jp.as.dal.net NOTICE bb :*** Notice -- motd was last changed at 23/1/2024 15:37
+>> :sakura.jp.as.dal.net 375 bb :- sakura.jp.as.dal.net Message of the Day - 
+>> :sakura.jp.as.dal.net 372 bb :-23/1/2024 15:37
+>> :sakura.jp.as.dal.net 372 bb :- =====================================================================
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- Server: sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net 372 bb :- Plaintext ports: 6660 - 6669, 7000
+>> :sakura.jp.as.dal.net 372 bb :- SSL/TLS port: 6697
+>> :sakura.jp.as.dal.net 372 bb :- Both IPv4 and IPv6 are supported on this server
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- Server Administrator: xPsycho (xpsycho@DAL.net)
+>> :sakura.jp.as.dal.net 372 bb :- Operators: toolman (toolman@DAL.net)
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :-            __.--~~.,-.__
+>> :sakura.jp.as.dal.net 372 bb :-            `~-._.-(`-.__`-.
+>> :sakura.jp.as.dal.net 372 bb :-                    \    `~~`
+>> :sakura.jp.as.dal.net 372 bb :-               .--./ \ 
+>> :sakura.jp.as.dal.net 372 bb :-              /#   \  \.--.
+>> :sakura.jp.as.dal.net 372 bb :-              \    /  /#   \ 
+>> :sakura.jp.as.dal.net 372 bb :-          jgs  '--'   \    /
+>> :sakura.jp.as.dal.net 372 bb :-                       '--'
+>> :sakura.jp.as.dal.net 372 bb :-                                                                      
+>> :sakura.jp.as.dal.net 372 bb :- This server is proudly sponsored by DataPacket.com
+>> :sakura.jp.as.dal.net 372 bb :-       <https://www.datapacket.com/>
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- =====================================================================
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :sakura.jp.as.dal.net 372 bb :- by its acceptable use policy available at: https://www.dal.net/aup
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- We reserve the right to deny access to this server to anyone at any
+>> :sakura.jp.as.dal.net 372 bb :- time without warning or explanation.
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- To help prevent abuse, this server will check your PC for open proxy
+>> :sakura.jp.as.dal.net 372 bb :- servers when you connect. If you do not want this test performed, do
+>> :sakura.jp.as.dal.net 372 bb :- not connect.
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- =====================================================================
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- If you need general IRC assistance or help with services commands,
+>> :sakura.jp.as.dal.net 372 bb :- please view our multilingual documentation at http://docs.dal.net/
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- If your question is not answered after reading our documention,
+>> :sakura.jp.as.dal.net 372 bb :- please /join #help for general questions or /join #OperHelp if you
+>> :sakura.jp.as.dal.net 372 bb :- require the immediate assistance of an IRC Operator.
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- =====================================================================
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- Thank you, and enjoy your day!
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 372 bb :- =====================================================================
+>> :sakura.jp.as.dal.net 372 bb :- 
+>> :sakura.jp.as.dal.net 376 bb :End of /MOTD command.
+>> :bb MODE bb :+iH
+>> :NickServ!service@dal.net NOTICE bb :This nick is owned by someone else. Please choose another.
+>> :NickServ!service@dal.net NOTICE bb :If this is your nick, type: /msg NickServ@services.dal.net IDENTIFY <password>
+>> :NickServ!service@dal.net NOTICE bb :Your nick will be changed in 60 seconds if you do not comply.
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bb
+--> lag pong
+>> :NickServ!service@dal.net NOTICE bb :You now have 40 seconds to change your nick. The nick you are
+>> :NickServ!service@dal.net NOTICE bb :currently using is registered to another user.
+>> :NickServ!service@dal.net NOTICE bb :You now have 20 seconds to change your nick. If you do not
+>> :NickServ!service@dal.net NOTICE bb :comply, I will change your nick for you. This is your final warning.
+>> :services.dal.net 433 bb bb :Nickname is registered to someone else.
+>> :NickServ!service@dal.net NOTICE bb :Your nick has been changed to Guest55077. For more help on services,
+>> :NickServ!service@dal.net NOTICE bb :please visit http://www.dal.net/services
+>> :bb!~bberger@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip NICK :Guest55077
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Guest55077
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Guest55077
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :Guest55077
+--> lag pong
+<< NICK bbr
+>> :Guest55077!~bberger@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip NICK :bbr
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip PRIVMSG bbr :DCC SEND test.txt 168560387 53396 7
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< PING sakura.jp.as.dal.net
+>> :sakura.jp.as.dal.net PONG sakura.jp.as.dal.net :bbr
+--> lag pong
+<< QUIT :leaving

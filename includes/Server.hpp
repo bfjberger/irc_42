@@ -51,6 +51,7 @@ std::string	getParams(t_Message* msg, int index = 0);
 #include "Commands/Quit.hpp"
 #include "Commands/Topic.hpp"
 #include "Commands/User.hpp"
+#include "Commands/Dcc.hpp"
 
 class Bot;
 

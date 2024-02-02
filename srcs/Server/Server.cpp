@@ -71,6 +71,7 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 	_commands["QUIT"] = new Quit();
 	_commands["TOPIC"] = new Topic();
 	_commands["USER"] = new User();
+	_commands["DCC"] = new Dcc();
 
 
 	Server::launch();
