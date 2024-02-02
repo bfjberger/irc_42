@@ -45,7 +45,6 @@ FILES = main.cpp \
 		Commands/Quit.cpp \
 		Commands/Topic.cpp \
 		Commands/User.cpp \
-		Commands/Dcc.cpp \
 		Bot.cpp
 
 SRCS = ${addprefix ${SRC_PATH}, ${FILES}}

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/01 15:55:59 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/02 14:58:14 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ Server::Server(const std::string port, const std::string password) : _port(port)
 	_commands["QUIT"] = new Quit();
 	_commands["TOPIC"] = new Topic();
 	_commands["USER"] = new User();
-	_commands["DCC"] = new Dcc();
-
 
 	Server::launch();
 }

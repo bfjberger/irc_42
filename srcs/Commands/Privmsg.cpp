@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/01 15:14:31 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/02 16:03:29 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,32 @@
 Privmsg::Privmsg(void) {}
 
 Privmsg::~Privmsg(void) {}
+
+// If the input is /DCC SEND targetUserName filePath
+// It will automatically expand to
+// PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
+
+// PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
+// :Nickname1is PRIVMSG Nickname1is :DCC SEND dalnet.txt 2130706433 50465 3357
+void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
+
+	Client*	target = server->getClient(msg->params[0]);
+
+	std::string	dccContent;
+	for (std::vector<std::string>::iterator it = msg->params.begin() + 1; it != msg->params.end(); it++) {
+		dccContent += *it;
+		if (it + 1 != msg->params.end())
+			dccContent += " ";
+	}
+
+	std::string	rpl(msg->command);
+	rpl = ":" + client->getNick() + " " + rpl;
+	rpl += " ";
+	rpl += client->getNick() + " " + dccContent;
+	rpl += "\r\n";
+	std::cout << "resultat: " << rpl << std::endl;
+	target->sendMessage(rpl);
+}
 
 /**
  * Executes the PRIVMSG command.
@@ -74,9 +100,15 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	else if (server->isNick(msg->params[0]) == true) {
 		Client* target = server->getClient(msg->params[0]);
 		if (target != NULL) {
-			std::string rplPrivmsg = RPL_PRIVMSG(client->getNick(), rplMsg);
-			std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
-			target->sendMessage(rplPrivmsg);
+			if (msg->params[1].compare(":DCC")) {
+				dcchandler(server, msg, client);
+				return;
+			}
+			else {
+				std::string rplPrivmsg = RPL_PRIVMSG(client->getNick(), rplMsg);
+				std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
+				target->sendMessage(rplPrivmsg);
+			}
 		}
 		else {
 			std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);

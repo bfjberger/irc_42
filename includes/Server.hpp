@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/01 15:05:07 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/02 14:24:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ std::string	getParams(t_Message* msg, int index = 0);
 #include "Commands/Quit.hpp"
 #include "Commands/Topic.hpp"
 #include "Commands/User.hpp"
-#include "Commands/Dcc.hpp"
 
 class Bot;
 

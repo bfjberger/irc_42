@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:32:36 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/24 15:12:19 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/02 15:31:34 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ class Privmsg : public ACommand {
 		Privmsg(void);
 		~Privmsg(void);
 
+		void			dcchandler(Server* server, t_Message*msg, Client* client);
 		virtual void	execute(Server* server, t_Message* msg, Client* client);
 };
 
