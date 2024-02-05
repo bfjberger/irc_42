@@ -76,9 +76,16 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 	}
 
 	std::string	params = getParams(msg, 1);
+	if (params.empty() == false && params[0] == ':') {
+		if (params.size() > 2 && params[1] == ' ')
+			params.erase(0, 2);
+		else
+			params.erase(0, 1);
+	}
 
 	channel->setTopic(params);
 
-	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
+	// response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
+	response = RPL_TOPIC(client->getNick(), channelName, params);
 	client->sendMessage(response);
 }

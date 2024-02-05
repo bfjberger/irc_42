@@ -53,7 +53,7 @@
 
 #define RPL_NOTOPIC(client, channel) (":localhost 331 " + client + " " + channel + " :No topic is set\r\n") //331
 
-#define RPL_TOPIC(client, channel, topic) (":localhost 332 " + client + " " + channel + " : " + topic + "\r\n") //332
+#define RPL_TOPIC(client, channel, topic) (":localhost 332 " + client + " " + channel + " :" + topic + "\r\n") //332
 
 #define RPL_INVITING(client, channel, nick) (":localhost 341 " + client + " " + channel + " " + nick + "\r\n") //341
 

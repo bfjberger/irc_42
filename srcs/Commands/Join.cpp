@@ -112,6 +112,10 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	client->sendMessage(rplNameList);
 	std::string endOfNames = RPL_ENDOFNAMES(client->getNick(), channel->getName());
 	client->sendMessage(endOfNames);
+	if (channel->getTopic().empty() == false) {
+		std::string response = RPL_TOPIC(client->getNick(), channel->getName(), channel->getTopic());
+		client->sendMessage(response);
+	}
 }
 
 void Join::execute(Server* server, t_Message* msg, Client* client) {
