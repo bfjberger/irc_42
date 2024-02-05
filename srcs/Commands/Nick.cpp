@@ -43,20 +43,21 @@ bool isNicknameUsed(const std::string& nickname, const std::map<int, Client*>& c
  * @param client The client object.
  */
 void	Nick::execute(Server* server, t_Message* msg, Client* client) {
-
+	// the placeholder is used to send the error message to the client if it is not registered
 	std::string placeHolder = "*";
 
+	// If the nickname parameter is not provided, an error message is sent to the client.
 	if (msg->params.empty()) {
 		std::string errEmpty;
 		if (client->isRegistered() == true)
 			errEmpty = ERR_NONICKNAMEGIVEN(client->getNick());
 		else
 			errEmpty = ERR_NONICKNAMEGIVEN(placeHolder);
-		send(client->getFd(), errEmpty.c_str(), errEmpty.size(), 0);
-		// std::cout << COLOR("Send to client: ", CYAN) << errEmpty << std::endl;
+		client->sendMessage(errEmpty);
 		return;
 	}
 
+	// If the nickname is too long, an error message is sent to the client.
 	std::string nickname = msg->params[0];
 
 	if (nickname.size() > 9) {
@@ -65,29 +66,28 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 			errSize = ERR_ERRONEUSNICKNAME(client->getNick(), nickname);
 		else
 			errSize = ERR_ERRONEUSNICKNAME(placeHolder, nickname);
-		send(client->getFd(), errSize.c_str(), errSize.size(), 0);
-		// std::cout << COLOR("Send to client: ", CYAN) << errSize << std::endl;
+		client->sendMessage(errSize);
 		return;
 	}
 
+	// If the nickname is already in use, an error message is sent to the client.
 	else if (isNicknameUsed(nickname, server->getClients())) {
 		std::string errUsed;
 		if (client->isRegistered() == true)
 			errUsed = ERR_NICKNAMEINUSE(client->getNick(), nickname);
 		else
 			errUsed = ERR_NICKNAMEINUSE(placeHolder, nickname);
-		send(client->getFd(), errUsed.c_str(), errUsed.size(), 0);
-		// std::cout << COLOR("Send to client: ", CYAN) << errUsed << std::endl;
+		client->sendMessage(errUsed);
 		return;
 	}
 
+	// If the nickname is valid and available, it is set as the client's nickname.
 	else {
 		std::string rplNick;
 		if (client->isRegistered() == true) {
 			std::string	tmp = BOLD_TEXT + nickname + RESET;
 			rplNick = RPL_NICKCHANGE(tmp);
-			send(client->getFd(), rplNick.c_str(), rplNick.size(), 0);
-			// std::cout << COLOR("Send to client: ", CYAN) << rplNick << std::endl;
+			client->sendMessage(rplNick);
 		}
 		client->setNick(nickname);
 	}

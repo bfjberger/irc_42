@@ -34,13 +34,13 @@ Kill::~Kill(void) {}
 void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.size() < 2) {
-		std::string	tmp = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(errNeedMoreParams);
 		return;
 	}
 	else if (!client->isOperator()) {
-		std::string	tmp = ERR_NOPRIVILEGES(client->getNick());
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNoPrivileges = ERR_NOPRIVILEGES(client->getNick());
+		client->sendMessage(errNoPrivileges);
 		return;
 	}
 
@@ -53,8 +53,8 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 	}
 
 	if (it == clients.end()) {
-		std::string	tmp = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		client->sendMessage(errNoSuchNick);
 	}
 	else {
 		std::string	params;
@@ -63,8 +63,8 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 			if (it + 1 != msg->params.end())
 				params += " ";
 		}
-		std::string	tmp = "You were removed from the server because " + params + "\r\n";
-		send(it->second->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	rplKill = "You were removed from the server because " + params + "\r\n";
+		it->second->sendMessage(rplKill);
 
 		close(it->second->getFd());
 	}
