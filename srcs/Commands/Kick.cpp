@@ -86,7 +86,7 @@ void Kick::execute(Server *server, t_Message *msg, Client *client) {
 	it2->second->removeChannel(channel);
 
 	// erase the client from the channel's clients list
-	clientsList.erase(it2);
+	clientsList.erase(it2); // Not sure if needed
 
 	// if the channel is empty, delete it
 	if (channel->getClients().size() == 0)
