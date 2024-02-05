@@ -32,8 +32,6 @@ Mode::~Mode(void) {}
  * @param client The client object.
 */
 
-// TODO send the successful modification of a channel to the channel
-// TODO send the failed modification of a channel to the client requesting the changes
 
 void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
@@ -41,12 +39,14 @@ void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* 
 
 	if (!msg->params[1].compare("+i")) {
 		channel->setI(true);
-		std::string	response = "The channel " + channel->getName() + " is now in invite-only mode.\r\n";
+		// std::string	response = "The channel " + channel->getName() + " is now in invite-only mode.\r\n";
+		std::string response = ":localhost MODE " + channel->getName() + " +i\r\n";
 		client->sendMessage(response);
 	}
 	else {
 		channel->setI(false);
-		std::string	response = "The channel " + channel->getName() + " is no longer in invite-only mode.\r\n";
+		std::string response = ":localhost MODE " + channel->getName() + " -i\r\n";
+		// std::string	response = "The channel " + channel->getName() + " is no longer in invite-only mode.\r\n";
 		client->sendMessage(response);
 	}
 }
@@ -55,17 +55,18 @@ void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* 
 
 	(void) server;
 
-	std::string	params;
-	std::vector<std::string>::iterator	it = msg->params.begin() + 2;
-	for (; it != msg->params.end(); it++) {
-		params += *it;
-		if (it + 1 != msg->params.end())
-			params += " ";
+	std::string	params = getParams(msg, 2);
+	if (params.empty() == false && params[0] == ':') {
+		if (params.size() > 2 && params[1] == ' ')
+			params.erase(0, 2);
+		else
+			params.erase(0, 1);
 	}
 
 	channel->setTopic(params);
 
-	std::string	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
+	std::string response = RPL_TOPIC(client->getNick(), channel->getName(), params);
+	// std::string	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
 	client->sendMessage(response);
 }
 
