@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 11:53:54 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 15:58:09 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ Channel::Channel(const std::string &name) {
 	i = false;
 	k = false;
 	l = false;
+	t = true;
 }
 
 Channel::~Channel(void) {
@@ -67,6 +68,10 @@ bool Channel::getK() const {
 
 bool Channel::getL() const {
 	return (l);
+}
+
+bool	Channel::getT() const {
+	return (t);
 }
 
 const std::map<std::string, Client *> &Channel::getClients() const {
@@ -125,6 +130,10 @@ void Channel::setK(bool status) {
 
 void Channel::setL(bool status) {
 	l = status;
+}
+
+void	Channel::setT(bool status) {
+	t = status;
 }
 
 void Channel::setInvitedClientVector(std::string clientInvited) {

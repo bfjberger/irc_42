@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 17:30:10 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 15:57:01 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class Channel {
 		bool	i;
 		bool	k;
 		bool	l;
+		bool	t;
 
 	public:
 		Channel(const std::string& name);
@@ -49,6 +50,7 @@ class Channel {
 		bool	getI() const;
 		bool	getK() const;
 		bool	getL() const;
+		bool	getT() const;
 
 		const std::map<std::string, Client*>&	getClients() const;
 		Client*									getClient(std::string clientName);
@@ -63,13 +65,14 @@ class Channel {
 		void	setI(bool status);
 		void	setK(bool status);
 		void	setL(bool status);
+		void	setT(bool status);
 
 		//Channel Methods
 		void			addClient(Client* client);
 		void			removeClient(Client* client);
 		void			sendMessageToAllClients(std::string& message, int flag = 0);
 		void			sendToAllButOne(std::string& message, Client* client, int flag = 0);
-		void			deleteInvitedClient(std::string invitedClient); 
+		void			deleteInvitedClient(std::string invitedClient);
 
 
 };
