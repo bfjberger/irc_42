@@ -159,10 +159,9 @@ void Channel::sendMessageToAllClients(std::string &message, int flag) {
 }
 
 void Channel::sendToAllButOne(std::string &message, Client *client, int flag) {
-	(void)flag;
+
 	std::string msg = message;
 	if (flag == ISINCHANNEL) {
-		// msg = ":" + client->getNick() + " " + message;
 		msg = ":" + client->getNick() + "!" + client->getUserName() + "@" + client->getHostname() + " " + message;
 	}
 	std::map<std::string, Client *>::const_iterator it = _clients.begin();
