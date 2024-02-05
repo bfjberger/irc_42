@@ -34,16 +34,16 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if there is enough parameters
 	if (msg->params.size() < 2)
 	{
-		std::string	tmp = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(errNeedMoreParams);
 		return;
 	}
 
 	// Check if the client to be invited exist
 	if (!server->getClient(msg->params[0]))
 	{
-		std::string	tmp = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		client->sendMessage(errNoSuchNick);
 		return;
 	}
 
@@ -55,7 +55,7 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	if (invitedClientOnChan)
 	{
 		std::string errOnChannel = ERR_USERONCHANNEL(client->getNick(), msg->params[0], nameChannel);
-		send(client->getFd(), errOnChannel.c_str(), errOnChannel.size(), 0);
+		client->sendMessage(errOnChannel);
 		return;
 	}
 
@@ -63,24 +63,24 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	std::map<Channel*, bool>::iterator	clientSendingIt = client->getChannel(nameChannel);
 	if (clientSendingIt == client->getChannels().end()) {
 		std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
-		send(client->getFd(), errNotOnChannel.c_str(), errNotOnChannel.size(), 0);
+		client->sendMessage(errNotOnChannel);
 		return;
 	}
 
 	// Check if the client sending the invitation is a channel operator on this channel
 	if (clientSendingIt->second == false) {
 		std::string errNotOperator = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
-		send(client->getFd(), errNotOperator.c_str(), errNotOperator.size(), 0);
+		client->sendMessage(errNotOperator);
 		return;
 	}
 
 	Client*	invitedClient = server->getClient(msg->params[0]);
 
 	std::string rpl_invit = RPL_INVITING(invitedClient->getNick(), nameChannel, client->getNick());
-	send(invitedClient->getFd(), rpl_invit.c_str(), rpl_invit.size(), 0);
+	invitedClient->sendMessage(rpl_invit);
 
 	rpl_invit = "An invitation has been sent to " + invitedClient->getNick() + "\r\n";
-	send(client->getFd(), rpl_invit.c_str(), rpl_invit.size(), 0);
+	client->sendMessage(rpl_invit);
 
 	channel->setInvitedClientVector(invitedClient->getNick());
 }
