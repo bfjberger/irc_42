@@ -30,10 +30,16 @@
 /*                             COMMAND RESPONSES                              */
 /* ************************************************************************** */
 
+// JOIN RPL
+#define RPL_JOIN(client, channel) (":" + USER_ID(client) + " JOIN " + channel + "\r\n") //JOIN
+#define RPL_ENDOFNAMES(client, channel) (":localhost 366 " + client + " " + channel + " :End of /NAMES list\r\n") //366
+#define RPL_NAMERPLY(client, channel, nickname) (":localhost 353 " + client + " = " + channel + " : " + nickname + "\r\n") //353
+
 // PING
 #define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n") // PONG
 
-#define RPL_JOIN(client, channel) (":" + USER_ID(client) + " JOIN " + channel + "\r\n") //JOIN
+#define RPL_PING(user_id, token) (user_id + " PING " + token + "\r\n") // PING
+
 
 #define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
 

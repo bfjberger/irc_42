@@ -56,6 +56,13 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 	std::string response2 = RPL_JOIN(client, msg->params[0]);
 	client->sendMessage(response2);
 
+	// get the list of clients in the channel
+
+	std::string rplNameList = RPL_NAMERPLY(client->getNick(), channel->getName(), "@" + client->getNick());
+	client->sendMessage(rplNameList);
+	std::string endOfNames = RPL_ENDOFNAMES(client->getNick(), channel->getName());
+	client->sendMessage(endOfNames);
+
 }
 
 void	Join::joinChannelPassword(Server* server, t_Message* msg, Client* client, Channel* channel) {
@@ -89,17 +96,22 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	channel->addClient(client);
 
 	// Send a response to the client
-	// std::string response = "You have joined channel " + msg->params[0] + "\r\n"; // TODO: Change this message to be IRSSI compliant
-	// response = ":" + client->getNick() + " " + channel->getName() + " :You have joined channel " + msg->params[0] + "\r\n";
-	// send(client->getFd(), response.c_str(), response.length(), 0);
-	std::string response2 = RPL_JOIN(client, msg->params[0]);
-	client->sendMessage(response2);
-	// send(client->getFd(), response2.c_str(), response2.length(), 0);
+	std::string response = RPL_JOIN(client, msg->params[0]);
+	channel->sendMessageToAllClients(response);
 
-	// std::string	toChan = "The user " + client->getNick() + " has joined this channel.\r\n"; // TODO : Change this message to be IRSSI compliant
-	// channel->sendToAllButOne(toChan, client);
-	channel->sendToAllButOne(response2, client);
-
+	// get the list of clients in the channel
+	std::string clientInChannel;
+	std::map<std::string, Client *> clients = channel->getClients();
+	for (std::map<std::string, Client *>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
+		if (it->second->isOperator(channel) == true)
+			clientInChannel += "@" + it->first + " ";
+		else
+			clientInChannel += it->first + " ";
+	}
+	std::string rplNameList = RPL_NAMERPLY(client->getNick(), channel->getName(), clientInChannel);
+	client->sendMessage(rplNameList);
+	std::string endOfNames = RPL_ENDOFNAMES(client->getNick(), channel->getName());
+	client->sendMessage(endOfNames);
 }
 
 void Join::execute(Server* server, t_Message* msg, Client* client) {
