@@ -85,7 +85,6 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 
 	channel->setTopic(params);
 
-	// response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
 	response = RPL_TOPIC(client->getNick(), channelName, params);
-	client->sendMessage(response);
+	channel->sendMessageToAllClients(response);
 }

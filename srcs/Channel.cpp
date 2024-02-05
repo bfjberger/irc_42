@@ -147,11 +147,10 @@ void Channel::removeClient(Client *client) {
 
 void Channel::sendMessageToAllClients(std::string &message, int flag) {
 
-	(void)flag;
 	std::string msg = message;
 	std::map<std::string, Client *>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
-		it->second->sendMessage(msg);
+		it->second->sendMessage(msg, flag);
 		it++;
 	}
 	trimString(msg);
