@@ -55,6 +55,5 @@ void	Quit::execute(Server* server, t_Message* msg, Client* client) {
 		std::string channelQuit = ":" + USER_ID(client) + " QUIT :Quit: " + params;
 		it->first->sendMessageToAllClients(channelQuit);
 	}
-
-	close(client->getFd());
+	client->setDeconnection(true);
 }

@@ -89,6 +89,7 @@ class Server {
 		int		handlePollErr(std::vector<pollfd>& pollfds, std::vector<pollfd>::iterator it);
 		void	handleMaxClient(int clientSocketFd);
 		int		acceptSocket(int listenSocket);
+		void	eraseClientFromMaps(int clientFd);
 		void	run();
 
 		//CLIENT

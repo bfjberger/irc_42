@@ -56,7 +56,6 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 			params.erase(0, 1);
 		std::string	rplKill = "You were removed from the server because " + params + "\r\n";
 		clientToKill->sendMessage(rplKill);
-
-		close(clientToKill->getFd());
+		clientToKill->setDeconnection(true);
 	}
 }
