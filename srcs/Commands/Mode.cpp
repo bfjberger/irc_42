@@ -235,6 +235,9 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 	else if (!msg->params[1].compare("+o")) {
 		//ignore
 	}
+	else if (!msg->params[1].compare("+i")) {
+		//ignore
+	}
 	else if (!msg->params[1].compare("-o")) { // demote an operator
 		std::string	response;
 		if (client->isOperator()) {
