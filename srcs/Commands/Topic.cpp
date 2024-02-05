@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:11 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:01:04 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 16:17:29 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	// Check if the client is a channel operator on this channel
-	if (it->second == false) {
+	// Check for who the command is available
+	// If the command is reserved for chanop, check that the client is one
+	if (channel->getT() == true && it->second == false) {
 		response = ERR_CHANOPRIVSNEEDED(client->getNick(), channelName);
 		client->sendMessage(response);
 		return;

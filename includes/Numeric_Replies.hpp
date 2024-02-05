@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:47:48 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 16:57:29 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,11 @@
 
 #define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
 
-#define RPL_UMODEIS(client, string) (": localhost 221 " + client + " Your user mode is [" + string + "]\r\n") //221
+#define RPL_UMODEIS(client, string) (":localhost 221 " + client + " " + string + "\r\n") //221
 
 #define RPL_AWAY() (": localhost 301" + "<nick> :<away message>\r\n") //301
 
-#define RPL_CHANNELMODEIS(channel, mode) (": localhost 324 " + channel + " [" + mode + "]\r\n") //324
+#define RPL_CHANNELMODEIS(client, channel, mode) (":localhost 324 " + client + " " + channel + " " + mode + "\r\n") //324
 
 #define RPL_NOTOPIC(client, channel) (":localhost 331 " + client + " " + channel + " :No topic is set\r\n") //331
 

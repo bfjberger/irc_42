@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 12:04:28 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 17:02:55 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* 
 	if (!msg->params[1].compare("+i")) {
 		channel->setI(true);
 		// std::string	response = "The channel " + channel->getName() + " is now in invite-only mode.\r\n";
-		std::string response = ":localhost MODE " + channel->getName() + " +i\r\n";
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " +i\r\n";
 		client->sendMessage(response);
 	}
 	else {
 		channel->setI(false);
-		std::string response = ":localhost MODE " + channel->getName() + " -i\r\n";
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -i\r\n";
 		// std::string	response = "The channel " + channel->getName() + " is no longer in invite-only mode.\r\n";
 		client->sendMessage(response);
 	}
@@ -55,19 +55,16 @@ void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* 
 
 	(void) server;
 
-	std::string	params = getParams(msg, 2);
-	if (params.empty() == false && params[0] == ':') {
-		if (params.size() > 2 && params[1] == ' ')
-			params.erase(0, 2);
-		else
-			params.erase(0, 1);
+	if (!msg->params[1].compare("+t")) {
+		channel->setT(true);
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " +t\r\n";
+		client->sendMessage(response);
 	}
-
-	channel->setTopic(params);
-
-	std::string response = RPL_TOPIC(client->getNick(), channel->getName(), params);
-	// std::string	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
-	client->sendMessage(response);
+	else {
+		channel->setT(false);
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -t\r\n";
+		client->sendMessage(response);
+	}
 }
 
 void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* channel) {
@@ -77,7 +74,7 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 	if (!msg->params[1].compare("+k") && channel->getPassword().empty()) { //set the key and the key is not yet set
 		channel->setK(true);
 		channel->setPassword(msg->params[2]);
-		std::string	response = "A key was successfully setup for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " +k " + msg->params[2] + "\r\n";
 		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is already set
@@ -86,8 +83,8 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 	}
 	else { //remove the key
 		channel->setK(false);
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -k " + channel->getPassword() + "\r\n";
 		channel->setPassword("");
-		std::string	response = "The key was successfully removed for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
 		client->sendMessage(response);
 	}
 }
@@ -108,18 +105,13 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 
 	if (!msg->params[1].compare("+o")) {
 		clientChanging->changeOpStatus(channel, true, client);
-		std::string	response = "You promoted " + clientChanging->getNick() + " to channel operator of channel " + channel->getName() + "\r\n";
-		client->sendMessage(response);
-	}
-	else if (clientChanging->getFd() == client->getFd()) {
-		clientChanging->changeOpStatus(channel, false, client);
-		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
-		// it->second = false;
-		std::string	response = "You demoted yourself from channel operator of the channel " + channel->getName() + "\r\n";
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " +o " + msg->params[2] + "\r\n";
 		client->sendMessage(response);
 	}
 	else {
-		std::string	response = "You cannot demote an another channel operator.\r\n";
+		clientChanging->changeOpStatus(channel, false, client);
+		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -o" + msg->params[2] + "\r\n";
 		client->sendMessage(response);
 	}
 }
@@ -134,25 +126,21 @@ void	Mode::handleLimit(Server* server, t_Message* msg, Client* client, Channel* 
 			std::stringstream tmp(msg->params[2]);
 			int	limit;
 			tmp >> limit;
-			if (tmp.fail()) {
-				std::string	response = "Failed to set the limit of users on channel " + channel->getName() + ". It takes an int as value.\r\n";
-				client->sendMessage(response);
-			}
-			else {
+			if (!tmp.fail()) {
 				channel->setUserLimit(limit);
-				std::string	response = "The channel " + channel->getName() + " now has a limit of " + msg->params[2] + " users.\r\n";
+				std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " +l " + msg->params[2] + "\r\n";
 				client->sendMessage(response);
 			}
 		}
 		else {
-			std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+			std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command + msg->params[2]);
 			client->sendMessage(response);
 		}
 	}
 	else {
 		channel->setL(false);
 		channel->setUserLimit(-1);
-		std::string	response = "The channel " + channel->getName() + " no longer has a user limit.\r\n";
+		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -l\r\n";
 		client->sendMessage(response);
 	}
 }
@@ -179,18 +167,16 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 			modes += "k";
 		if (channel->getL())
 			modes += "l";
-		if (modes.size() == 1)
-			modes.erase(0);
-		response = RPL_CHANNELMODEIS(nameChannel, modes);
+		if (channel->getT())
+			modes += "t";
+		response = RPL_CHANNELMODEIS(client->getNick(), nameChannel, modes);
 		client->sendMessage(response);
 		return;
 	}
 
-	std::map<Channel*, bool>			chans = client->getChannels();
+	std::map<Channel*, bool>::iterator	it = client->getChannel(channel->getName());
 
-	std::map<Channel*, bool>::iterator	it = chans.find(channel);
-
-	if (it == chans.end()) {
+	if (it == client->getChannels().end()) {
 		response = "Couldn't find the channel in the ones where the client is.\r\n";
 		client->sendMessage(response);
 		return;
@@ -204,7 +190,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 	if (!msg->params[1].compare("+i") || !msg->params[1].compare("-i"))
 		handleInvit(server, msg, client, channel);
-	else if (!msg->params[1].compare("+t"))
+	else if (!msg->params[1].compare("+t") || !msg->params[1].compare("-t"))
 		handleTopic(server, msg, client, channel);
 	else if (!msg->params[1].compare("+k") || !msg->params[1].compare("-k"))
 		handleKey(server, msg, client, channel);
