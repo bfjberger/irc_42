@@ -48,8 +48,6 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	//add the channel to which the client is part of and indicate he is an operator on this one
 	client->addChannel(channel, true);
-	// std::map<Channel*, bool>	chanList = client->getChannels();
-	// chanList.insert(std::pair<Channel*, bool>(channel, true));
 
 	channel->addClient(client);
 
@@ -57,21 +55,20 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 	// send(client->getFd(), response.c_str(), response.length(), 0);
 	std::string response2 = RPL_JOIN(client, msg->params[0]);
 	client->sendMessage(response2);
-	// send(client->getFd(), response2.c_str(), response2.size(), 0);
-	// client->printInfo();
+
 }
 
 void	Join::joinChannelPassword(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	if (msg->params.size() < 2) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
 	if (msg->params[1] != channel->getPassword()) {
 		std::string	response = ERR_BADCHANNELKEY(client->getNick(), channel->getName());
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else
 		joinChannel(server, msg, client, channel);
@@ -103,7 +100,6 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 	// channel->sendToAllButOne(toChan, client);
 	channel->sendToAllButOne(response2, client);
 
-	// client->printInfo();
 }
 
 void Join::execute(Server* server, t_Message* msg, Client* client) {
