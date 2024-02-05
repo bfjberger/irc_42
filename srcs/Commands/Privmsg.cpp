@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:38:18 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:39:57 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ Privmsg::~Privmsg(void) {}
 /**
  * If the input is /DCC SEND targetUserName filePath
  * It will automatically expand to
- * PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
+ *		PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
  *
  * * Example:
- *  PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
- *  :Nickname1is PRIVMSG Nickname1is :DCC SEND dalnet.txt 2130706433 50465 3357
+ * PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
  * @param server
  * @param msg
  * @param client

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:10 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 15:28:12 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 14:18:18 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,22 @@ void	Quit::execute(Server* server, t_Message* msg, Client* client) {
 	if (msg->params.empty()) {
 		quitMsg += "leaving]\n\r";
 		client->sendMessage(quitMsg);
-		close(client->getFd());
 	}
 	else {
-		std::string	params;
-		for (std::vector<std::string>::iterator it = msg->params.begin(); it != msg->params.end(); it++) {
-			params += *it;
-			if (it + 1 != msg->params.end())
-				params += " ";
-		}
+		std::string	params = getParams(msg, 0);
 
 		quitMsg += params + "]\n\r";
 		client->sendMessage(quitMsg);
-		close(client->getFd());
 	}
+
+	std::map<Channel*, bool>::iterator	it = client->getChannel(client->getCurrentChannel());
+	if (it != client->getChannels().end()) {
+		std::string	params = getParams(msg, 0);
+		if (params.empty() == false && params[0] == ':')
+			params.erase(0, 1);
+		std::string channelQuit = ":" + USER_ID(client) + " QUIT :Quit: " + params;
+		it->first->sendMessageToAllClients(channelQuit);
+	}
+
+	close(client->getFd());
 }

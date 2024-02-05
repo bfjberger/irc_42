@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 11:20:58 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:47:48 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@
 
 #define RPL_ENDOFMOTD(client) (":localhost 376 " + client + " :End of MOTD command\r\n") //376
 
-#define RPL_YOUREOPER(client) (":localhost 381 " + client + " :You are now an IRC operator\r\n") //381
+#define RPL_YOUREOPER(client) ("381 " + client + " :You are now an IRC operator\r\n") //381
 
 /* ************************************************************************** */
 /*                               ERRORS REPLIES                               */

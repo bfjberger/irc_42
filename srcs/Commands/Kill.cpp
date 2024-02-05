@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:01 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/29 12:49:37 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 14:02:08 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ Kill::~Kill(void) {}
 */
 void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 
-	if (msg->params.size() < 2) {
+	if (msg->params.size() < 2 || !msg->params[1].compare(":")) {
 		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
 		client->sendMessage(errNeedMoreParams);
 		return;
@@ -44,28 +44,19 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	std::map<int, Client*>	clients = server->getClients();
+	Client*	clientToKill = server->getClient(msg->params[0]);
 
-	std::map<int, Client*>::const_iterator it;
-	for (it = clients.begin(); it != clients.end(); ++it) {
-		if (it->second->getNick() == msg->params[0])
-			break;
-	}
-
-	if (it == clients.end()) {
+	if (!clientToKill) {
 		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
 		client->sendMessage(errNoSuchNick);
 	}
 	else {
-		std::string	params;
-		for (std::vector<std::string>::iterator it = msg->params.begin() + 1; it != msg->params.end(); it++) {
-			params += *it;
-			if (it + 1 != msg->params.end())
-				params += " ";
-		}
+		std::string	params = getParams(msg, 1);
+		if (params.empty() == false && params[0] == ':')
+			params.erase(0, 1);
 		std::string	rplKill = "You were removed from the server because " + params + "\r\n";
-		it->second->sendMessage(rplKill);
+		clientToKill->sendMessage(rplKill);
 
-		close(it->second->getFd());
+		close(clientToKill->getFd());
 	}
 }
