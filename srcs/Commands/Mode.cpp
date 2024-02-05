@@ -42,12 +42,12 @@ void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* 
 	if (!msg->params[1].compare("+i")) {
 		channel->setI(true);
 		std::string	response = "The channel " + channel->getName() + " is now in invite-only mode.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else {
 		channel->setI(false);
 		std::string	response = "The channel " + channel->getName() + " is no longer in invite-only mode.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 }
 
@@ -66,7 +66,7 @@ void	Mode::handleTopic(Server* server, t_Message* msg, Client* client, Channel* 
 	channel->setTopic(params);
 
 	std::string	response = "The topic of the channel " + channel->getName() + " is now " + params + "\r\n";
-	send(client->getFd(), response.c_str(), response.size(), 0);
+	client->sendMessage(response);
 }
 
 void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* channel) {
@@ -77,17 +77,17 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 		channel->setK(true);
 		channel->setPassword(msg->params[2]);
 		std::string	response = "A key was successfully setup for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is already set
 		std::string	response = ERR_KEYSET(client->getNick(), channel->getName());
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else { //remove the key
 		channel->setK(false);
 		channel->setPassword("");
 		std::string	response = "The key was successfully removed for the channel " + channel->getName() + " by " + client->getNick() + "\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 }
 
@@ -98,7 +98,7 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	Client*	clientChanging = channel->getClient(msg->params[2]);
 	if (!clientChanging) {
 		std::string	response = ERR_USERNOTINCHANNEL(client->getNick(), msg->params[2], channel->getName());
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -108,18 +108,18 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	if (!msg->params[1].compare("+o")) {
 		clientChanging->changeOpStatus(channel, true, client);
 		std::string	response = "You promoted " + clientChanging->getNick() + " to channel operator of channel " + channel->getName() + "\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else if (clientChanging->getFd() == client->getFd()) {
 		clientChanging->changeOpStatus(channel, false, client);
 		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
 		// it->second = false;
 		std::string	response = "You demoted yourself from channel operator of the channel " + channel->getName() + "\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else {
 		std::string	response = "You cannot demote an another channel operator.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 }
 
@@ -135,24 +135,24 @@ void	Mode::handleLimit(Server* server, t_Message* msg, Client* client, Channel* 
 			tmp >> limit;
 			if (tmp.fail()) {
 				std::string	response = "Failed to set the limit of users on channel " + channel->getName() + ". It takes an int as value.\r\n";
-				send(client->getFd(), response.c_str(), response.size(), 0);
+				client->sendMessage(response);
 			}
 			else {
 				channel->setUserLimit(limit);
 				std::string	response = "The channel " + channel->getName() + " now has a limit of " + msg->params[2] + " users.\r\n";
-				send(client->getFd(), response.c_str(), response.size(), 0);
+				client->sendMessage(response);
 			}
 		}
 		else {
 			std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-			send(client->getFd(), response.c_str(), response.size(), 0);
+			client->sendMessage(response);
 		}
 	}
 	else {
 		channel->setL(false);
 		channel->setUserLimit(-1);
 		std::string	response = "The channel " + channel->getName() + " no longer has a user limit.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 }
 

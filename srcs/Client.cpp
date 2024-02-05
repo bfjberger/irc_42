@@ -181,8 +181,8 @@ void	Client::setDeconnection(bool deconnection) {
 
 void	Client::sendMessage(std::string& message, int showMsg) {
 	if (showMsg == SHOW_MSG) {
-		std::cout << COLOR("Sending message to client ", CYAN) << _fd << std::endl;
-		std::cout << COLOR("Message: ", CYAN) << message << std::endl;
+		std::cout << COLOR("Sending message to client ", CYAN) << _fd;
+		std::cout << COLOR(" >> ", CYAN) << message << std::endl;
 	}
 	if (message.find("\r\n") == std::string::npos)
 		message += "\r\n";

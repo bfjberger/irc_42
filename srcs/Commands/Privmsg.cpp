@@ -16,29 +16,29 @@ Privmsg::Privmsg(void) {}
 
 Privmsg::~Privmsg(void) {}
 
-// If the input is /DCC SEND targetUserName filePath
-// It will automatically expand to
-// PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
-
-// PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
-// :Nickname1is PRIVMSG Nickname1is :DCC SEND dalnet.txt 2130706433 50465 3357
+/**
+ * If the input is /DCC SEND targetUserName filePath
+ * It will automatically expand to
+ * PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
+ * 
+ * * Example:
+ *  PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
+ *  :Nickname1is PRIVMSG Nickname1is :DCC SEND dalnet.txt 2130706433 50465 3357
+ * @param server 
+ * @param msg 
+ * @param client 
+ */
 void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
 
 	Client*	target = server->getClient(msg->params[0]);
 
 	std::string	dccContent;
-	for (std::vector<std::string>::iterator it = msg->params.begin() + 1; it != msg->params.end(); it++) {
-		dccContent += *it;
-		if (it + 1 != msg->params.end())
-			dccContent += " ";
-	}
+	dccContent = getParams(msg, 1);
 
 	std::string	rpl(msg->command);
-	rpl = ":" + client->getNick() + " " + rpl;
-	rpl += " ";
-	rpl += client->getNick() + " " + dccContent;
-	rpl += "\r\n";
-	std::cout << "resultat: " << rpl << std::endl;
+	rpl = ":" + client->getNick() + " " + rpl + " ";
+	rpl += client->getNick() + " " + dccContent + "\r\n";
+	// std::cout << "resultat: " << rpl << std::endl;
 	target->sendMessage(rpl);
 }
 
