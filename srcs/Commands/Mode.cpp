@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/30 17:35:50 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 12:04:28 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,14 +162,15 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 	Channel*	channel = server->getChannel(nameChannel);
 
+	std::string	response;
+
 	if (!channel) {
-		std::string	response = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		response = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
+		client->sendMessage(response);
 		return;
 	}
 
 	if (msg->params.size() == 1) { // print info (no need for privileges so done before those checks)
-		std::string	response;
 		std::string	modes = "+";
 		if (channel->getI())
 			modes += "i";
@@ -180,7 +181,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 		if (modes.size() == 1)
 			modes.erase(0);
 		response = RPL_CHANNELMODEIS(nameChannel, modes);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -189,14 +190,14 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	std::map<Channel*, bool>::iterator	it = chans.find(channel);
 
 	if (it == chans.end()) {
-		std::string	response = "Couldn't find the channel in the ones where the client is.\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		response = "Couldn't find the channel in the ones where the client is.\r\n";
+		client->sendMessage(response);
 		return;
 	}
 
 	if (it->second == false) { // the user is not channel operator
-		std::string	response = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		response = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -211,26 +212,26 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	else if (!msg->params[1].compare("+l") || !msg->params[1].compare("-l"))
 		handleLimit(server, msg, client, channel);
 	else { // unknown mode
-		std::string	response = ERR_UNKNOWNMODE(client->getNick(), msg->params[1]);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		response = ERR_UNKNOWNMODE(client->getNick(), msg->params[1]);
+		client->sendMessage(response);
 	}
 }
 
 void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 
 	Client*	clientChanging = server->getClient(msg->params[0]);
+	std::string	response;
 
 	if (!clientChanging) { // couldn't find a user
-		std::string	response = ERR_USERSDONTMATCH(client->getNick());
+		response = ERR_USERSDONTMATCH(client->getNick());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 	else if (msg->params.size() == 1) { // print info
-		std::string	response;
 		if (client->isOperator())
 			response = RPL_UMODEIS(client->getNick(), "+o");
 		else
 			response = RPL_UMODEIS(client->getNick(), "-o");
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+o")) {
 		//ignore
@@ -239,18 +240,17 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 		//ignore
 	}
 	else if (!msg->params[1].compare("-o")) { // demote an operator
-		std::string	response;
 		if (client->isOperator()) {
 			client->setOperator(false);
 			response = "You're now no longer an operator !\r\n";
 		}
 		else
 			response = "lol from the start you're not an operator !\r\n";
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else { // unknown mode
-		std::string	response = ERR_UMODEUNKNOWNFLAG(client->getNick());
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		response = ERR_UMODEUNKNOWNFLAG(client->getNick());
+		client->sendMessage(response);
 	}
 }
 
@@ -258,7 +258,7 @@ void	Mode::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.size() < 1) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 		return;
 	}
 

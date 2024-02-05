@@ -1,0 +1,129 @@
+<< CAP LS 302
+<< JOIN :
+>> :nonstop.ix.me.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :nonstop.ix.me.dal.net NOTICE AUTH :*** Checking Ident
+>> :nonstop.ix.me.dal.net NOTICE AUTH :*** No Ident response
+>> :nonstop.ix.me.dal.net NOTICE AUTH :*** Found your hostname
+>> :nonstop.ix.me.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK test
+<< USER kmorin kmorin irc.dal.net :Killian Morin
+>> :nonstop.ix.me.dal.net 001 test :Welcome to the DALnet IRC Network test!~kmorin@185.25.195.181
+<< MODE test +i
+>> :nonstop.ix.me.dal.net 002 test :Your host is nonstop.ix.me.dal.net, running version bahamut-2.2.3
+>> :nonstop.ix.me.dal.net 003 test :This server was created Thu Dec 7 2023 at 06:32:17 PM IST
+>> :nonstop.ix.me.dal.net 004 test nonstop.ix.me.dal.net bahamut-2.2.3 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :nonstop.ix.me.dal.net 005 test NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=20 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:20 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :nonstop.ix.me.dal.net 005 test CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :nonstop.ix.me.dal.net 251 test :There are 63 users and 7385 invisible on 37 servers
+>> :nonstop.ix.me.dal.net 252 test 76 :IRC Operators online
+>> :nonstop.ix.me.dal.net 254 test 3671 :channels formed
+>> :nonstop.ix.me.dal.net 255 test :I have 141 clients and 1 servers
+>> :nonstop.ix.me.dal.net 265 test :Current local users: 141 Max: 404
+>> :nonstop.ix.me.dal.net 266 test :Current global users: 7448 Max: 8405
+>> :nonstop.ix.me.dal.net NOTICE test :*** Notice -- motd was last changed at 6/5/2023 1:47
+>> :nonstop.ix.me.dal.net 375 test :- nonstop.ix.me.dal.net Message of the Day - 
+>> :nonstop.ix.me.dal.net 372 test :-6/5/2023 1:47
+>> :nonstop.ix.me.dal.net 372 test :- You are now connected to nonstop.ix.me.dal.net, a member of the DALnet IRC Network!
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :-     _|      _|    _|_|    _|      _|    _|_|_|  _|_|_|_|_|    _|_|    _|_|_|
+>> :nonstop.ix.me.dal.net 372 test :-     _|_|    _|  _|    _|  _|_|    _|  _|            _|      _|    _|  _|    _|
+>> :nonstop.ix.me.dal.net 372 test :-     _|  _|  _|  _|    _|  _|  _|  _|    _|_|        _|      _|    _|  _|_|_|
+>> :nonstop.ix.me.dal.net 372 test :-     _|    _|_|  _|    _|  _|    _|_|        _|      _|      _|    _|  _|
+>> :nonstop.ix.me.dal.net 372 test :-     _|      _|    _|_|    _|      _|  _|_|_|        _|        _|_|    _|
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :- By connecting to this network, you agree to abide by its acceptable use policy,
+>> :nonstop.ix.me.dal.net 372 test :- available here: http://www.dal.net/aup
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :- ********** Recommended help channels **********
+>> :nonstop.ix.me.dal.net 372 test :- * #Help     - for help with DALnet's Services *
+>> :nonstop.ix.me.dal.net 372 test :- * #OperHelp - for IRCop/CSop assistance       *
+>> :nonstop.ix.me.dal.net 372 test :- ***********************************************
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :- This server is running a testing version of the latest Bahamut.
+>> :nonstop.ix.me.dal.net 372 test :- If you encourage any issues, please contact coders@dal.net
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :- **************************** Note ****************************
+>> :nonstop.ix.me.dal.net 372 test :- * The use of this server is a privilege.                     *
+>> :nonstop.ix.me.dal.net 372 test :- * We reserve the right to deny access to this server without *
+>> :nonstop.ix.me.dal.net 372 test :- * any warning or explanation.                                *
+>> :nonstop.ix.me.dal.net 372 test :- **************************************************************
+>> :nonstop.ix.me.dal.net 372 test :- 
+>> :nonstop.ix.me.dal.net 372 test :- --- Thank you for choosing DALnet and have a nice chatting! ---
+>> :nonstop.ix.me.dal.net 376 test :End of /MOTD command.
+>> :test MODE test :+iH
+>> :NickServ!service@dal.net NOTICE test :This nick is owned by someone else. Please choose another.
+>> :NickServ!service@dal.net NOTICE test :If this is your nick, type: /msg NickServ@services.dal.net IDENTIFY <password>
+>> :NickServ!service@dal.net NOTICE test :Your nick will be changed in 60 seconds if you do not comply.
+<< NICK testK1
+>> :test!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip NICK :testK1
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< JOIN #testK
+>> :testK1!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+>> :nonstop.ix.me.dal.net 353 testK1 = #testK :@testK1 
+>> :nonstop.ix.me.dal.net 366 testK1 #testK :End of /NAMES list.
+<< MODE #testK
+>> :nonstop.ix.me.dal.net 324 testK1 #testK + 
+--> chanquery mode
+>> :nonstop.ix.me.dal.net 329 testK1 #testK 1707128872
+--> event 329
+<< WHO #testK
+>> :nonstop.ix.me.dal.net 352 testK1 #testK ~kmorin 67ad-8ab6-b0a4-3ff5-ce28.25.185.ip nonstop.ix.me.dal.net testK1 H@ :0 Killian Morin
+--> silent event who
+>> :nonstop.ix.me.dal.net 315 testK1 #testK :End of /WHO list.
+--> chanquery who end
+<< MODE #testK b
+>> :nonstop.ix.me.dal.net 368 testK1 #testK :End of Channel Ban List
+--> chanquery ban end
+<< MODE #testK +i
+>> :testK1!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip MODE #testK +i 
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< PING nonstop.ix.me.dal.net
+>> :nonstop.ix.me.dal.net PONG nonstop.ix.me.dal.net :testK1
+--> lag pong
+<< QUIT :leaving

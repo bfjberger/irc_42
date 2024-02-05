@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/31 13:55:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:27:39 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,20 @@ Join::Join(void) {}
 Join::~Join(void) {}
 
 /**
- * https://datatracker.ietf.org/doc/html/IRSSI2812#section-3.2.1
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.1
  *
  * Parameters:
  * 		<channel> [<key>]
  *
  * At the creation of a channel, every other arguments, outside the channel name, are ignored
  *
- * If the client is already in too many channel, the corresponding error message is sent to the client.
- * If the number of parameters is not valid, the corresponding error message is sent to the client.
- * If the channel name is not valid, the corresponding error message is sent to the client.
+ * If the client is already in too many channel, ERR message
+ * If the number of parameters is not valid, ERR message
+ * If the channel name is not valid, ERR message
  * If the channel does not exist yet, it is created in channelCreation()
  * If the channel has a password, it is handled in joinChannelPassword()
  * If the channel has a user limit,
- * 		if the limit is reached, the corresponding error message is sent to the client
+ * 		if the limit is reached, ERR message
  * 		if the limit is not reached, the joining is handled in joinChannel()
  *
  * @param server The server Object.
