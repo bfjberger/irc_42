@@ -36,7 +36,12 @@ void	Server::execCommand(std::string message, Client* client) {
 		else if (msg->command == "PING")
 		{
 			std::string pongMsg = ":" + RPL_PONG(USER_ID(client), msg->params[0]);
-			client->sendMessage(pongMsg);
+			client->sendMessage(pongMsg, 0);
+		}
+		else if (msg->command == "PONG")
+		{
+			std::string pongMsg = ":" + RPL_PING(USER_ID(client), msg->params[0]);
+			client->sendMessage(pongMsg, 0);
 		}
 		else if (msg->command == "STOP") {
 			g_server_running = false;
