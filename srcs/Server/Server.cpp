@@ -339,8 +339,6 @@ int	Server::handlePollErr(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
  * 8. If the poll() call returns 0, the timeout expired and no file descriptors were ready
  * 9. If the poll() call returns a positive number, the file descriptor at that index in the array has data available to read
  *
- * TODO:
- * The received data is to be parsed according to the IRC protocol, and appropriate responses are sent.
  *
  * @note This function runs indefinitely until an error occurs or all clients disconnect.
  */
@@ -459,7 +457,7 @@ void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
 
 	pollfds.erase(it);
 
-	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 1 << std::endl;
+	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 2 << std::endl; // -2 because of the bot and the server fds
 }
 
 void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
