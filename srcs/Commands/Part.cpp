@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/31 11:36:38 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:28:50 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,52 +16,70 @@ Part::Part(void) {}
 
 Part::~Part(void) {}
 
+/**
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.2
+ *
+ * Parameters:
+ * 		<channel> [ <Part Message> ]
+ *
+ * If the number of parameters is not valid, ERR message
+ * If the channel to part from does not exist, ERR message
+ * If the client is not part of the channel to part from, ERR message
+ *
+ * If the channel has no member left, we delete it from the server
+ *
+ * @param server The server Object.
+ * @param msg The message object containing the command and parameters.
+ * @param client The client object.
+*/
+
 void	Part::execute(Server* server, t_Message* msg, Client* client)
 {
 
+	std::string	response;
+
+	// Check if there is enough parameters
 	if (msg->params.size() < 1)
 	{
-		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		client->sendMessage(errNeedMoreParams);
+		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(response);
 		return;
 	}
 
-	std::string    nameChannel = msg->params[0];
-	Channel*    channel = server->getChannel(nameChannel);
+	std::string	nameChannel = msg->params[0];
+	Channel*	channel = server->getChannel(nameChannel);
 
-    if (!channel)
+	// Check if the channel asked exist
+	if (!channel)
 	{
-		std::string	errNoSuchChannel = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
-		client->sendMessage(errNoSuchChannel);
+		response = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
+		client->sendMessage(response);
 		return;
-    }
+	}
 
-
-	std::map<std::string, Client*>    clientsList = channel->getClients();
-
-	if (clientsList.find(client->getNick()) == clientsList.end())
+	// Check if the client is a member of the channel
+	Client*	clientParting = channel->getClient(client->getNick());
+	if (!clientParting)
 	{
-		std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
-		client->sendMessage(errNotOnChannel);
+		response = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
+		client->sendMessage(response);
 		return;
 	}
-	std::map<Channel*, bool>    other = client->getChannels();
-	std::map<Channel*, bool>::iterator it = other.find(channel);
 
-	std::string rpl = ":" + USER_ID(client) + " PART " + nameChannel;
-	if (msg->params.size() == 1) {
-		rpl += " .\r\n";
-	}
+	// Prepare the message to send to all clients to announce the depart of the client
+	response = ":" + USER_ID(client) + " PART " + nameChannel;
+	if (msg->params.size() == 1)
+		response += " \r\n";
 	else
-		rpl += " " + getParams(msg, 1) + "\r\n";
-	it->first->sendMessageToAllClients(rpl);
-	
+		response += " " + getParams(msg, 1) + "\r\n";
+	channel->sendMessageToAllClients(response);
+
+	// Remove the channel from the map of the channels where the client is
+	// Remove the client from the map of clients which are member of the channel
 	client->removeChannel(channel);
 	channel->removeClient(client);
 
+	// If the channel has no member left, remove it
 	if (channel->getClients().size() == 0)
 		server->removeChannel(channel->getName());
 }
-
-
-// <channel> *( "," <channel> ) [ <Part Message> ]

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/02 16:03:29 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:19:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@ Privmsg::Privmsg(void) {}
 
 Privmsg::~Privmsg(void) {}
 
-// If the input is /DCC SEND targetUserName filePath
-// It will automatically expand to
-// PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
-
-// PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
-// :Nickname1is PRIVMSG Nickname1is :DCC SEND dalnet.txt 2130706433 50465 3357
+/*
+If the input is /DCC SEND targetUserName filePath
+irssi will automatically expand it to:
+	PRIVMSG targetUserName :DCC SEND filePath sender'sIPAddress sender'sPort nbOfBytes
+ex:
+	PRIVMSG test :DCC SEND dalnet.txt 2130706433 50411 3357
+*/
 void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
 
 	Client*	target = server->getClient(msg->params[0]);
@@ -43,14 +44,31 @@ void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
 }
 
 /**
- * Executes the PRIVMSG command.
- * Sends a message to either a channel or a client.
+ * https://datatracker.ietf.org/doc/html/rfc2812#section-3.3.1
+ *
+ * Parameters:
+ * 		<target> <text>
+ *
+ * The target of the message can be a channel or a client
+ *
+ * Get the message to be sent, add the closing caracters and erase the ':' at the start if present
+ * If the target of the message is the bot and with at least one parameter, go to the bot message handler
+ * If the number of parameters is not valid, ERR message
+ * If the target of the message is a channel, send it to all clients on the channel
+ * 		If the client is not part of the channel, ERR message
+ * 		If the channel does not exist, ERR message
+ * If the target of the message is a client, send the message to him
+ *		irssi expand the DCC SEND so check if it's the case and go to the file transfer handler
+ * 		If the client does not exist, ERR message
+ * If the target is not a channel nor a client, ERR message
  *
  * @param server The server instance.
  * @param msg The message containing the command and parameters.
  * @param client The client who sent the command.
  */
 void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
+
+	std::string	response;
 
 	// rplMsg is the message to send to the channel or the client
 	std::string rplMsg = getParams(msg, 1) + "\r\n";
@@ -63,11 +81,10 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	// msg->params[0] is the channel or the client to send the message to
-	// params[1+] is the message to send
+	// Check if there is enough parameters
 	if (msg->params.size() < 2) {
-		std::string errNeedMore = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		client->sendMessage(errNeedMore);
+		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(response);
 		return;
 	}
 
@@ -77,21 +94,21 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		Channel* channel = server->getChannel(msg->params[0]);
 		// If the client is not in the channel send an error message
 		if (channel != NULL && channel->isClientInChannel(client->getNick()) == false) {
-			std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), msg->params[0]);
-			client->sendMessage(errNotOnChannel);
+			response = ERR_NOTONCHANNEL(client->getNick(), msg->params[0]);
+			client->sendMessage(response);
 			return;
 		}
 		// If the client is in the channel send the message to all the clients in the channel
 		else if (channel != NULL) {
 			std::string clientNick = client->getNick();
-			std::string tmp = ":" + clientNick + "!" + client->getUserName() + "@" + client->getHostname() + " PRIVMSG " + msg->params[0];
-			tmp += " " + rplMsg + "\r\n";
-			channel->sendToAllButOne(tmp, client);
+			response = ":" + clientNick + "!" + client->getUserName() + "@" + client->getHostname() + " PRIVMSG " + msg->params[0];
+			response += " " + rplMsg + "\r\n";
+			channel->sendToAllButOne(response, client);
 		}
 		// If the channel does not exist send an error message
 		else {
-			std::string errNoChannel = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
-			client->sendMessage(errNoChannel);
+			response = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
+			client->sendMessage(response);
 		}
 	}
 
@@ -100,23 +117,23 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	else if (server->isNick(msg->params[0]) == true) {
 		Client* target = server->getClient(msg->params[0]);
 		if (target != NULL) {
-			if (msg->params[1].compare(":DCC")) {
+			if (msg->params[1].compare(":DCC")) { // Go to dcchandler for handling the format for the file transfer
 				dcchandler(server, msg, client);
 				return;
 			}
 			else {
-				std::string rplPrivmsg = RPL_PRIVMSG(client->getNick(), rplMsg);
+				response = RPL_PRIVMSG(client->getNick(), rplMsg);
 				std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
-				target->sendMessage(rplPrivmsg);
+				target->sendMessage(response);
 			}
 		}
-		else {
-			std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-			client->sendMessage(errNoNick);
+		else { // The target does not exist on the server
+			response = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+			client->sendMessage(response);
 		}
 	}
-	else {
-		std::string errNoNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
-		client->sendMessage(errNoNick);
+	else { // Not a client nor a channel
+		response = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		client->sendMessage(response);
 	}
 }

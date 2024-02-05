@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:07 by kmorin            #+#    #+#             */
-/*   Updated: 2024/01/26 16:08:42 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/05 13:13:37 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,15 @@ void	Pass::execute(Server* server, t_Message* msg, Client* client) {
 
 	(void) server;
 
+	std::string response;
+
 	if (msg->params.empty()) {
-		std::string tmp = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		client->sendMessage(response);
 	}
 	else if (client->isRegistered()) {
-		std::string	tmp = ERR_ALREADYREGISTRED(client->getNick());
-		send(client->getFd(), tmp.c_str(), tmp.size(), 0);
+		response = ERR_ALREADYREGISTRED(client->getNick());
+		client->sendMessage(response);
 	}
 	else {
 		msg->params[0] = tmpFormatString(msg->params[0]);
