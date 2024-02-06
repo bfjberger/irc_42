@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/06 13:29:43 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 14:15:33 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -511,5 +511,6 @@ void	Server::addChannel(Channel* channel) {
 }
 
 void	Server::removeChannel(std::string channelName) {
+	delete this->_channels[channelName];
 	this->_channels.erase(channelName);
 }
