@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 12:31:23 by bberger           #+#    #+#             */
-/*   Updated: 2024/01/25 10:30:01 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 13:40:05 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,8 @@ int main(int ac, char **av) {
 
 	if (std::atoi(av[1]) >= 0 && std::atoi(av[1]) <= 65535)
 	{
-		try {
-			Server server(av[1], av[2]);
-			server.run();
-
-		} catch (std::exception &e) {
-			std::cerr << "Error: " << e.what() << std::endl;
-		}
+		Server server(av[1], av[2]);
+		server.run();
 	}
 	else
 	{

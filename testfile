@@ -690,3 +690,71 @@
 >> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
 --> lag pong
 << QUIT :leaving
+<< CAP LS 302
+<< JOIN :
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Checking Ident
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :atw.hu.eu.dal.net NOTICE AUTH :*** No Ident response
+>> :atw.hu.eu.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK testK
+<< USER kmorin kmorin irc.dal.net :Killian Morin
+>> :atw.hu.eu.dal.net 001 testK :Welcome to the DALnet IRC Network testK!~kmorin@185.25.195.181
+<< MODE testK +i
+>> :atw.hu.eu.dal.net 002 testK :Your host is atw.hu.eu.dal.net, running version bahamut-2.2.3
+>> :atw.hu.eu.dal.net 003 testK :This server was created Tue Dec 12 2023 at 01:47:04 AM CET
+>> :atw.hu.eu.dal.net 004 testK atw.hu.eu.dal.net bahamut-2.2.3 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :atw.hu.eu.dal.net 005 testK NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :atw.hu.eu.dal.net 005 testK CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :atw.hu.eu.dal.net 251 testK :There are 65 users and 7340 invisible on 37 servers
+>> :atw.hu.eu.dal.net 252 testK 75 :IRC Operators online
+>> :atw.hu.eu.dal.net 254 testK 3746 :channels formed
+>> :atw.hu.eu.dal.net 255 testK :I have 1347 clients and 1 servers
+>> :atw.hu.eu.dal.net 265 testK :Current local users: 1347 Max: 2113
+>> :atw.hu.eu.dal.net 266 testK :Current global users: 7405 Max: 12060
+>> :atw.hu.eu.dal.net NOTICE testK :*** Notice -- motd was last changed at 20/1/2021 6:02
+>> :atw.hu.eu.dal.net 375 testK :- atw.hu.eu.dal.net Message of the Day - 
+>> :atw.hu.eu.dal.net 372 testK :-20/1/2021 6:02
+>> :atw.hu.eu.dal.net 372 testK :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :atw.hu.eu.dal.net 372 testK :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :- Server Policies:
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :-    *   We reserve the right to deny access to this server without
+>> :atw.hu.eu.dal.net 372 testK :-        warning or explanation
+>> :atw.hu.eu.dal.net 372 testK :-    *   No malicious bots, including flood and nick/channel chasers
+>> :atw.hu.eu.dal.net 372 testK :-    *   No channel filler bots/clients/psybncs
+>> :atw.hu.eu.dal.net 372 testK :-          - A channel filler is a client, bnc, or bot which is
+>> :atw.hu.eu.dal.net 372 testK :-            connected just to fill a channel and make it look
+>> :atw.hu.eu.dal.net 372 testK :-            bigger
+>> :atw.hu.eu.dal.net 372 testK :-    *   Operator impersonation, spamming, or any other abuse will
+>> :atw.hu.eu.dal.net 372 testK :-        cause you to be banned from this server
+>> :atw.hu.eu.dal.net 372 testK :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :atw.hu.eu.dal.net 372 testK :-    *   Please have fun and enjoy DALnet!
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :-      ///admins////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             //
+>> :atw.hu.eu.dal.net 372 testK :-      //  [ Hidden  - administrator             ]    //
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             // 
+>> :atw.hu.eu.dal.net 372 testK :-      //  [ koszik  - assistant administrator   ]    //
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             //
+>> :atw.hu.eu.dal.net 372 testK :-      ///operators/////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             //
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             //
+>> :atw.hu.eu.dal.net 372 testK :-      //                                             //
+>> :atw.hu.eu.dal.net 372 testK :-      /////////////////////////////////////////////////
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :- For IRCop assistance, please /join #operhelp or message one of our
+>> :atw.hu.eu.dal.net 372 testK :- friendly server staff listed above.
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :- For multilingual information:  <http://docs.dal.net/>
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 372 testK :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :atw.hu.eu.dal.net 372 testK :- 
+>> :atw.hu.eu.dal.net 376 testK :End of /MOTD command.
+>> :testK MODE testK :+iH
+<< PING atw.hu.eu.dal.net
+>> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :testK
+--> lag pong
+<< QUIT :leaving

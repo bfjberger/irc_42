@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/06 08:55:52 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 13:29:43 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,20 +148,20 @@ void	Server::launch() {
 	if (setsockopt(_serverSocketFd, SOL_SOCKET, SO_REUSEPORT, &optValue, sizeof(optValue)) < 0) {
 		std::cerr << COLOR("Error: socket option SO_REUSEPORT failed: ", RED) << strerror(errno) << std::endl;
 		close(_serverSocketFd);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	int bindResult = bind(_serverSocketFd, (struct sockaddr *)&_serverAddress, sizeof(_serverAddress));
 	if (bindResult < 0) {
 		std::cerr << COLOR("Error: socket binding failed: ", RED) << strerror(errno) << std::endl;
 		close(_serverSocketFd);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	if (listen(_serverSocketFd, MAX_SOCKETS) < 0) {
 		std::cerr << COLOR("Error: socket listening failed: ", RED) << strerror(errno) << std::endl;
 		close(_serverSocketFd);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	//BOT HANDLING
@@ -184,20 +184,20 @@ void	Server::launch() {
 	if (setsockopt(botSocket, SOL_SOCKET, SO_REUSEPORT, &optValue2, sizeof(optValue2)) < 0) {
 		std::cerr << COLOR("Error: bot socket option SO_REUSEPORT failed: ", RED) << strerror(errno) << std::endl;
 		close(botSocket);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	int bindResult2 = bind(botSocket, (struct sockaddr *)&botAddress, sizeof(botAddress));
 	if (bindResult2 < 0) {
 		std::cerr << COLOR("Error: bot socket binding failed: ", RED) << strerror(errno) << std::endl;
 		close(botSocket);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	if (listen(botSocket, MAX_SOCKETS) < 0) {
 		std::cerr << COLOR("Error: bot socket listening failed: ", RED) << strerror(errno) << std::endl;
 		close(botSocket);
-		return;
+		exit(EXIT_FAILURE);
 	}
 
 	_bot = std::pair<int, Bot*>(botSocket, bot);
@@ -511,6 +511,5 @@ void	Server::addChannel(Channel* channel) {
 }
 
 void	Server::removeChannel(std::string channelName) {
-	delete this->_channels[channelName];
 	this->_channels.erase(channelName);
 }
