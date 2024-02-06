@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/02 14:58:14 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 08:55:52 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -462,8 +462,20 @@ void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
 
 void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 
-	pollfd	clientPollfd;
-	Client*	client = new Client(clientSocket);
+	pollfd				clientPollfd;
+	std::string			strClientAddress;
+	struct sockaddr_in	clientAddress;
+	socklen_t			clientAddressSize = sizeof(clientAddress);
+
+	if (getsockname(clientSocket, (struct sockaddr *)&clientAddress, &clientAddressSize) == -1) {
+		std::cerr << COLOR("Error: getting socket information failed: ", RED) << strerror(errno) << std::endl;
+		strClientAddress = "127.0.0.1";
+		std::cerr << COLOR("Assigned the localhost address as default: ", RED) << strClientAddress << std::endl;
+	}
+	else
+		strClientAddress = inet_ntoa(clientAddress.sin_addr);
+
+	Client*	client = new Client(clientSocket, strClientAddress);
 
 	clientPollfd.fd = clientSocket;
 	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:28:50 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:29:56 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ Part::~Part(void) {}
  * @param msg The message object containing the command and parameters.
  * @param client The client object.
 */
-
 void	Part::execute(Server* server, t_Message* msg, Client* client)
 {
 
@@ -41,7 +40,7 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	// Check if there is enough parameters
 	if (msg->params.size() < 1)
 	{
-		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}
@@ -52,7 +51,7 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	// Check if the channel asked exist
 	if (!channel)
 	{
-		response = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
+		response = ERR_NOSUCHCHANNEL(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
 	}
@@ -61,7 +60,7 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	Client*	clientParting = channel->getClient(client->getNick());
 	if (!clientParting)
 	{
-		response = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
+		response = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
 	}

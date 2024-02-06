@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/31 11:15:25 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 08:51:15 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@
 /*                                   CLIENT                                   */
 /* -------------------------------------------------------------------------- */
 
-Client::Client(int fd) : _fd(fd),
-						_receivedInfo(false),
-						_isLogged(false),
-						_welcomeSent(false),
-						_isRegistered(false),
-						_isInChannel(false),
-						_isOperator(false),
-						_deconnection(false),
-						_hostname("localhost"),
-						_currentChannel(""),
-						_maxChannels(5) {
+Client::Client(int fd, std::string address) : _fd(fd), _address(address),
+														_receivedInfo(false),
+														_isLogged(false),
+														_welcomeSent(false),
+														_isRegistered(false),
+														_isInChannel(false),
+														_isOperator(false),
+														_deconnection(false),
+														_hostname("localhost"),
+														_currentChannel(""),
+														_maxChannels(5) {
 	return;
 }
 
@@ -38,6 +38,10 @@ Client::~Client() {
 
 int	Client::getFd() const {
 	return (_fd);
+}
+
+const std::string&	Client::getAddress() const {
+	return (_address);
 }
 
 bool	Client::hasReceivedInfo() const {

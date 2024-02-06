@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:23 by pvong             #+#    #+#             */
-/*   Updated: 2024/01/31 11:11:26 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 08:50:53 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ class Client {
 
 	private:
 		int 		_fd;
+
+		const std::string	_address;
 
 		bool		_receivedInfo;
 		bool		_isLogged;
@@ -43,12 +45,12 @@ class Client {
 		int	_maxChannels;
 
 	public:
-		Client(int fd);
-		Client();
+		Client(int fd, std::string address);
 		~Client();
 
 		// Getters
 		int					getFd() const;
+		const std::string&	getAddress() const;
 		bool				hasReceivedInfo() const;
 		bool				isLogged() const;
 		bool				welcomeSent() const;

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:01 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 14:02:08 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:43:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ Kill::~Kill(void) {}
  * Parameters:
  * 		<nickname> <comment>
  *
- * If the number of parameters is not valid, the corresponding error message is sent to the client.
- * If the client is not an operator, the corresponding error message is sent to the client.
- * If the nickname of the client to be killed is not found, the corresponding error message is sent to the client.
+ * If the number of parameters is not valid, ERR message
+ * If the client is not an operator, ERR message
+ * If the nickname of the client to be killed is not found, ERR message
  * Else, the client receive a message explaining why he has been killed and the server closes the connection.
  *
  * @param server The server Object.
@@ -34,12 +34,12 @@ Kill::~Kill(void) {}
 void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.size() < 2 || !msg->params[1].compare(":")) {
-		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(errNeedMoreParams);
 		return;
 	}
 	else if (!client->isOperator()) {
-		std::string	errNoPrivileges = ERR_NOPRIVILEGES(client->getNick());
+		std::string	errNoPrivileges = ERR_NOPRIVILEGES(client->getAddress(), client->getNick());
 		client->sendMessage(errNoPrivileges);
 		return;
 	}
@@ -47,7 +47,7 @@ void	Kill::execute(Server* server, t_Message* msg, Client* client) {
 	Client*	clientToKill = server->getClient(msg->params[0]);
 
 	if (!clientToKill) {
-		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getAddress(), client->getNick(), msg->params[0]);
 		client->sendMessage(errNoSuchNick);
 	}
 	else {

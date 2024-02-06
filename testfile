@@ -594,3 +594,99 @@
 >> :lair.nl.eu.dal.net PONG lair.nl.eu.dal.net :testK
 --> lag pong
 << QUIT :leaving
+<< CAP LS 302
+<< JOIN :
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Checking Ident
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** Found your hostname
+>> :serenity.fl.us.dal.net NOTICE AUTH :*** No Ident response
+>> :serenity.fl.us.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK testK
+<< USER kmorin kmorin irc.dal.net :Killian Morin
+>> :serenity.fl.us.dal.net 001 testK :Welcome to the DALnet IRC Network testK!~kmorin@185.25.195.181
+<< MODE testK +i
+>> :serenity.fl.us.dal.net 002 testK :Your host is serenity.fl.us.dal.net, running version bahamut-2.2.2
+>> :serenity.fl.us.dal.net 003 testK :This server was created Tue 23 Aug UTC at 2022 04:42:56 AM
+>> :serenity.fl.us.dal.net 004 testK serenity.fl.us.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :serenity.fl.us.dal.net 005 testK NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :serenity.fl.us.dal.net 005 testK CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :serenity.fl.us.dal.net 251 testK :There are 65 users and 7382 invisible on 37 servers
+>> :serenity.fl.us.dal.net 252 testK 75 :IRC Operators online
+>> :serenity.fl.us.dal.net 254 testK 3725 :channels formed
+>> :serenity.fl.us.dal.net 255 testK :I have 253 clients and 1 servers
+>> :serenity.fl.us.dal.net 265 testK :Current local users: 253 Max: 1393
+>> :serenity.fl.us.dal.net 266 testK :Current global users: 7447 Max: 12060
+>> :serenity.fl.us.dal.net NOTICE testK :*** Notice -- motd was last changed at 30/11/2020 19:09
+>> :serenity.fl.us.dal.net 375 testK :- serenity.fl.us.dal.net Message of the Day - 
+>> :serenity.fl.us.dal.net 372 testK :-30/11/2020 19:09
+>> :serenity.fl.us.dal.net 372 testK :- serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net 372 testK :- sponsored by: Kape, Inc & Datapacket.com
+>> :serenity.fl.us.dal.net 372 testK :- admin: Mustang
+>> :serenity.fl.us.dal.net 372 testK :- 
+>> :serenity.fl.us.dal.net 372 testK :- Please abide by DALnet's Acceptable Use Policy:
+>> :serenity.fl.us.dal.net 372 testK :- https://www.dal.net/aup
+>> :serenity.fl.us.dal.net 372 testK :- 
+>> :serenity.fl.us.dal.net 372 testK :- 
+>> :serenity.fl.us.dal.net 376 testK :End of /MOTD command.
+>> :testK MODE testK :+iH
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< JOIN #testK
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+>> :serenity.fl.us.dal.net 353 testK = #testK :@testK 
+>> :serenity.fl.us.dal.net 366 testK #testK :End of /NAMES list.
+<< MODE #testK
+>> :serenity.fl.us.dal.net 324 testK #testK + 
+--> chanquery mode
+>> :serenity.fl.us.dal.net 329 testK #testK 1707209632
+--> event 329
+>> :testK_!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+<< WHO #testK
+>> :serenity.fl.us.dal.net 352 testK #testK ~kmorin 67ad-8ab6-b0a4-3ff5-ce28.25.185.ip nonstop.ix.me.dal.net testK_ H :3 Killian Morin
+--> silent event who
+>> :serenity.fl.us.dal.net 352 testK #testK ~kmorin 67ad-8ab6-b0a4-3ff5-ce28.25.185.ip serenity.fl.us.dal.net testK H@ :0 Killian Morin
+--> silent event who
+>> :serenity.fl.us.dal.net 315 testK #testK :End of /WHO list.
+--> chanquery who end
+<< MODE #testK b
+>> :serenity.fl.us.dal.net 368 testK #testK :End of Channel Ban List
+--> chanquery ban end
+<< KICK #testK testK_ :
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip KICK #testK testK_ :testK
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+>> :testK_!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+<< KICK #testK testK_ :parce que tu es mechant
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip KICK #testK testK_ :parce que tu es mechant
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< MODE #testK
+>> :serenity.fl.us.dal.net 324 testK #testK + 
+>> :serenity.fl.us.dal.net 329 testK #testK 1707209632
+<< MODE #testK +i
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip MODE #testK +i 
+<< PING serenity.fl.us.dal.net
+>> :serenity.fl.us.dal.net PONG serenity.fl.us.dal.net :testK
+--> lag pong
+<< QUIT :leaving

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 17:02:55 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:29:26 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,11 @@ Mode::~Mode(void) {}
  *
  * Parameters CHANNEL mode:
  * 		<channel> {[+|-]|i|t|k|o|l} [<topic>] [<key>] [<user>] [<limit>]
- * you can't remove the topic, only change it with +t
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.
  * @param client The client object.
 */
-
 
 void	Mode::handleInvit(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
@@ -78,7 +76,7 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+k") && !channel->getPassword().empty()) { //set the key and the key is already set
-		std::string	response = ERR_KEYSET(client->getNick(), channel->getName());
+		std::string	response = ERR_KEYSET(client->getAddress(), client->getNick(), channel->getName());
 		client->sendMessage(response);
 	}
 	else { //remove the key
@@ -95,7 +93,7 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 
 	Client*	clientChanging = channel->getClient(msg->params[2]);
 	if (!clientChanging) {
-		std::string	response = ERR_USERNOTINCHANNEL(client->getNick(), msg->params[2], channel->getName());
+		std::string	response = ERR_USERNOTINCHANNEL(client->getAddress(), client->getNick(), msg->params[2], channel->getName());
 		client->sendMessage(response);
 		return;
 	}
@@ -133,7 +131,7 @@ void	Mode::handleLimit(Server* server, t_Message* msg, Client* client, Channel* 
 			}
 		}
 		else {
-			std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command + msg->params[2]);
+			std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command + msg->params[2]);
 			client->sendMessage(response);
 		}
 	}
@@ -154,7 +152,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	std::string	response;
 
 	if (!channel) {
-		response = ERR_NOSUCHCHANNEL(client->getNick(), nameChannel);
+		response = ERR_NOSUCHCHANNEL(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
 	}
@@ -169,7 +167,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 			modes += "l";
 		if (channel->getT())
 			modes += "t";
-		response = RPL_CHANNELMODEIS(client->getNick(), nameChannel, modes);
+		response = RPL_CHANNELMODEIS(client->getAddress(), client->getNick(), nameChannel, modes);
 		client->sendMessage(response);
 		return;
 	}
@@ -183,7 +181,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	}
 
 	if (it->second == false) { // the user is not channel operator
-		response = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
+		response = ERR_CHANOPRIVSNEEDED(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
 	}
@@ -199,7 +197,7 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 	else if (!msg->params[1].compare("+l") || !msg->params[1].compare("-l"))
 		handleLimit(server, msg, client, channel);
 	else { // unknown mode
-		response = ERR_UNKNOWNMODE(client->getNick(), msg->params[1]);
+		response = ERR_UNKNOWNMODE(client->getAddress(), client->getNick(), msg->params[1]);
 		client->sendMessage(response);
 	}
 }
@@ -210,14 +208,14 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 	std::string	response;
 
 	if (!clientChanging) { // couldn't find a user
-		response = ERR_USERSDONTMATCH(client->getNick());
+		response = ERR_USERSDONTMATCH(client->getAddress(), client->getNick());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
 	else if (msg->params.size() == 1) { // print info
 		if (client->isOperator())
-			response = RPL_UMODEIS(client->getNick(), "+o");
+			response = RPL_UMODEIS(client->getAddress(), client->getNick(), "+o");
 		else
-			response = RPL_UMODEIS(client->getNick(), "-o");
+			response = RPL_UMODEIS(client->getAddress(), client->getNick(), "-o");
 		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+o")) {
@@ -236,7 +234,7 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 		client->sendMessage(response);
 	}
 	else { // unknown mode
-		response = ERR_UMODEUNKNOWNFLAG(client->getNick());
+		response = ERR_UMODEUNKNOWNFLAG(client->getAddress(), client->getNick());
 		client->sendMessage(response);
 	}
 }
@@ -244,7 +242,7 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 void	Mode::execute(Server* server, t_Message* msg, Client* client) {
 
 	if (msg->params.size() < 1) {
-		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}

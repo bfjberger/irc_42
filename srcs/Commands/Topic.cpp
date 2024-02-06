@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:11 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 16:17:29 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:27:23 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if there is enough parameters
 	if (msg->params.size() < 1) {
-		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}
@@ -52,9 +52,9 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 	if (msg->params[1].empty()) {
 		response = channel->getTopic();
 		if (response.empty())
-			response = RPL_NOTOPIC(client->getNick(), channelName);
+			response = RPL_NOTOPIC(client->getAddress(), client->getNick(), channelName);
 		else
-			response = RPL_TOPIC(client->getNick(), channelName, response);
+			response = RPL_TOPIC(client->getAddress(), client->getNick(), channelName, response);
 
 		client->sendMessage(response);
 		return;
@@ -63,7 +63,7 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if the client is on the channel
 	std::map<Channel*, bool>::iterator	it = client->getChannel(channelName);
 	if (it == client->getChannels().end()) {
-		response = ERR_NOTONCHANNEL(client->getNick(), channelName);
+		response = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), channelName);
 		client->sendMessage(response);
 		return;
 	}
@@ -71,7 +71,7 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 	// Check for who the command is available
 	// If the command is reserved for chanop, check that the client is one
 	if (channel->getT() == true && it->second == false) {
-		response = ERR_CHANOPRIVSNEEDED(client->getNick(), channelName);
+		response = ERR_CHANOPRIVSNEEDED(client->getAddress(), client->getNick(), channelName);
 		client->sendMessage(response);
 		return;
 	}
@@ -86,6 +86,6 @@ void	Topic::execute(Server* server, t_Message* msg, Client* client) {
 
 	channel->setTopic(params);
 
-	response = RPL_TOPIC(client->getNick(), channelName, params);
+	response = RPL_TOPIC(client->getAddress(), client->getNick(), channelName, params);
 	channel->sendMessageToAllClients(response);
 }

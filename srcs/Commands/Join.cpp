@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:27:39 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:29:01 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ Join::~Join(void) {}
  * @param msg The message object containing the command and parameters.
  * @param client The client object.
 */
-
 void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	channel = new Channel(msg->params[0]);
@@ -58,9 +57,9 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	// get the list of clients in the channel
 
-	std::string rplNameList = RPL_NAMERPLY(client->getNick(), channel->getName(), "@" + client->getNick());
+	std::string rplNameList = RPL_NAMERPLY(client->getAddress(), client->getNick(), channel->getName(), "@" + client->getNick());
 	client->sendMessage(rplNameList);
-	std::string endOfNames = RPL_ENDOFNAMES(client->getNick(), channel->getName());
+	std::string endOfNames = RPL_ENDOFNAMES(client->getAddress(), client->getNick(), channel->getName());
 	client->sendMessage(endOfNames);
 
 }
@@ -68,13 +67,13 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 void	Join::joinChannelPassword(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	if (msg->params.size() < 2) {
-		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}
 
 	if (msg->params[1] != channel->getPassword()) {
-		std::string	response = ERR_BADCHANNELKEY(client->getNick(), channel->getName());
+		std::string	response = ERR_BADCHANNELKEY(client->getAddress(), client->getNick(), channel->getName());
 		client->sendMessage(response);
 	}
 	else
@@ -108,12 +107,12 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 		else
 			clientInChannel += it->first + " ";
 	}
-	std::string rplNameList = RPL_NAMERPLY(client->getNick(), channel->getName(), clientInChannel);
+	std::string rplNameList = RPL_NAMERPLY(client->getAddress(), client->getNick(), channel->getName(), clientInChannel);
 	client->sendMessage(rplNameList);
-	std::string endOfNames = RPL_ENDOFNAMES(client->getNick(), channel->getName());
+	std::string endOfNames = RPL_ENDOFNAMES(client->getAddress(), client->getNick(), channel->getName());
 	client->sendMessage(endOfNames);
 	if (channel->getTopic().empty() == false) {
-		std::string response = RPL_TOPIC(client->getNick(), channel->getName(), channel->getTopic());
+		std::string response = RPL_TOPIC(client->getAddress(), client->getNick(), channel->getName(), channel->getTopic());
 		client->sendMessage(response);
 	}
 }
@@ -122,14 +121,14 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if the client is not in too many channel
 	if (static_cast<int>(client->getChannels().size()) == client->getMaxChannels()) {
-		std::string	response = ERR_TOOMANYCHANNELS(client->getNick(), msg->params[0]);
+		std::string	response = ERR_TOOMANYCHANNELS(client->getAddress(), client->getNick(), msg->params[0]);
 		client->sendMessage(response);
 		return;
 	}
 
 	// Check if there is enough parameters
 	if (msg->params.size() < 1) {
-		std::string	response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}
@@ -139,7 +138,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	// Check for forbidden caracters
 	if (channelName.find(' ') != channelName.npos || channelName.find(',') != channelName.npos || \
 		channelName.find(7) != channelName.npos || channelName.size() > 50) {
-		std::string	response = ERR_NOSUCHCHANNEL(client->getNick(), channelName);
+		std::string	response = ERR_NOSUCHCHANNEL(client->getAddress(), client->getNick(), channelName);
 		client->sendMessage(response);
 		return;
 	}
@@ -166,7 +165,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if the channel has a user limit
 	if (channel->getL() == true) {
 		if (channel->getUserLimit() == static_cast<int>(channel->getClients().size())) {
-			std::string	response = ERR_CHANNELISFULL(client->getNick(), channel->getName());
+			std::string	response = ERR_CHANNELISFULL(client->getAddress(), client->getNick(), channel->getName());
 			client->sendMessage(response);
 		}
 		else
@@ -179,7 +178,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 		if (channel->getInvitedClientVector(client->getNick()))
 			joinChannel(server, msg, client, channel);
 		else {
-			std::string	response = ERR_INVITEONLYCHAN(client->getNick(), channel->getName());
+			std::string	response = ERR_INVITEONLYCHAN(client->getAddress(), client->getNick(), channel->getName());
 			client->sendMessage(response);
 		}
 		return;

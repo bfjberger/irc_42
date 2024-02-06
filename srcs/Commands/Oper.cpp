@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:05 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:52:00 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:25:45 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	Oper::execute(Server* server, t_Message* msg, Client* client) {
 	std::string	response;
 
 	if (msg->params.size() < 2) {
-		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 	}
 	else if (msg->params[1] != server->getPass()) {
-		response = ERR_PASSWDMISMATCH(client->getNick());
+		response = ERR_PASSWDMISMATCH(client->getAddress(), client->getNick());
 		client->sendMessage(response);
 	}
 	else if (msg->params[0] != client->getNick()) {

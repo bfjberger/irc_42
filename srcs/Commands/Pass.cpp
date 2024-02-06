@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:07 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:13:37 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:26:07 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ void	Pass::execute(Server* server, t_Message* msg, Client* client) {
 	std::string response;
 
 	if (msg->params.empty()) {
-		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 	}
 	else if (client->isRegistered()) {
-		response = ERR_ALREADYREGISTRED(client->getNick());
+		response = ERR_ALREADYREGISTRED(client->getAddress(), client->getNick());
 		client->sendMessage(response);
 	}
 	else {

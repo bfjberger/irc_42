@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 13:39:57 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:26:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if there is enough parameters
 	if (msg->params.size() < 2) {
-		response = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);
 		return;
 	}
@@ -92,7 +92,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		Channel* channel = server->getChannel(msg->params[0]);
 		// If the client is not in the channel send an error message
 		if (channel != NULL && channel->isClientInChannel(client->getNick()) == false) {
-			response = ERR_NOTONCHANNEL(client->getNick(), msg->params[0]);
+			response = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), msg->params[0]);
 			client->sendMessage(response);
 			return;
 		}
@@ -105,7 +105,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 		}
 		// If the channel does not exist send an error message
 		else {
-			response = ERR_NOSUCHCHANNEL(client->getNick(), msg->params[0]);
+			response = ERR_NOSUCHCHANNEL(client->getAddress(), client->getNick(), msg->params[0]);
 			client->sendMessage(response);
 		}
 	}
@@ -120,18 +120,18 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 				return;
 			}
 			else {
-				response = RPL_PRIVMSG(client->getNick(), rplMsg);
+				response = RPL_PRIVMSG(client->getAddress(), client->getNick(), rplMsg);
 				std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
 				target->sendMessage(response);
 			}
 		}
 		else { // The target does not exist on the server
-			response = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+			response = ERR_NOSUCHNICK(client->getAddress(), client->getNick(), msg->params[0]);
 			client->sendMessage(response);
 		}
 	}
 	else { // Not a client nor a channel
-		response = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		response = ERR_NOSUCHNICK(client->getAddress(), client->getNick(), msg->params[0]);
 		client->sendMessage(response);
 	}
 }

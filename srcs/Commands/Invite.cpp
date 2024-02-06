@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:58 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/01 15:11:10 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:28:48 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,12 @@ Invite::~Invite(void) {}
  * @param msg The message object containing the command and parameters.
  * @param client The client object.
 */
-
 void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if there is enough parameters
 	if (msg->params.size() < 2)
 	{
-		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getNick(), msg->command);
+		std::string	errNeedMoreParams = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(errNeedMoreParams);
 		return;
 	}
@@ -42,7 +41,7 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if the client to be invited exist
 	if (!server->getClient(msg->params[0]))
 	{
-		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getNick(), msg->params[0]);
+		std::string	errNoSuchNick = ERR_NOSUCHNICK(client->getAddress(), client->getNick(), msg->params[0]);
 		client->sendMessage(errNoSuchNick);
 		return;
 	}
@@ -54,7 +53,7 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	Client*	invitedClientOnChan = channel->getClient(msg->params[0]);
 	if (invitedClientOnChan)
 	{
-		std::string errOnChannel = ERR_USERONCHANNEL(client->getNick(), msg->params[0], nameChannel);
+		std::string errOnChannel = ERR_USERONCHANNEL(client->getAddress(), client->getNick(), msg->params[0], nameChannel);
 		client->sendMessage(errOnChannel);
 		return;
 	}
@@ -62,21 +61,21 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	// Check if the client sending the invitation is on the channel
 	std::map<Channel*, bool>::iterator	clientSendingIt = client->getChannel(nameChannel);
 	if (clientSendingIt == client->getChannels().end()) {
-		std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getNick(), nameChannel);
+		std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(errNotOnChannel);
 		return;
 	}
 
 	// Check if the client sending the invitation is a channel operator on this channel
 	if (clientSendingIt->second == false) {
-		std::string errNotOperator = ERR_CHANOPRIVSNEEDED(client->getNick(), nameChannel);
+		std::string errNotOperator = ERR_CHANOPRIVSNEEDED(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(errNotOperator);
 		return;
 	}
 
 	Client*	invitedClient = server->getClient(msg->params[0]);
 
-	std::string rpl_invit = RPL_INVITING(invitedClient->getNick(), nameChannel, client->getNick());
+	std::string rpl_invit = RPL_INVITING(client->getAddress(), invitedClient->getNick(), nameChannel, client->getNick());
 	invitedClient->sendMessage(rpl_invit);
 
 	rpl_invit = "An invitation has been sent to " + invitedClient->getNick() + "\r\n";
