@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 13:59:52 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 16:14:59 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 	ERR -> error replies
 */
 
-#define USER_ID(user) (user->getNick() + "!" + user->getUserName() + "@" + user->getHostname())
+#define USER_ID(user) (user->getNick() + "!" + user->getUserName() + "@" + user->getAddress())
 #define RPL_WELCOME(nickname, host, user_id) (":" + host + " 001 " + nickname + " :Welcome to the Internet Relay Network " + user_id + "\r\n") //001
 
 #define MSG_START(client) (":localhost " + client + " ")
@@ -40,7 +40,7 @@
 
 #define RPL_PING(user_id, token) (user_id + " PING " + token + "\r\n") // PING
 
-#define RPL_PRIVMSG(address, nickname, message) (":" + address + " " + nickname + ": " + message + "\r\n") // PRIVMSG
+#define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
 
 #define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
 

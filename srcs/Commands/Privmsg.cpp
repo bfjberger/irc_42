@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 14:37:44 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 16:35:39 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
 	std::string	rpl(msg->command);
 	rpl = ":" + client->getNick() + " " + rpl + " ";
 	rpl += client->getNick() + " " + dccContent + "\r\n";
-	// std::cout << "resultat: " << rpl << std::endl;
+	std::cout << "resultat: " << rpl << std::endl;
 	target->sendMessage(rpl);
 }
 
@@ -70,7 +70,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	std::string	response;
 
 	// rplMsg is the message to send to the channel or the client
-	std::string rplMsg = getParams(msg, 1) + "\r\n";
+	std::string rplMsg = getParams(msg, 1);
 	if (rplMsg[0] == ':') {
 		rplMsg.erase(0, 1);
 	}
@@ -116,13 +116,13 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	else if (server->isNick(msg->params[0]) == true) {
 		Client* target = server->getClient(msg->params[0]);
 		if (target != NULL) {
-			if (msg->params[1].compare(":DCC")) { // Go to dcchandler for handling the format for the file transfer
+			if (msg->params[1].compare(":DCC") == 0 || msg->params[1].compare(":DCC") < 0) { // Go to dcchandler for handling the format for the file transfer
 				dcchandler(server, msg, client);
 				return;
 			}
 			else {
-				response = RPL_PRIVMSG(client->getAddress(), client->getNick(), rplMsg);
-				std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
+				response = RPL_PRIVMSG(target->getNick(), rplMsg);
+				std::cout << COLOR("[" << client->getNick() << "] >> [" << target->getNick() << "] : " << rplMsg, GREEN) << std::endl;
 				target->sendMessage(response);
 			}
 		}

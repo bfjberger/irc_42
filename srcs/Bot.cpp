@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 16:28:48 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 14:39:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 16:15:31 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 
 	// rplMsg = ":" + rplMsg;
 	// rplPrivmsg = RPL_PRIVMSG(client, target->getName(), rplMsg);
-	rplPrivmsg = RPL_PRIVMSG(client->getAddress(), getName(), rplMsg);
+	// rplPrivmsg = RPL_PRIVMSG(client->getAddress(), getName(), rplMsg);
+	rplPrivmsg = RPL_PRIVMSG(getName(), rplMsg);
 	// std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getName() << "] : " << rplMsg, GREEN) << std::endl;
 	client->sendMessage(rplPrivmsg);
 }

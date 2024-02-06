@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:00 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/06 14:15:33 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 15:52:07 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,20 +291,23 @@ int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<p
 			std::cout << "_aggMessagesStatus[" << it->fd << "] = " << _aggMessagesStatus[it->fd] << " : ";
 			_aggMessagesStatus[it->fd] = true;
 			_aggMessages[it->fd] += buffer;
+			memset(buffer, 0, sizeof(buffer));
 			std::cout << _aggMessages[it->fd] << std::endl;
 			return (0);
-		} 
+		}
 		// if the buffer last char is not a newline and we are already aggregating, we continue to aggregate
 		else if (buffer[readResult - 1] != '\n' && _aggMessagesStatus[it->fd] == true) {
 			std::cout << "_aggMessagesStatus[" << it->fd << "] = " << _aggMessagesStatus[it->fd] << " : ";
 			_aggMessages[it->fd] += buffer;
+			memset(buffer, 0, sizeof(buffer));
 			std::cout << _aggMessages[it->fd] << std::endl;
 			return (0);
-		} 
+		}
 		// else the buffer is complete and we can parse it
 		else if (_aggMessagesStatus[it->fd] == true) {
 			_aggMessagesStatus[it->fd] = false;
 			_aggMessages[it->fd] += buffer;
+			memset(buffer, 0, sizeof(buffer));
 			std::string	tmp(_aggMessages[it->fd]);
 			trimString(tmp);
 			std::cout << COLOR("Received: ", CYAN) << "|" << tmp << "|" << std::endl;
@@ -479,6 +482,9 @@ void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::ite
 	std::map<int, Client*>::iterator	client = this->_clients.find(it->fd);
 	delete client->second;
 	this->_clients.erase(client);
+
+	_aggMessagesStatus.erase(it->fd);
+	_aggMessages.erase(it->fd);
 
 	close(it->fd);
 
