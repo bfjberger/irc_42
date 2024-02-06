@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 16:28:48 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:28:15 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 14:39:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,14 @@ const struct sockaddr_in&	Bot::getBotAddress() const {
 /*                               MEMBER FUNCTIONS                             */
 /* ************************************************************************** */
 
+/**
+ * In irssi, nothing after the first parameter (bot) or a single space
+ * 	is not enough parameters and an ERR_NEEDMOREPARAMS is send automatically
+ * With nc, it works with nothing after "bot"
+ */
 void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 
-	Bot* target = server->getBot();
+	// Bot* target = server->getBot();
 
 	std::string	rplMsg;
 	std::string rplPrivmsg;
@@ -73,6 +78,6 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 	// rplMsg = ":" + rplMsg;
 	// rplPrivmsg = RPL_PRIVMSG(client, target->getName(), rplMsg);
 	rplPrivmsg = RPL_PRIVMSG(client->getAddress(), getName(), rplMsg);
-	std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getName() << "] : " << rplMsg, GREEN) << std::endl;
+	// std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getName() << "] : " << rplMsg, GREEN) << std::endl;
 	client->sendMessage(rplPrivmsg);
 }
