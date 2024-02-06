@@ -511,5 +511,6 @@ void	Server::addChannel(Channel* channel) {
 }
 
 void	Server::removeChannel(std::string channelName) {
+	delete this->_channels[channelName];
 	this->_channels.erase(channelName);
 }
