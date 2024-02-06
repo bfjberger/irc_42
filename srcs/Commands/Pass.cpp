@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:07 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:26:07 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:35:32 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ Pass::~Pass(void) {}
  * Parameter:
  * 		<password>
  *
- * If the number of parameter is not valid, the corresponding error message is sent to the client.
- * If the client is already registered, the corresponding error message is sent to the client.
+ * If the number of parameter is not valid, ERR_NEEDMOREPARAMS
+ * If the client is already registered, ERR_ALREADYREGISTRED
  * Else it sets the parameter as the password associated to the client
  *
  * @param server The server object.

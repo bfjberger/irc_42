@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:01 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:43:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:33:50 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ Kill::~Kill(void) {}
  * Parameters:
  * 		<nickname> <comment>
  *
- * If the number of parameters is not valid, ERR message
- * If the client is not an operator, ERR message
- * If the nickname of the client to be killed is not found, ERR message
- * Else, the client receive a message explaining why he has been killed and the server closes the connection.
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the client is not an operator, ERR_NOPRIVILEGES
+ * If the nickname of the client to be killed is not found, ERR_NOSUCHNICK
+ * Else, the client receive a custom message explaining why he has been killed and the server closes the connection.
  *
  * @param server The server Object.
  * @param msg The message object containing the command and parameters.

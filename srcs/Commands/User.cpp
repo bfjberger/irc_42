@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:12 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:27:31 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:39:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ User::~User(void) {}
  * Parameters:
  *		<user>
  *
- * If the number of parameters is not valid, the corresponding error message is sent to the client.
- * If the client is already registered, the correspond error message is sent.
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the client is already registered, ERR_ALREADYREGISTRED
  * If the username is valid and available, it is set as the client's username.
  *
  * @param server The server object.

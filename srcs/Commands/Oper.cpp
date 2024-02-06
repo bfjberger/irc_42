@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:05 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:25:45 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:33:38 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ Oper::~Oper(void) {}
  * assume the name asked is the username of the client asking to be promoted
  * assume the password is the password of the client asking to be promoted
  *
- * If the number of parameters is not valid, ERR message
- * If the password is not the correct one, ERR message
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the password is not the correct one, ERR_PASSWDMISMATCH
  * If the username is not the correct one, nothing is done.
- * If both parameters are correct, we promote the client and send him the corresponding message.
+ * If both parameters are correct, we promote the client and send him RPL_YOUREOPER
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.

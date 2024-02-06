@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:44:31 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:33:17 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ bool isNicknameUsed(const std::string& nickname, const std::map<int, Client*>& c
  *
  * This function is responsible for handling the Nick command received from a client.
  * It checks if the nickname parameter is provided and valid, and performs the necessary actions accordingly.
- * If the nickname is empty, ERR message
- * If the nickname is too long, ERR message
- * If the nickname is already in use, ERR message
- * If the nickname is valid and available, it is set as the client's nickname.
+ *
+ * If the nickname is empty, ERR_NONICKNAMEGIVEN
+ * If the nickname is too long, ERR_ERRONEUSNICKNAME
+ * If the nickname is already in use, ERR_NICKNAMEINUSE
+ * If the nickname is valid and available, it is set as the client's nickname and send RPL_NICKCHANGE to the client
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.

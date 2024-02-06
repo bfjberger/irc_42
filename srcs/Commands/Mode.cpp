@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:29:26 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:54:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,33 @@ Mode::~Mode(void) {}
  * https://datatracker.ietf.org/doc/html/rfc2812#section-3.1.5 USER MODE
  * https://datatracker.ietf.org/doc/html/rfc2812#section-3.2.3 CHANNEL MODE
  *
- * Parameters USER mode:
- * 		<nickname> {[+|-]|o}
- *
  * Parameters CHANNEL mode:
  * 		<channel> {[+|-]|i|t|k|o|l} [<topic>] [<key>] [<user>] [<limit>]
+ *
+ *  Parameters USER mode:
+ * 		<nickname> {[+|-]|o}
+ *
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the first char of the first parameter is a '#' it's a channel
+ * 	If the channel does not exist, ERR_NOSUCHCHANNEL
+ * 	If the channel name is the only parameter, send the RPL_CHANNELMODEIS to the client
+ * 	If the user is not a member of the channel, ERR_USERNOTINCHANNEL
+ * 	If the user is not a chanop of the channel, ERR_CHANOPRIVSNEEDED
+ * 	If the mode is 'i' -> handleInvit()
+ * 	If the mode is 't' -> handleTopic()
+ *	If the mode is 'k' -> handleKey()
+ * 	If the mode is 'o' -> handleChanOp()
+ * 	If the mode is 'l' -> handleLimit()
+ * 		each handle function does additional test, send ERR or the appropriate RPL
+ * 	If the mode is unknown, ERR_UNKNOWNMODE
+ *
+ * Else it's a user
+ * 	If the nickname passed is not the one of the client requesting the change, ERR_USERSDONTMATCH
+ * 	If the nickname is the only parameter, send the RPL_UMODEIS to the client
+ * 	If the mode is '+o' or '+i' we ignore it
+ * 	If the mode is '-o' we demote the client from operator to normal client and send him a custom message
+ * 	If the mode is unknown, ERR_UMODEUNKNOWNFLAG
+ *
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.
@@ -92,11 +114,6 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	(void) server;
 
 	Client*	clientChanging = channel->getClient(msg->params[2]);
-	if (!clientChanging) {
-		std::string	response = ERR_USERNOTINCHANNEL(client->getAddress(), client->getNick(), msg->params[2], channel->getName());
-		client->sendMessage(response);
-		return;
-	}
 
 	// std::map<Channel*, bool>	chanList = client->getChannels();
 	// std::map<Channel*, bool>::iterator it = chanList.find(channel);
@@ -151,13 +168,15 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 	std::string	response;
 
+	// Check if the channel exists
 	if (!channel) {
 		response = ERR_NOSUCHCHANNEL(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
 	}
 
-	if (msg->params.size() == 1) { // print info (no need for privileges so done before those checks)
+	// print info (no need for privileges so done before those checks)
+	if (msg->params.size() == 1) {
 		std::string	modes = "+";
 		if (channel->getI())
 			modes += "i";
@@ -174,13 +193,15 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 	std::map<Channel*, bool>::iterator	it = client->getChannel(channel->getName());
 
+	// Check if the user is a member of the channel
 	if (it == client->getChannels().end()) {
-		response = "Couldn't find the channel in the ones where the client is.\r\n";
+		std::string	response = ERR_USERNOTINCHANNEL(client->getAddress(), client->getNick(), msg->params[2], channel->getName());
 		client->sendMessage(response);
 		return;
 	}
 
-	if (it->second == false) { // the user is not channel operator
+	// Check if the user is a chanop of the channel
+	if (it->second == false) {
 		response = ERR_CHANOPRIVSNEEDED(client->getAddress(), client->getNick(), nameChannel);
 		client->sendMessage(response);
 		return;
@@ -207,7 +228,8 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 	Client*	clientChanging = server->getClient(msg->params[0]);
 	std::string	response;
 
-	if (!clientChanging) { // couldn't find a user
+	// Check if the nickname correspond to the sender
+	if (!clientChanging) {
 		response = ERR_USERSDONTMATCH(client->getAddress(), client->getNick());
 		send(client->getFd(), response.c_str(), response.size(), 0);
 	}
@@ -215,7 +237,7 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 		if (client->isOperator())
 			response = RPL_UMODEIS(client->getAddress(), client->getNick(), "+o");
 		else
-			response = RPL_UMODEIS(client->getAddress(), client->getNick(), "-o");
+			response = RPL_UMODEIS(client->getAddress(), client->getNick(), "");
 		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+o")) {
@@ -241,6 +263,7 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 
 void	Mode::execute(Server* server, t_Message* msg, Client* client) {
 
+	// Check if there is enough parameters
 	if (msg->params.size() < 1) {
 		std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
 		client->sendMessage(response);

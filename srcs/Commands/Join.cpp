@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:29:01 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:30:46 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,17 @@ Join::~Join(void) {}
  *
  * At the creation of a channel, every other arguments, outside the channel name, are ignored
  *
- * If the client is already in too many channel, ERR message
- * If the number of parameters is not valid, ERR message
- * If the channel name is not valid, ERR message
- * If the channel does not exist yet, it is created in channelCreation()
- * If the channel has a password, it is handled in joinChannelPassword()
+ * If the client is already in too many channel, ERR_TOOMANYCHANNELS
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the channel name is not valid, ERR_NOSUCHCHANNEL
+ * If the channel does not exist yet -> channelCreation()
+ * If the channel has a password -> joinChannelPassword()
  * If the channel has a user limit,
- * 		if the limit is reached, ERR message
- * 		if the limit is not reached, the joining is handled in joinChannel()
+ * 		if the limit is reached, ERR_CHANNELISFULL
+ * 		if the limit is not reached -> joinChannel()
+ * If the channel is in invite-only mode,
+ * 		if the client is not invited, ERR_INVITEONLYCHAN
+ * 		if the client is invited -> joinChannel()
  *
  * @param server The server Object.
  * @param msg The message object containing the command and parameters.

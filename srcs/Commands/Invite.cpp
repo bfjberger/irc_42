@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:58 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:28:48 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:27:19 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,12 @@ Invite::~Invite(void) {}
  * Parameters:
  * 		<nickname> <channel>
  *
- *
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the client to be invited does not exist, ERR_NOSUCHNICK
+ * If the client to be invited is already on the channel, ERR_USERONCHANNEL
+ * If the client inviting is not on the channel, ERR_NOTONCHANNEL
+ * If the client inviting it not a chanop, ERR_CHANOPRIVSNEEDED
+ * Else, send RPL_INVITING to the client invited, send a custom confirmation of invitation to the client inviting
  *
  * @param server The server Object.
  * @param msg The message object containing the command and parameters.

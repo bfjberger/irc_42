@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:29:56 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:35:21 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ Part::~Part(void) {}
  * Parameters:
  * 		<channel> [ <Part Message> ]
  *
- * If the number of parameters is not valid, ERR message
- * If the channel to part from does not exist, ERR message
- * If the client is not part of the channel to part from, ERR message
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the channel to part from does not exist, ERR_NOSUCHCHANNEL
+ * If the client is not part of the channel to part from, ERR_NOTONCHANNEL
+ * Else, a custom message is sent to the channel indicating that the client left the channel with the comment if present
+ * 		the server, handle the cleaning in the maps
  *
  * If the channel has no member left, we delete it from the server
  *

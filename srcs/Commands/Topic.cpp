@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:11 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:27:23 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:39:22 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ Topic::~Topic(void) {}
  * Parameter:
  * 		<channel> [<topic>]
  *
- * If the number of parameters is not valid, ERR message
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
  * If one parameter is passed,
- * 	send the RPL to the client depending on if the topic is empty or not
- * If the client is not on the channel, ERR message
- * If the client is not a operator on this channel, ERR message
- * Else sets the topic to what is passed after the channel parameter
+ * 		send to the client RPL_TOPIC if the topic is not empty or
+ * 		RPL_NOTOPIC if the topic is empty
+ * If the client is not on the channel, ERR_NOTONCHANNEL
+ * If the client is not a operator on this channel and the channel is in +t mode, ERR_CHANOPRIVSNEEDED
+ * Else sets the topic to what is passed after the channel parameter and send RPL_TOPIC to the channel
  *
  * @param server The server object.
  * @param msg The message object containing the command and parameters.

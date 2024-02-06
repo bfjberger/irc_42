@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:26:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:37:13 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,16 @@ void	Privmsg::dcchandler(Server* server, t_Message* msg, Client* client) {
  * The target of the message can be a channel or a client
  *
  * Get the message to be sent, add the closing caracters and erase the ':' at the start if present
- * If the target of the message is the bot and with at least one parameter, go to the bot message handler
- * If the number of parameters is not valid, ERR message
+ * If the target of the message is the bot and with at least one parameter -> handleBot()
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
  * If the target of the message is a channel, send it to all clients on the channel
- * 		If the client is not part of the channel, ERR message
- * 		If the channel does not exist, ERR message
+ * 		If the client is not part of the channel, ERR_NOTONCHANNEL
+ * 		If the channel does not exist, ERR_NOSUCHCHANNEL
  * If the target of the message is a client, send the message to him
- *		irssi expand the DCC SEND so check if it's the case and go to the file transfer handler
- * 		If the client does not exist, ERR message
- * If the target is not a channel nor a client, ERR message
+ *		irssi expand the DCC SEND so check if it's the case -> dcchandler()
+ * 		If the client does not exist, ERR_NOSUCHNICK
+ * 		Else send the RPL_PRIVMSG to the client
+ * If the target is not a channel nor a client, ERR_NOSUCHNICK
  *
  * @param server The server instance.
  * @param msg The message containing the command and parameters.

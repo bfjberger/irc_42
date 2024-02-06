@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:00 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:19:35 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:31:23 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ Kick::~Kick(void) {}
  *
  * Kick a user from a specific channel
  *
- * If the number of parameters is not valid, ERR message
- * If the channel does not exist, ERR message
- * If the user attempting to kick is not on the channel, ERR message
- * If the user attempting to kick is not chanop, ERR message
- * If the user targeted to be kick is not on the channel, ERR message
+ * If the number of parameters is not valid, ERR_NEEDMOREPARAMS
+ * If the channel does not exist, ERR_NOSUCHCHANNEL
+ * If the user attempting to kick is not on the channel, ERR_NOTONCHANNEL
+ * If the user attempting to kick is not chanop, ERR_CHANOPRIVSNEEDED
+ * If the user targeted to be kick is not on the channel, ERR_USERNOTINCHANNEL
  *
  * @param server The server Object.
  * @param msg The message object containing the command and parameters.
