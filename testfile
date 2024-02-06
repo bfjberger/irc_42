@@ -758,3 +758,184 @@
 >> :atw.hu.eu.dal.net PONG atw.hu.eu.dal.net :testK
 --> lag pong
 << QUIT :leaving
+<< CAP LS 302
+<< JOIN :
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :bitcoin.uk.eu.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK testK
+<< USER kmorin kmorin irc.dal.net :Killian Morin
+>> :bitcoin.uk.eu.dal.net 001 testK :Welcome to the DALnet IRC Network testK!~kmorin@185.25.195.181
+<< MODE testK +i
+>> :bitcoin.uk.eu.dal.net 002 testK :Your host is bitcoin.uk.eu.dal.net, running version bahamut-2.2.2
+>> :bitcoin.uk.eu.dal.net 003 testK :This server was created Sat 8 Oct 2022 at 14:41:03 BST
+>> :bitcoin.uk.eu.dal.net 004 testK bitcoin.uk.eu.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :bitcoin.uk.eu.dal.net 005 testK NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :bitcoin.uk.eu.dal.net 005 testK CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :bitcoin.uk.eu.dal.net 251 testK :There are 65 users and 7382 invisible on 37 servers
+>> :bitcoin.uk.eu.dal.net 252 testK 76 :IRC Operators online
+>> :bitcoin.uk.eu.dal.net 254 testK 3752 :channels formed
+>> :bitcoin.uk.eu.dal.net 255 testK :I have 317 clients and 1 servers
+>> :bitcoin.uk.eu.dal.net 265 testK :Current local users: 317 Max: 4001
+>> :bitcoin.uk.eu.dal.net 266 testK :Current global users: 7447 Max: 12809
+>> :bitcoin.uk.eu.dal.net NOTICE testK :*** Notice -- motd was last changed at 9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 375 testK :- bitcoin.uk.eu.dal.net Message of the Day - 
+>> :bitcoin.uk.eu.dal.net 372 testK :-9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ bitcoin.uk.eu.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ Accessible via...        ]
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ ipv4: bitcoin.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) 
+>> :bitcoin.uk.eu.dal.net 372 testK :- for sponsoring this server.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :bitcoin.uk.eu.dal.net 372 testK :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Server Policies:
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   We reserve the right to deny access to this server without
+>> :bitcoin.uk.eu.dal.net 372 testK :-        warning or explanation
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   No malicious bots, including flood and nick/channel chasers
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   No channel filler bots/clients/psybncs
+>> :bitcoin.uk.eu.dal.net 372 testK :-          - A channel filler is a client, bnc, or bot which is
+>> :bitcoin.uk.eu.dal.net 372 testK :-            connected just to fill a channel and make it look
+>> :bitcoin.uk.eu.dal.net 372 testK :-            bigger
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Operator impersonation, spamming, or any other abuse will
+>> :bitcoin.uk.eu.dal.net 372 testK :-        cause you to be banned from this server
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Please have fun and enjoy DALnet!
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Server Administrator: tyler
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) for sponsori
+>> :bitcoin.uk.eu.dal.net 372 testK :- ng this server.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- For IRCop assistance, please /join #operhelp or message one of our
+>> :bitcoin.uk.eu.dal.net 372 testK :- friendly server staff listed above.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- For multilingual information:  <http://docs.dal.net/>
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :bitcoin.uk.eu.dal.net 376 testK :End of /MOTD command.
+>> :testK MODE testK :+iH
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :testK
+--> lag pong
+<< JOIN #testK
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+>> :bitcoin.uk.eu.dal.net 353 testK = #testK :@testK 
+>> :bitcoin.uk.eu.dal.net 366 testK #testK :End of /NAMES list.
+<< MODE #testK
+>> :bitcoin.uk.eu.dal.net 324 testK #testK + 
+--> chanquery mode
+>> :bitcoin.uk.eu.dal.net 329 testK #testK 1707225962
+--> event 329
+<< WHO #testK
+>> :bitcoin.uk.eu.dal.net 352 testK #testK ~kmorin 67ad-8ab6-b0a4-3ff5-ce28.25.185.ip bitcoin.uk.eu.dal.net testK H@ :0 Killian Morin
+--> silent event who
+>> :bitcoin.uk.eu.dal.net 315 testK #testK :End of /WHO list.
+--> chanquery who end
+<< MODE #testK b
+>> :bitcoin.uk.eu.dal.net 368 testK #testK :End of Channel Ban List
+--> chanquery ban end
+<< MODE #new +l
+>> :bitcoin.uk.eu.dal.net 482 testK #New :You're not channel operator
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :testK
+--> lag pong
+<< PART #testK
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip PART #testK
+<< QUIT :leaving
+<< CAP LS 302
+<< JOIN :
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Looking up your hostname...
+>> :bitcoin.uk.eu.dal.net NOTICE AUTH :*** Found your hostname
+>> :bitcoin.uk.eu.dal.net 451 * JOIN :You must finish connecting with another nickname first.
+<< NICK testK
+<< USER kmorin kmorin irc.dal.net :Killian Morin
+>> :bitcoin.uk.eu.dal.net 001 testK :Welcome to the DALnet IRC Network testK!~kmorin@185.25.195.181
+<< MODE testK +i
+>> :bitcoin.uk.eu.dal.net 002 testK :Your host is bitcoin.uk.eu.dal.net, running version bahamut-2.2.2
+>> :bitcoin.uk.eu.dal.net 003 testK :This server was created Sat 8 Oct 2022 at 14:41:03 BST
+>> :bitcoin.uk.eu.dal.net 004 testK bitcoin.uk.eu.dal.net bahamut-2.2.2 aAbcCdefFghHiIjkKmnoOPrRsSwxXy AbceiIjklLmMnoOpPrRsStv beIjklov
+>> :bitcoin.uk.eu.dal.net 005 testK NETWORK=DALnet SAFELIST MAXBANS=200 MAXCHANNELS=50 CHANNELLEN=32 KICKLEN=307 NICKLEN=30 TOPICLEN=307 MODES=6 CHANTYPES=# CHANLIMIT=#:50 PREFIX=(ohv)@%+ STATUSMSG=@%+ :are available on this server
+>> :bitcoin.uk.eu.dal.net 005 testK CASEMAPPING=ascii WATCH=128 SILENCE=10 ELIST=cmntu EXCEPTS INVEX CHANMODES=beI,k,jl,ciPAmMnOprRsSt MAXLIST=b:200,e:100,I:100 TARGMAX=DCCALLOW:,JOIN:,KICK:4,KILL:20,NOTICE:20,PART:,PRIVMSG:20,WHOIS:,WHOWAS: :are available on this server
+>> :bitcoin.uk.eu.dal.net 251 testK :There are 65 users and 7432 invisible on 37 servers
+>> :bitcoin.uk.eu.dal.net 252 testK 76 :IRC Operators online
+>> :bitcoin.uk.eu.dal.net 254 testK 3746 :channels formed
+>> :bitcoin.uk.eu.dal.net 255 testK :I have 322 clients and 1 servers
+>> :bitcoin.uk.eu.dal.net 265 testK :Current local users: 322 Max: 4001
+>> :bitcoin.uk.eu.dal.net 266 testK :Current global users: 7497 Max: 12809
+>> :bitcoin.uk.eu.dal.net NOTICE testK :*** Notice -- motd was last changed at 9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 375 testK :- bitcoin.uk.eu.dal.net Message of the Day - 
+>> :bitcoin.uk.eu.dal.net 372 testK :-9/11/2017 12:51
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ bitcoin.uk.eu.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ Accessible via...        ]
+>> :bitcoin.uk.eu.dal.net 372 testK :-                 [ ipv4: bitcoin.dal.net    ]
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) 
+>> :bitcoin.uk.eu.dal.net 372 testK :- for sponsoring this server.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Welcome to DALnet!  By connecting to this network, you agree to abide
+>> :bitcoin.uk.eu.dal.net 372 testK :- by its acceptable use policy, available here: http://www.dal.net/aup
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Server Policies:
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   We reserve the right to deny access to this server without
+>> :bitcoin.uk.eu.dal.net 372 testK :-        warning or explanation
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   No malicious bots, including flood and nick/channel chasers
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   No channel filler bots/clients/psybncs
+>> :bitcoin.uk.eu.dal.net 372 testK :-          - A channel filler is a client, bnc, or bot which is
+>> :bitcoin.uk.eu.dal.net 372 testK :-            connected just to fill a channel and make it look
+>> :bitcoin.uk.eu.dal.net 372 testK :-            bigger
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Operator impersonation, spamming, or any other abuse will
+>> :bitcoin.uk.eu.dal.net 372 testK :-        cause you to be banned from this server
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Abide by DALnet's AUP (www.dal.net/aup)
+>> :bitcoin.uk.eu.dal.net 372 testK :-    *   Please have fun and enjoy DALnet!
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Server Administrator: tyler
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you to Private Internet Access (https://www.privateinternetaccess.com) for sponsori
+>> :bitcoin.uk.eu.dal.net 372 testK :- ng this server.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- For IRCop assistance, please /join #operhelp or message one of our
+>> :bitcoin.uk.eu.dal.net 372 testK :- friendly server staff listed above.
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- For multilingual information:  <http://docs.dal.net/>
+>> :bitcoin.uk.eu.dal.net 372 testK :- 
+>> :bitcoin.uk.eu.dal.net 372 testK :- Thank you for using DALnet!  We hope you have a pleasant day.
+>> :bitcoin.uk.eu.dal.net 376 testK :End of /MOTD command.
+>> :testK MODE testK :+iH
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :testK
+--> lag pong
+<< JOIN #testK
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+>> :bitcoin.uk.eu.dal.net 353 testK = #testK :@testK 
+>> :bitcoin.uk.eu.dal.net 366 testK #testK :End of /NAMES list.
+<< MODE #testK
+>> :bitcoin.uk.eu.dal.net 324 testK #testK + 
+--> chanquery mode
+>> :bitcoin.uk.eu.dal.net 329 testK #testK 1707227547
+--> event 329
+<< WHO #testK
+>> :bitcoin.uk.eu.dal.net 352 testK #testK ~kmorin 67ad-8ab6-b0a4-3ff5-ce28.25.185.ip bitcoin.uk.eu.dal.net testK H@ :0 Killian Morin
+--> silent event who
+>> :bitcoin.uk.eu.dal.net 315 testK #testK :End of /WHO list.
+--> chanquery who end
+<< MODE #testK b
+>> :bitcoin.uk.eu.dal.net 368 testK #testK :End of Channel Ban List
+--> chanquery ban end
+<< MODE #testK +i
+>> :testK!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip MODE #testK +i 
+<< INVITE testK_ #testK
+>> :bitcoin.uk.eu.dal.net 341 testK testK_ #testK
+>> :bitcoin.uk.eu.dal.net NOTICE @#testK :testK invited testK_ into channel #testK
+<< PING bitcoin.uk.eu.dal.net
+>> :bitcoin.uk.eu.dal.net PONG bitcoin.uk.eu.dal.net :testK
+--> lag pong
+>> :testK_!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip JOIN :#testK
+>> :testK_!~kmorin@67ad-8ab6-b0a4-3ff5-ce28.25.185.ip PART #testK
+<< QUIT :leaving
