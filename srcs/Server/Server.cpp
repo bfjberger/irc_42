@@ -255,8 +255,9 @@ int	Server::createClientConnection(std::vector<pollfd> &pollfds, std::vector<pol
 		std::cout << COLOR("Error: socket accepting failed: ", RED) << strerror(errno) << std::endl;
 		return (CONTINUE);
 	}
-	if (pollfds.size() - 1 < MAX_SOCKETS)
+	if (pollfds.size() - 1 < MAX_SOCKETS) {
 		addClient(clientSocketFd, newPollfds);
+	}
 	else
 		handleMaxClient(clientSocketFd);
 	return (0);
@@ -285,6 +286,32 @@ int	Server::handleExistingConnection(std::vector<pollfd> &pollfds, std::vector<p
 		return (CONTINUE);
 	}
 	else {
+		// if the buffer last char is not a newline, we aggregate it (handle CTRL D case)
+		if (buffer[readResult - 1] != '\n' && _aggMessagesStatus[it->fd] == false) {
+			std::cout << "_aggMessagesStatus[" << it->fd << "] = " << _aggMessagesStatus[it->fd] << " : ";
+			_aggMessagesStatus[it->fd] = true;
+			_aggMessages[it->fd] += buffer;
+			std::cout << _aggMessages[it->fd] << std::endl;
+			return (0);
+		} 
+		// if the buffer last char is not a newline and we are already aggregating, we continue to aggregate
+		else if (buffer[readResult - 1] != '\n' && _aggMessagesStatus[it->fd] == true) {
+			std::cout << "_aggMessagesStatus[" << it->fd << "] = " << _aggMessagesStatus[it->fd] << " : ";
+			_aggMessages[it->fd] += buffer;
+			std::cout << _aggMessages[it->fd] << std::endl;
+			return (0);
+		} 
+		// else the buffer is complete and we can parse it
+		else if (_aggMessagesStatus[it->fd] == true) {
+			_aggMessagesStatus[it->fd] = false;
+			_aggMessages[it->fd] += buffer;
+			std::string	tmp(_aggMessages[it->fd]);
+			trimString(tmp);
+			std::cout << COLOR("Received: ", CYAN) << "|" << tmp << "|" << std::endl;
+			parser(_aggMessages[it->fd], it->fd);
+			_aggMessages[it->fd] = "";
+			return (0);
+		}
 		buffer[readResult] = '\0';
 		std::string	tmp(buffer);
 		trimString(tmp);
@@ -481,6 +508,8 @@ void	Server::addClient(int clientSocket, std::vector<pollfd> &pollfds) {
 	clientPollfd.events = POLLIN | POLLOUT; // data can be read and written
 	pollfds.push_back(clientPollfd);
 	_clients.insert(std::pair<int, Client *>(clientSocket, client));
+	_aggMessagesStatus.insert(std::pair<int, bool>(clientSocket, false));
+	_aggMessages.insert(std::pair<int, std::string>(clientSocket, ""));
 
 	std::cout << COLOR("Added client #", CYAN) << clientSocket << std::endl;
 }

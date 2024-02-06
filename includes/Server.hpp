@@ -62,11 +62,10 @@ class Server {
 		struct sockaddr_in					_serverAddress;
 
 		std::map<int, Client *>				_clients;
-
 		std::map<std::string, ACommand *>	_commands;
-
 		std::map<std::string, Channel *>	_channels;
-
+		std::map<int, std::string>	_aggMessages;
+		std::map<int, bool>				_aggMessagesStatus;
 		int			_serverSocketFd;
 
 		std::string	_port;
