@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:00 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:31:23 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 10:59:02 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,6 @@ void Kick::execute(Server *server, t_Message *msg, Client *client) {
 		client->sendMessage(errNotOperator);
 		return;
 	}
-
-	// std::map<std::string, Client *> clientsList = channel->getClients();
-	// std::map<std::string, Client *>::iterator it2 = clientsList.begin();
-	// for (; it2 != clientsList.end(); ++it2) {
-	// 	if (it2->first == msg->params[1])
-	// 		break;
-	// }
-	// if (it2 == clientsList.end()) {
-	// 	std::string errNotOnChannel = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), channelName);
-	// 	client->sendMessage(errNotOnChannel);
-	// 	return;
-	// }
 
 	Client*	target = channel->getClient(msg->params[1]);
 	// Check if the target is on the channel
