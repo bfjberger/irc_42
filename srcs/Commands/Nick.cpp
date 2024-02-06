@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:33:17 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 19:11:59 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 	else {
 		std::string rplNick;
 		if (client->isRegistered() == true) {
-			std::string	tmp = BOLD_TEXT + nickname + RESET;
-			rplNick = RPL_NICKCHANGE(tmp);
+			std::string	nick = BOLD_TEXT + nickname + RESET;
+			rplNick = RPL_NICK(client, nick);
 			client->sendMessage(rplNick);
 		}
 		client->setNick(nickname);

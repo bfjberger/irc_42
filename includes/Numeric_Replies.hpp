@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:14:59 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 19:12:47 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 #define RPL_PRIVMSG(nickname, message) (":localhost " + nickname + ": " + message + "\r\n") // PRIVMSG
 
 #define RPL_NICKCHANGE(nickname) ("You're now known as " + nickname + "\r\n") //NICK
+
+#define RPL_NICK(client, nick) (":" + USER_ID(client) + " NICK " + nick + "\r\n") // NICK
 
 #define RPL_UMODEIS(address, client, string) (":" + address + " 221 " + client + " " + string + "\r\n") //221
 

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:54:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 19:00:18 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,11 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	(void) server;
 
 	Client*	clientChanging = channel->getClient(msg->params[2]);
-
-	// std::map<Channel*, bool>	chanList = client->getChannels();
-	// std::map<Channel*, bool>::iterator it = chanList.find(channel);
+	if (!clientChanging) {
+		std::string	response = ERR_USERSDONTMATCH(client->getAddress(), client->getNick());
+		client->sendMessage(response);
+		return;
+	}
 
 	if (!msg->params[1].compare("+o")) {
 		clientChanging->changeOpStatus(channel, true, client);
