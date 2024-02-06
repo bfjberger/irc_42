@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 17:03:17 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/06 08:51:15 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:26:56 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void	Client::sendMessage(std::string& message, int showMsg) {
 	}
 	if (message.find("\r\n") == std::string::npos)
 		message += "\r\n";
-	::send(_fd, message.c_str(), message.length(), 0);
+	send(_fd, message.c_str(), message.length(), 0);
 }
 
 void	Client::addChannel(Channel* chan, bool chanOp) {

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 09:58:26 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:21:28 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class Channel {
 
 		const std::map<std::string, Client*>&	getClients() const;
 		Client*									getClient(std::string clientName);
+		std::map<std::string, Client*>::iterator	getClientIt(std::string clientName);
 
 		//Setters
 		void	setName(std::string name);

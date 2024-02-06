@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 13:49:28 by pvong             #+#    #+#             */
-/*   Updated: 2024/02/02 14:24:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:06:22 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ class Server {
 		std::map<int, Client *>				_clients;
 		std::map<std::string, ACommand *>	_commands;
 		std::map<std::string, Channel *>	_channels;
-		std::map<int, std::string>	_aggMessages;
-		std::map<int, bool>				_aggMessagesStatus;
+		std::map<int, std::string>			_aggMessages;
+		std::map<int, bool>					_aggMessagesStatus;
 		int			_serverSocketFd;
 
 		std::string	_port;

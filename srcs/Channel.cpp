@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/05 15:58:09 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:40:34 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ Client *Channel::getClient(std::string clientName) {
 	return (NULL);
 }
 
+std::map<std::string, Client*>::iterator Channel::getClientIt(std::string clientName) {
+	std::map<std::string, Client *>::iterator it = this->_clients.find(clientName);
+	return (it);
+}
+
 bool Channel::getInvitedClientVector(std::string ClientInvited) const {
 	for (std::vector<std::string>::const_iterator it = invitedClientVector.begin(); it != invitedClientVector.end(); it++) {
 		if (!it->compare(ClientInvited))
@@ -146,6 +151,7 @@ void Channel::setInvitedClientVector(std::string clientInvited) {
 
 void Channel::addClient(Client *client) {
 
+	// std::cout << "added client " << client->getNick() << " in channel " << getName() << std::endl;
 	_clients.insert(std::pair<std::string, Client *>(client->getNick(), client));
 }
 

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:35:21 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:42:46 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	std::string	nameChannel = msg->params[0];
 	Channel*	channel = server->getChannel(nameChannel);
 
+	// std::cout << "nick of the client: " << client->getNick() << std::endl;
+	// std::cout << "nick registered as member of the channel " << channel->getClients().begin()->first << std::endl;
+
 	// Check if the channel asked exist
 	if (!channel)
 	{
@@ -57,6 +60,11 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 		client->sendMessage(response);
 		return;
 	}
+
+	// std::map<std::string, Client *>	tmp = channel->getClients();
+	// for (std::map<std::string, Client *>::iterator it = tmp.begin(); it != tmp.end(); it++) {
+	// 	std::cout << "first " << it->first << " second " << it->second->getNick() << std::endl;
+	// }
 
 	// Check if the client is a member of the channel
 	Client*	clientParting = channel->getClient(client->getNick());

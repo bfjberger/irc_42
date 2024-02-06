@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 19:11:59 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/06 23:41:14 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 Nick::Nick(void) {}
 
 Nick::~Nick(void) {}
-
-//
 
 bool isNicknameUsed(const std::string& nickname, const std::map<int, Client*>& clients) {
 	std::map<int, Client*>::const_iterator it;
@@ -59,7 +57,7 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 	}
 
 	// If the nickname is too long, an error message is sent to the client.
-	std::string nickname = msg->params[0];
+	std::string	nickname = msg->params[0];
 
 	if (nickname.size() > 9) {
 		std::string errSize;
@@ -90,6 +88,20 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 			rplNick = RPL_NICK(client, nick);
 			client->sendMessage(rplNick);
 		}
+		std::string	odlNickname = client->getNick();
 		client->setNick(nickname);
+		//recup les chans ou le client est
+		std::map<Channel*, bool>	chan = client->getChannels();
+		//doit changer sur tous les chans ou il est le nom sous lequel il est enregistre dans la map
+		for (std::map<Channel*, bool>::iterator it = chan.begin(); it != chan.end(); ++it) {
+			Channel	*tmp = it->first; //recup l'instance du chan
+			std::map<std::string, Client*> clients = tmp->getClients();
+			std::map<std::string, Client*>::iterator clientOnChan = tmp->getClientIt(odlNickname); //recup un iterator vers l'element lie au client sur ce chan
+			std::cout << clientOnChan->first << " " << clientOnChan->second->getNick() << std::endl;
+			if (clientOnChan != clients.end()) { //si pas fin donc bien present dans chan
+				tmp->addClient(client); //ajoute le client avec le nouveau nick
+				clients.erase(odlNickname); //efface l'ancien element
+			}
+		}
 	}
 }
