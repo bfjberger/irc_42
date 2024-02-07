@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 19:00:18 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 15:15:51 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,12 @@ void	Mode::handleKey(Server* server, t_Message* msg, Client* client, Channel* ch
 void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel* channel) {
 
 	(void) server;
+
+	if (msg->params.size() <= 2) {
+		std::string	response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
+		client->sendMessage(response);
+		return;
+	}
 
 	Client*	clientChanging = channel->getClient(msg->params[2]);
 	if (!clientChanging) {
