@@ -84,7 +84,7 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 	else {
 		std::string rplNick;
 		if (client->isRegistered() == true) {
-			std::string	nick = BOLD_TEXT + nickname + RESET;
+			std::string	nick = nickname;
 			rplNick = RPL_NICK(client, nick);
 			client->sendMessage(rplNick);
 		}
