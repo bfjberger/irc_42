@@ -204,3 +204,7 @@ void Channel::sendToAllButOne(std::string &message, Client *client, int flag) {
 void Channel::deleteInvitedClient(std::string invitedClient) {
 	invitedClientVector.erase(std::remove(invitedClientVector.begin(), invitedClientVector.end(), invitedClient));
 }
+
+void Channel::removeClientFromChannel(int fd) {
+	_clients.erase(fd);
+}
