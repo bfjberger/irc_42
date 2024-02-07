@@ -73,6 +73,7 @@ class Server {
 		std::string	_version;
 		std::string	_name;
 		bool		_running;
+		bool		_capStatus;
 
 		std::pair<int, Bot*>		_bot;
 

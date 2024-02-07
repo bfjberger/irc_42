@@ -53,7 +53,7 @@ std::string getParams(t_Message* msg, int index) {
  * initialization of the map stocking an instance of all available commands
  * call the launch method that will start the server
  */
-Server::Server(const std::string port, const std::string password) : _port(port), _password(password) {
+Server::Server(const std::string port, const std::string password) : _port(port), _password(password), _capStatus(false) {
 
 	_name = "SERVER-BPHK";
 	_version = "alpha";

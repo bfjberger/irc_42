@@ -96,7 +96,21 @@ void	Server::parser(std::string message, int clientSocketFd) {
 	std::vector<std::string>			cmds;
 	std::map<int, Client *>::iterator	it = _clients.find(clientSocketFd);
 
+	if (message.empty() == true || message == "\n")
+		return ;
 	splitMessage(cmds, message);
+
+	if (message.find("CAP") != std::string::npos) {
+		std::string msg = ": CAP * LS :\r\n";
+		send(clientSocketFd, msg.c_str(), msg.length(), 0);
+		_capStatus = true;
+		return ;
+	}
+	if (_capStatus == true && message.find("CAP END") != std::string::npos) {
+		std::cout << "CAP END" << std::endl;
+		_capStatus = false;
+		return ;
+	}
 
 	for (size_t i = 0; i != cmds.size(); i++) {
 
