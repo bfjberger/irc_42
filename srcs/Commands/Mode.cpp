@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 15:15:51 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 16:38:30 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ void	Mode::handleChanOp(Server* server, t_Message* msg, Client* client, Channel*
 	}
 	else {
 		clientChanging->changeOpStatus(channel, false, client);
-		std::cout << (clientChanging->getChannels().at(channel)) << std::endl;
 		std::string response = ":" + client->getNick() + " MODE " + channel->getName() + " -o" + msg->params[2] + "\r\n";
 		client->sendMessage(response);
 	}
