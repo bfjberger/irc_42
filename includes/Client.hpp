@@ -89,10 +89,8 @@ class Client {
 
 		void	addChannel(Channel* chan, bool chanOp);
 		void	removeChannel(Channel* chan);
+		void	removeFromAllChannels();
 		void	changeOpStatus(Channel* chan, bool chanOp, Client* client);
-
-		// TODO: Not Implemented yet
-		void	logIn();
 
 		// Helpers function
 		void	printInfo() const;

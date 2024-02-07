@@ -203,6 +203,11 @@ void	Client::removeChannel(Channel* chan) {
 	_channels.erase(chan);
 }
 
+void	Client::removeFromAllChannels() {
+
+	_channels.clear();
+}
+
 void	Client::changeOpStatus(Channel* chan, bool chanOp, Client* client) {
 
 	std::map<Channel*, bool>::iterator	it = getChannel(chan->getName());

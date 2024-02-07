@@ -105,6 +105,35 @@ Server::~Server() {
 /*                             SERVER MANAGEMENT                              */
 /* -------------------------------------------------------------------------- */
 
+void Server::eraseClientFromMaps(int clientFd) {
+	// if the client is in a channel, remove it from the channel
+	std::map<std::string, Channel*>::iterator it = _channels.begin();
+	while (it != _channels.end()) {
+		it->second->removeClientFromChannel(clientFd);
+		// if the channel is empty, remove it from the server
+		if (it->second->getClients().size() == 0) {
+			delete it->second;
+			it = _channels.erase(it); // Update iterator after erasing element
+		}
+		else {
+			++it; // Move to the next element
+		}
+	}
+	// remove the client from the server
+	std::map<int, Client*>::iterator it2 = _clients.find(clientFd);
+	if (it2 == _clients.end()) {
+		std::cerr << COLOR("Error: client not found.", RED) << std::endl;
+	}
+	else {
+		it2->second->removeFromAllChannels();
+		delete it2->second;
+		_clients.erase(it2);
+	}
+	// remove the client from the aggregated messages maps
+	_aggMessagesStatus.erase(clientFd);
+	_aggMessages.erase(clientFd);
+}
+
 /* ---------------------------------- Poll ---------------------------------- */
 
 // Pollfd is a struct with the following members:
@@ -478,18 +507,9 @@ Bot*	Server::getBot() const {
 void	Server::deleteClient(std::vector<pollfd> &pollfds, std::vector<pollfd>::iterator it) {
 
 	std::cout << COLOR("Client ", CYAN) << it->fd << COLOR(" disconnected.", CYAN) << std::endl;
-
-	std::map<int, Client*>::iterator	client = this->_clients.find(it->fd);
-	delete client->second;
-	this->_clients.erase(client);
-
-	_aggMessagesStatus.erase(it->fd);
-	_aggMessages.erase(it->fd);
-
+	eraseClientFromMaps(it->fd);
 	close(it->fd);
-
 	pollfds.erase(it);
-
 	std::cout << COLOR("Number of clients: ", CYAN) << pollfds.size() - 2 << std::endl; // -2 because of the bot and the server fds
 }
 
