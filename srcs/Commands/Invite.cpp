@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:58 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:27:19 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 15:58:52 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,5 @@ void	Invite::execute(Server* server, t_Message* msg, Client* client) {
 	rpl_invit = "An invitation has been sent to " + invitedClient->getNick() + "\r\n";
 	client->sendMessage(rpl_invit);
 
-	channel->setInvitedClientVector(invitedClient->getNick());
+	channel->setInvitedClient(invitedClient->getFd());
 }

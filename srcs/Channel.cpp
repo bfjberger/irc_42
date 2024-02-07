@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:44:57 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 16:00:53 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,6 @@ const std::map<int, Client *>&	Channel::getClients() const {
 }
 
 Client *Channel::getClient(std::string nickname) {
-	// std::map<int, Client *>::iterator it = _clients.find(fd);
-	// if (it != this->_clients.end())
-	// 	return (it->second);
-	// return (NULL);
-
 	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
 		if (it->second->getNick() == nickname)
 			return (it->second);
@@ -92,8 +87,6 @@ Client *Channel::getClient(std::string nickname) {
 }
 
 std::map<int, Client*>::iterator Channel::getClientIt(std::string nickname) {
-	// std::map<int, Client *>::iterator it = _clients.find(fd);
-	// return (it);
 	std::map<int, Client*>::iterator it = _clients.begin();
 	for (; it != _clients.end(); ++it) {
 		if (it->second->getNick() == nickname)
@@ -102,9 +95,9 @@ std::map<int, Client*>::iterator Channel::getClientIt(std::string nickname) {
 	return (it);
 }
 
-bool Channel::getInvitedClientVector(std::string ClientInvited) const {
-	for (std::vector<std::string>::const_iterator it = invitedClientVector.begin(); it != invitedClientVector.end(); it++) {
-		if (!it->compare(ClientInvited))
+bool Channel::getInvitedClient(int fd) const {
+	for (std::vector<int>::const_iterator it = _invitedClient.begin(); it != _invitedClient.end(); it++) {
+		if (*it == fd)
 			return (true);
 	}
 	return (false);
@@ -153,8 +146,8 @@ void	Channel::setT(bool status) {
 	t = status;
 }
 
-void Channel::setInvitedClientVector(std::string clientInvited) {
-	invitedClientVector.push_back(clientInvited);
+void Channel::setInvitedClient(int fd) {
+	_invitedClient.push_back(fd);
 }
 
 /* ************************************************************************** */
@@ -201,8 +194,8 @@ void Channel::sendToAllButOne(std::string &message, Client *client, int flag) {
 	std::cout << COLOR("Message: ", CYAN) << message << std::endl;
 }
 
-void Channel::deleteInvitedClient(std::string invitedClient) {
-	invitedClientVector.erase(std::remove(invitedClientVector.begin(), invitedClientVector.end(), invitedClient));
+void Channel::deleteInvitedClient(int fd) {
+	_invitedClient.erase(std::remove(_invitedClient.begin(), _invitedClient.end(), fd));
 }
 
 void Channel::removeClientFromChannel(int fd) {

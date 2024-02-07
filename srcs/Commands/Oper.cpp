@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:05 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 10:33:38 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 15:47:15 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	Oper::execute(Server* server, t_Message* msg, Client* client) {
 	}
 	else {
 		client->setOperator(true);
-		response = RPL_YOUREOPER(client->getNick());
+		response = RPL_YOUREOPER(client->getAddress(), client->getNick());
 		client->sendMessage(response);
 	}
 }

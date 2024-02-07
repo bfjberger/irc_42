@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:00:24 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 16:00:56 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Channel {
 		std::string	_password;
 		std::map<int, Client*>	_clients;
 
-		std::vector<std::string>	invitedClientVector;
+		std::vector<int>		_invitedClient;
 
 		int	_userLimit;
 
@@ -43,7 +43,7 @@ class Channel {
 		std::string	getName(void) const;
 		std::string	getTopic(void) const;
 		std::string	getPassword(void) const;
-		bool		getInvitedClientVector(std::string ClientInvited) const;
+		bool		getInvitedClient(int fd) const;
 		bool		isClientInChannel(int fd) const;
 
 		int		getUserLimit() const;
@@ -60,7 +60,7 @@ class Channel {
 		void	setName(std::string name);
 		void	setTopic(std::string topic);
 		void	setPassword(std::string password);
-		void 	setInvitedClientVector(std::string ClientInvited);
+		void 	setInvitedClient(int fd);
 
 		void	setUserLimit(int i);
 		void	setI(bool status);
@@ -74,7 +74,7 @@ class Channel {
 		void			removeClientFromChannel(int fd);
 		void			sendMessageToAllClients(std::string& message, int flag = 0);
 		void			sendToAllButOne(std::string& message, Client* client, int flag = 0);
-		void			deleteInvitedClient(std::string invitedClient);
+		void			deleteInvitedClient(int fd);
 };
 
 #include "Client.hpp"

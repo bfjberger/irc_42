@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 14:34:39 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 15:58:33 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,8 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 
 	// Check if the channel is in invite-only
 	else if (channel->getI() == true) {
-		if (channel->getInvitedClientVector(client->getNick())) {
-			channel->deleteInvitedClient(client->getNick());
+		if (channel->getInvitedClient(client->getFd())) {
+			channel->deleteInvitedClient(client->getFd());
 			joinChannel(server, msg, client, channel);
 		}
 		else {
