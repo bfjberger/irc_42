@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 16:28:48 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:23:23 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:32:35 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 	// Bot* target = server->getBot();
 
 	std::string	rplMsg;
-	std::string rplPrivmsg;
 
 	if (msg->params[1][0] == ':')
 		msg->params[1].erase(0, 1);
@@ -74,15 +73,25 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 		ssClient << static_cast<int>(server->getClients().size());
 		rplMsg = "There are currently " + ssChan.str() + " channels and " + ssClient.str() + " users on the server.\r\n";
 		std::map<std::string, Channel*>	channelsOnServ = server->getChannels();
-		for (std::map<std::string, Channel*>::iterator it = channelsOnServ.begin(); it != channelsOnServ.end(); ++it) {
-			// rplPrivmsg += "The channel " + it->first + " has " + static_cast<int>(channelsOnServ.size()) + " members, which are ";
+		for (std::map<std::string, Channel*>::iterator itChan = channelsOnServ.begin(); itChan != channelsOnServ.end(); ++itChan) {
+			std::stringstream	chanSize;
+			chanSize << static_cast<int>(itChan->second->getClients().size());
+			rplMsg += "The channel " + itChan->first + " has " + chanSize.str() + " members: |";
+			for (std::map<int, Client*>::const_iterator itClient = itChan->second->getClients().begin(); itClient != itChan->second->getClients().end(); ++itClient) {
+				rplMsg += itClient->second->getNick();
+				if (itClient != itChan->second->getClients().end())
+					rplMsg += "|";
+			}
+		}
+		rplMsg += "\n     The users connected to the server are: |";
+		for (std::map<int, Client*>::const_iterator itClient = server->getClients().begin(); itClient != server->getClients().end(); ++itClient) {
+			rplMsg += itClient->second->getNick();
+			if (itClient != server->getClients().end())
+				rplMsg += "|";
 		}
 	}
 
-	// rplMsg = ":" + rplMsg;
-	// rplPrivmsg = RPL_PRIVMSG(client, target->getName(), rplMsg);
-	// rplPrivmsg = RPL_PRIVMSG(client->getAddress(), getName(), rplMsg);
+	std::string rplPrivmsg;
 	rplPrivmsg = RPL_PRIVMSG(getName(), rplMsg);
-	// std::cout << COLOR("[" << client->getNick() << "] -> [" << target->getName() << "] : " << rplMsg, GREEN) << std::endl;
 	client->sendMessage(rplPrivmsg);
 }

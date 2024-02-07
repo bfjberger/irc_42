@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:12:01 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:44:57 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,6 @@ void Channel::addClient(Client *client) {
 void Channel::removeClient(Client *client) {
 	client->setCurrentChannel("");
 	_clients.erase(client->getFd());
-	std::cout << _clients.size() << std::endl;
 }
 
 void Channel::sendMessageToAllClients(std::string &message, int flag) {

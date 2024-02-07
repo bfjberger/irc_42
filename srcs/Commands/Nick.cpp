@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:08:13 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:22:23 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ Nick::~Nick(void) {}
 bool isNicknameUsed(const std::string& nickname, const std::map<int, Client*>& clients) {
 	std::map<int, Client*>::const_iterator it;
 	for (it = clients.begin(); it != clients.end(); ++it) {
+		std::cout << "new nickname: " << nickname << " nickname of the client: " << it->second->getNick() << std::endl;
 		if (it->second->getNick() == nickname) {
 			return true; // Nickname is already used
 		}
@@ -88,20 +89,6 @@ void	Nick::execute(Server* server, t_Message* msg, Client* client) {
 			rplNick = RPL_NICK(client, nick);
 			client->sendMessage(rplNick);
 		}
-		// std::string	odlNickname = client->getNick();
 		client->setNick(nickname);
-		//recup les chans ou le client est
-		// std::map<Channel*, bool>	chan = client->getChannels();
-		//doit changer sur tous les chans ou il est le nom sous lequel il est enregistre dans la map
-		// for (std::map<Channel*, bool>::iterator it = chan.begin(); it != chan.end(); ++it) {
-			// Channel	*tmp = it->first; //recup l'instance du chan
-			// std::map<std::string, Client*> clients = tmp->getClients();
-			// std::map<std::string, Client*>::iterator clientOnChan = tmp->getClientIt(odlNickname); //recup un iterator vers l'element lie au client sur ce chan
-			// std::cout << clientOnChan->first << " " << clientOnChan->second->getNick() << std::endl;
-			// if (clientOnChan != clients.end()) { //si pas fin donc bien present dans chan
-				// tmp->addClient(client); //ajoute le client avec le nouveau nick
-				// clients.erase(odlNickname); //efface l'ancien element
-			// }
-		// }
 	}
 }
