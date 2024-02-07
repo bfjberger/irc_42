@@ -98,18 +98,21 @@ void	Server::parser(std::string message, int clientSocketFd) {
 
 	if (message.empty() == true || message == "\n")
 		return ;
-	splitMessage(cmds, message);
 
-	if (message.find("CAP") != std::string::npos) {
+	if (_capStatus == false && message.find("CAP") != std::string::npos) {
 		std::string msg = ": CAP * LS :\r\n";
 		send(clientSocketFd, msg.c_str(), msg.length(), 0);
 		_capStatus = true;
 		return ;
 	}
 	if (_capStatus == true && message.find("CAP END") != std::string::npos) {
-		std::cout << "CAP END" << std::endl;
 		_capStatus = false;
-		return ;
+	}
+	splitMessage(cmds, message);
+
+	// if the message find CAP ENDPASS
+	if (message.find("CAP ENDPASS") != std::string::npos) {
+		std::cout << "CAP ENDPASS" << std::endl;
 	}
 
 	for (size_t i = 0; i != cmds.size(); i++) {

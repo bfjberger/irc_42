@@ -229,12 +229,6 @@ void Client::printInfo() const {
 	std::cout << "Client info:" << std::endl;
 	std::cout << "   fd: " << _fd << std::endl;
 	std::cout << "   nick: " << _nick << std::endl;
-	std::cout << "   userName: " << _userName << std::endl;
 	std::cout << "   password: " << _password << std::endl;
-	std::cout << "   currentChannel: " << _currentChannel << std::endl;
-	std::cout << "   receivedInfo: " << std::boolalpha << _receivedInfo << std::endl;
-	std::cout << "   isLogged: " << std::boolalpha << _isLogged << std::endl;
-	std::cout << "   isRegistered: " << std::boolalpha << _isRegistered << std::endl;
-	std::cout << "   isInChannel: " << std::boolalpha << _isInChannel << std::endl;
 	std::cout << "----------------------------------------" << std::endl;
 }
