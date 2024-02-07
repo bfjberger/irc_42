@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:09 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:44:55 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:06:21 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	Privmsg::execute(Server* server, t_Message* msg, Client* client) {
 	if (server->isChannel(msg->params[0]) == true) {
 		Channel* channel = server->getChannel(msg->params[0]);
 		// If the client is not in the channel send an error message
-		if (channel != NULL && channel->isClientInChannel(client->getNick()) == false) {
+		if (channel != NULL && channel->isClientInChannel(client->getFd()) == false) {
 			response = ERR_NOTONCHANNEL(client->getAddress(), client->getNick(), msg->params[0]);
 			client->sendMessage(response);
 			return;

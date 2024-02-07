@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 14:14:47 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:07:15 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,12 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 
 	// get the list of clients in the channel
 	std::string clientInChannel;
-	std::map<std::string, Client *> clients = channel->getClients();
-	for (std::map<std::string, Client *>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
+	std::map<int, Client *> clients = channel->getClients();
+	for (std::map<int, Client *>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
 		if (it->second->isOperator(channel) == true)
-			clientInChannel += "@" + it->first + " ";
+			clientInChannel += "@" + it->second->getNick() + " ";
 		else
-			clientInChannel += it->first + " ";
+			clientInChannel += it->second->getNick() + " ";
 	}
 	std::string rplNameList = RPL_NAMERPLY(client->getAddress(), client->getNick(), channel->getName(), clientInChannel);
 	client->sendMessage(rplNameList);

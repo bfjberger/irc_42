@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 16:28:48 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 16:15:31 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:23:23 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 		ssChan << static_cast<int>(server->getChannels().size());
 		std::stringstream	ssClient;
 		ssClient << static_cast<int>(server->getClients().size());
-		rplMsg = "There are currently " + ssChan.str() + " channels and " + ssClient.str() + " users on the server.";
+		rplMsg = "There are currently " + ssChan.str() + " channels and " + ssClient.str() + " users on the server.\r\n";
+		std::map<std::string, Channel*>	channelsOnServ = server->getChannels();
+		for (std::map<std::string, Channel*>::iterator it = channelsOnServ.begin(); it != channelsOnServ.end(); ++it) {
+			// rplPrivmsg += "The channel " + it->first + " has " + static_cast<int>(channelsOnServ.size()) + " members, which are ";
+		}
 	}
 
 	// rplMsg = ":" + rplMsg;

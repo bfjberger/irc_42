@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:58:32 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 23:40:34 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:12:01 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,19 +74,31 @@ bool	Channel::getT() const {
 	return (t);
 }
 
-const std::map<std::string, Client *> &Channel::getClients() const {
+const std::map<int, Client *>&	Channel::getClients() const {
 	return (_clients);
 }
 
-Client *Channel::getClient(std::string clientName) {
-	std::map<std::string, Client *>::iterator it = this->_clients.find(clientName);
-	if (it != this->_clients.end())
-		return (it->second);
+Client *Channel::getClient(std::string nickname) {
+	// std::map<int, Client *>::iterator it = _clients.find(fd);
+	// if (it != this->_clients.end())
+	// 	return (it->second);
+	// return (NULL);
+
+	for (std::map<int, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it) {
+		if (it->second->getNick() == nickname)
+			return (it->second);
+	}
 	return (NULL);
 }
 
-std::map<std::string, Client*>::iterator Channel::getClientIt(std::string clientName) {
-	std::map<std::string, Client *>::iterator it = this->_clients.find(clientName);
+std::map<int, Client*>::iterator Channel::getClientIt(std::string nickname) {
+	// std::map<int, Client *>::iterator it = _clients.find(fd);
+	// return (it);
+	std::map<int, Client*>::iterator it = _clients.begin();
+	for (; it != _clients.end(); ++it) {
+		if (it->second->getNick() == nickname)
+			return (it);
+	}
 	return (it);
 }
 
@@ -98,8 +110,8 @@ bool Channel::getInvitedClientVector(std::string ClientInvited) const {
 	return (false);
 }
 
-bool Channel::isClientInChannel(std::string clientName) const {
-	std::map<std::string, Client *>::const_iterator it = _clients.find(clientName);
+bool Channel::isClientInChannel(int fd) const {
+	std::map<int, Client *>::const_iterator it = _clients.find(fd);
 	if (it != _clients.end())
 		return (true);
 	return (false);
@@ -152,18 +164,19 @@ void Channel::setInvitedClientVector(std::string clientInvited) {
 void Channel::addClient(Client *client) {
 
 	// std::cout << "added client " << client->getNick() << " in channel " << getName() << std::endl;
-	_clients.insert(std::pair<std::string, Client *>(client->getNick(), client));
+	_clients.insert(std::pair<int, Client *>(client->getFd(), client));
 }
 
 void Channel::removeClient(Client *client) {
 	client->setCurrentChannel("");
-	_clients.erase(client->getNick());
+	_clients.erase(client->getFd());
+	std::cout << _clients.size() << std::endl;
 }
 
 void Channel::sendMessageToAllClients(std::string &message, int flag) {
 
 	std::string msg = message;
-	std::map<std::string, Client *>::const_iterator it = _clients.begin();
+	std::map<int, Client *>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
 		it->second->sendMessage(msg, flag);
 		it++;
@@ -179,7 +192,7 @@ void Channel::sendToAllButOne(std::string &message, Client *client, int flag) {
 	if (flag == ISINCHANNEL) {
 		msg = ":" + client->getNick() + "!" + client->getUserName() + "@" + client->getHostname() + " " + message;
 	}
-	std::map<std::string, Client *>::const_iterator it = _clients.begin();
+	std::map<int, Client *>::const_iterator it = _clients.begin();
 	while (it != _clients.end()) {
 		if (it->second != client)
 			it->second->sendMessage(msg, 0);

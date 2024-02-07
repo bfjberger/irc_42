@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 13:57:03 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 23:21:28 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 11:00:24 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Channel {
 		std::string	_name;
 		std::string	_topic;
 		std::string	_password;
-		std::map<std::string, Client*>	_clients;
+		std::map<int, Client*>	_clients;
 
 		std::vector<std::string>	invitedClientVector;
 
@@ -44,7 +44,7 @@ class Channel {
 		std::string	getTopic(void) const;
 		std::string	getPassword(void) const;
 		bool		getInvitedClientVector(std::string ClientInvited) const;
-		bool		isClientInChannel(std::string clientName) const;
+		bool		isClientInChannel(int fd) const;
 
 		int		getUserLimit() const;
 		bool	getI() const;
@@ -52,9 +52,9 @@ class Channel {
 		bool	getL() const;
 		bool	getT() const;
 
-		const std::map<std::string, Client*>&	getClients() const;
-		Client*									getClient(std::string clientName);
-		std::map<std::string, Client*>::iterator	getClientIt(std::string clientName);
+		const std::map<int, Client*>&		getClients() const;
+		Client*								getClient(std::string nickname);
+		std::map<int, Client*>::iterator	getClientIt(std::string nickname);
 
 		//Setters
 		void	setName(std::string name);
