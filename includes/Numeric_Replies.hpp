@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 17:31:31 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 19:12:47 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:47:20 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@
 // JOIN RPL
 #define RPL_JOIN(client, channel) (":" + USER_ID(client) + " JOIN " + channel + "\r\n") //JOIN
 #define RPL_ENDOFNAMES(address, client, channel) (":" + address + " 366 " + client + " " + channel + " :End of /NAMES list\r\n") //366
-#define RPL_NAMERPLY(address, client, channel, nickname) (":" + address + " 353 " + client + " = " + channel + " : " + nickname + "\r\n") //353
+#define RPL_NAMREPLY(address, client, channel, nickname) (":" + address + " 353 " + client + " = " + channel + " :" + nickname + "\r\n") //353
+
+// PART
+#define RPL_PART(client, channel, reason) (":" + USER_ID(client) + " PART " + channel + " " + (reason.empty() ? "." : reason ) + "\r\n")
 
 // PING
 #define RPL_PONG(user_id, token) (user_id + " PONG " + token + "\r\n") // PONG

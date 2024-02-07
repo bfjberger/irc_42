@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 16:28:48 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 13:32:35 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:43:54 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	Bot::handleBot(Server* server, t_Message* msg, Client* client) {
 		for (std::map<std::string, Channel*>::iterator itChan = channelsOnServ.begin(); itChan != channelsOnServ.end(); ++itChan) {
 			std::stringstream	chanSize;
 			chanSize << static_cast<int>(itChan->second->getClients().size());
-			rplMsg += "The channel " + itChan->first + " has " + chanSize.str() + " members: |";
+			rplMsg += "     The channel " + itChan->first + " has " + chanSize.str() + " members: |";
 			for (std::map<int, Client*>::const_iterator itClient = itChan->second->getClients().begin(); itClient != itChan->second->getClients().end(); ++itClient) {
 				rplMsg += itClient->second->getNick();
 				if (itClient != itChan->second->getClients().end())

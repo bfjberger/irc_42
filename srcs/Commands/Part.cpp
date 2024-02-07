@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/06 23:42:46 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:46:30 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,14 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 	}
 
 	// Prepare the message to send to all clients to announce the depart of the client
-	response = ":" + USER_ID(client) + " PART " + nameChannel;
-	if (msg->params.size() == 1)
-		response += " \r\n";
-	else
-		response += " " + getParams(msg, 1) + "\r\n";
+	// response = ":" + USER_ID(client) + " PART " + nameChannel;
+	// if (msg->params.size() == 1)
+	// 	response += " \r\n";
+	// else
+	// 	response += " " + getParams(msg, 1) + "\r\n";
+	// channel->sendMessageToAllClients(response);
+
+	response = RPL_PART(client, channel->getName(), getParams(msg, 1));
 	channel->sendMessageToAllClients(response);
 
 	// Remove the channel from the map of the channels where the client is

@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 11:07:15 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:34:39 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	Join::channelCreation(Server* server, t_Message* msg, Client* client, Chann
 
 	// get the list of clients in the channel
 
-	std::string rplNameList = RPL_NAMERPLY(client->getAddress(), client->getNick(), channel->getName(), "@" + client->getNick());
+	std::string rplNameList = RPL_NAMREPLY(client->getAddress(), client->getNick(), channel->getName(), "@" + client->getNick());
 	client->sendMessage(rplNameList);
 	std::string endOfNames = RPL_ENDOFNAMES(client->getAddress(), client->getNick(), channel->getName());
 	client->sendMessage(endOfNames);
@@ -110,7 +110,7 @@ void	Join::joinChannel(Server* server, t_Message* msg, Client* client, Channel* 
 		else
 			clientInChannel += it->second->getNick() + " ";
 	}
-	std::string rplNameList = RPL_NAMERPLY(client->getAddress(), client->getNick(), channel->getName(), clientInChannel);
+	std::string rplNameList = RPL_NAMREPLY(client->getAddress(), client->getNick(), channel->getName(), clientInChannel);
 	client->sendMessage(rplNameList);
 	std::string endOfNames = RPL_ENDOFNAMES(client->getAddress(), client->getNick(), channel->getName());
 	client->sendMessage(endOfNames);
@@ -146,7 +146,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
-	if (channelName[0] != '#') {
+	else if (channelName[0] != '#') {
 		std::string	response = "A '#' is needed at the beginning of the channel name.\r\n";
 		client->sendMessage(response);
 		return;
@@ -156,28 +156,28 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	Channel* channel = server->getChannel(channelName);
 	if (channel == NULL) {
 		channelCreation(server, msg, client, channel);
-		return;
+		// return;
 	}
 
 	// Check if the channel has a password
-	if (channel->getK() == true) {
+	else if (channel->getK() == true) {
 		joinChannelPassword(server, msg, client, channel);
-		return;
+		// return;
 	}
 
 	// Check if the channel has a user limit
-	if (channel->getL() == true) {
+	else if (channel->getL() == true) {
 		if (channel->getUserLimit() == static_cast<int>(channel->getClients().size())) {
 			std::string	response = ERR_CHANNELISFULL(client->getAddress(), client->getNick(), channel->getName());
 			client->sendMessage(response);
 		}
 		else
 			joinChannel(server, msg, client, channel);
-		return;
+		// return;
 	}
 
 	// Check if the channel is in invite-only
-	if (channel->getI() == true) {
+	else if (channel->getI() == true) {
 		if (channel->getInvitedClientVector(client->getNick())) {
 			channel->deleteInvitedClient(client->getNick());
 			joinChannel(server, msg, client, channel);
@@ -186,8 +186,8 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 			std::string	response = ERR_INVITEONLYCHAN(client->getAddress(), client->getNick(), channel->getName());
 			client->sendMessage(response);
 		}
-		return;
+		// return;
 	}
-
-	joinChannel(server, msg, client, channel);
+	else
+		joinChannel(server, msg, client, channel);
 }
