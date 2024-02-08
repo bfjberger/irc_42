@@ -18,7 +18,6 @@ You will use an actual IRC client to connect to your server and test it.
 Internet is ruled by solid standards protocols that allow connected computers to interact
 with each other.
 It’s always a good thing to know.
-Version: 8
     <br />
     <a href="https://github.com/bfjberger/irc_42"><strong>Explore the docs »</strong></a>
     <br />
@@ -76,6 +75,32 @@ Version: 8
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+1. With our reference IRC client: irssi
+
+* start irssi
+  ```sh
+  irssi
+  ```
+* connect to the server
+  ```sh
+  /connect <ipaddress> <port> <password>
+  #hence
+  /connect localhost 6667 password
+  ```
+
+2. With netcat
+	```sh
+	nc <host> <port>
+	#hence
+	nc localhost 6667
+	```
+
+Now enjoy
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -91,8 +116,19 @@ Version: 8
 <!-- SOURCES -->
 ## Sources
 
-* []()
-* []()
-* []()
+* For the IRC server
+  * [RFC 1459 - Internet Relay Chat Protocol](https://datatracker.ietf.org/doc/html/rfc1459)
+  * [RFC 2810 - Internet Relay Chat: Architecture](https://datatracker.ietf.org/doc/html/rfc2810)
+  * [RFC 2811 -  Internet Relay Chat: Channel Management](https://datatracker.ietf.org/doc/html/rfc2811)
+  * [**RFC 2812 - Internet Relay Chat: Client Protocol**](https://datatracker.ietf.org/doc/html/rfc2812)
+  * [Numeric Replies](https://www.alien.net.au/irc/irc2numerics.html)
+
+* For irssi
+  * https://irssi.org
+
+* For the sockets
+  * https://beej.us/guide/bgnet/html/
+  * https://www.tutorialspoint.com/unix_sockets/index.htm
+  * https://www.ibm.com/docs/en/i/7.2?topic=programming-how-sockets-work
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
