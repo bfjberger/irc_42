@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/08 10:50:20 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/08 13:15:36 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,10 +189,14 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 			modes += "i";
 		if (channel->getK())
 			modes += "k";
-		if (channel->getL())
-			modes += "l";
 		if (channel->getT())
 			modes += "t";
+		if (channel->getL()) {
+			modes += "l ";
+			std::stringstream	ss;
+			ss << channel->getUserLimit();
+			modes += ss.str();
+		}
 		response = RPL_CHANNELMODEIS(client->getAddress(), client->getNick(), nameChannel, modes);
 		client->sendMessage(response);
 		return;
