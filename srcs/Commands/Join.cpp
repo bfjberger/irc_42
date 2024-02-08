@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:35:59 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 15:58:33 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/08 11:35:55 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,13 +156,13 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 	Channel* channel = server->getChannel(channelName);
 	if (channel == NULL) {
 		channelCreation(server, msg, client, channel);
-		// return;
+		return;
 	}
 
 	// Check if the channel has a password
 	else if (channel->getK() == true) {
 		joinChannelPassword(server, msg, client, channel);
-		// return;
+		return;
 	}
 
 	// Check if the channel has a user limit
@@ -173,7 +173,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 		}
 		else
 			joinChannel(server, msg, client, channel);
-		// return;
+		return;
 	}
 
 	// Check if the channel is in invite-only
@@ -186,7 +186,7 @@ void Join::execute(Server* server, t_Message* msg, Client* client) {
 			std::string	response = ERR_INVITEONLYCHAN(client->getAddress(), client->getNick(), channel->getName());
 			client->sendMessage(response);
 		}
-		// return;
+		return;
 	}
 	else
 		joinChannel(server, msg, client, channel);

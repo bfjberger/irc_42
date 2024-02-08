@@ -43,7 +43,7 @@ Version: 8
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#authors">Authors</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#sources">Sources</a></li>
   </ol>
 </details>
 
@@ -88,8 +88,8 @@ Version: 8
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+<!-- SOURCES -->
+## Sources
 
 * []()
 * []()
