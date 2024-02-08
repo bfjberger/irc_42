@@ -75,11 +75,6 @@ It’s always a good thing to know.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 1. With our reference IRC client: irssi
 
 * start irssi
