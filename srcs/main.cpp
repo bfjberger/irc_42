@@ -22,18 +22,8 @@ static void	signalHandler(int signal) {
 	g_server_running = false;
 }
 
-int main(int ac, char **av) {
-
-	// Create a socket
-	// Bind the socket to an IP / port
-	// Listen for incoming connections
-	// Accept incoming connections and create a new threads for each one
-	// Read from / write to the socket
-	// Parse the request according to IRC protocol
-	// Respond to the request
-	// Handle errors and disconnections
-	// Close the socket
-
+int main(int ac, char **av) 
+{
 	signal(SIGINT, signalHandler);
 
 	if (ac != 3) {
