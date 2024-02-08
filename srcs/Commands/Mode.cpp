@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 16:38:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:50:20 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,9 +236,9 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 	std::string	response;
 
 	// Check if the nickname correspond to the sender
-	if (!clientChanging) {
+	if (clientChanging->getNick() != client->getNick()) {
 		response = ERR_USERSDONTMATCH(client->getAddress(), client->getNick());
-		send(client->getFd(), response.c_str(), response.size(), 0);
+		client->sendMessage(response);
 	}
 	else if (msg->params.size() == 1) { // print info
 		if (client->isOperator())
@@ -248,7 +248,8 @@ void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+o")) {
-		//ignore
+		response = "You can't promote yourself to Operator this way.\r\n";
+		client->sendMessage(response);
 	}
 	else if (!msg->params[1].compare("+i")) {
 		//ignore
