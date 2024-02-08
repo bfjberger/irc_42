@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:06 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/07 14:46:30 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/08 10:12:32 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,14 @@ void	Part::execute(Server* server, t_Message* msg, Client* client)
 		return;
 	}
 
-	// Prepare the message to send to all clients to announce the depart of the client
-	// response = ":" + USER_ID(client) + " PART " + nameChannel;
-	// if (msg->params.size() == 1)
-	// 	response += " \r\n";
-	// else
-	// 	response += " " + getParams(msg, 1) + "\r\n";
-	// channel->sendMessageToAllClients(response);
+	// Prepare the comment to send to all clients to announce the depart of the client
+	std::string	comment;
+	if (msg->params.size() == 1)
+		comment = client->getNick();
+	else
+		comment = getParams(msg, 1);
 
-	response = RPL_PART(client, channel->getName(), getParams(msg, 1));
+	response = RPL_PART(client, channel->getName(), comment);
 	channel->sendMessageToAllClients(response);
 
 	// Remove the channel from the map of the channels where the client is
