@@ -25,28 +25,18 @@ It’s always a good thing to know.
 </div>
 
 
-
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#authors">Authors</a></li>
-    <li><a href="#sources">Sources</a></li>
-  </ol>
-</details>
 
-
+- [About The Project](#about-the-project)
+    - [Which client was used ?](#which-client-was-used-)
+    - [How to instal IRSSI ?](#how-to-instal-irssi-)
+    - [Our implemented commands](#our-implemented-commands)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+- [Usage](#usage)
+- [Authors](#authors)
+- [Sources](#sources)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -86,14 +76,14 @@ brew install irssi
 | `Invite` | Invite a client to a channel that is set to invite-only |
 | `Join` | Try to join a channel or create one if it does not exist |
 | `Kick` | If the user is the channel operator, kick the targeted user from given channel |
-| `Kill` | Available to server operator, kill close the targeted client connection |
+| `Kill` | Available to server operator, close the targeted client connection |
 | `Mode` | Set the channel mode if channel operator (channel mode: i,k,l,o,t) |
 | `Nick` | Nick set/change the nickname of the client if the nickname is not already given |
 | `Oper` | Set user to Operator if correct password given|
 | `Part` | Leave the given channel |
 | `Pass` | Set the password to the client and compare if it is the same as the server |
 | `Privmsg` | Send a message to the targeted client / channel |
-| `Quit` | Disconnect from the server and quit irssi |
+| `Quit` | Disconnect from the server and quit the IRC client used |
 | `Topic` | Available to channel operator, set the topic of the channel |
 | `User` | Set the username of the client |
 
