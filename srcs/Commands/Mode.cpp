@@ -6,7 +6,7 @@
 /*   By: kmorin <kmorin@student.42lausanne.ch>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/23 10:36:02 by kmorin            #+#    #+#             */
-/*   Updated: 2024/02/08 13:15:36 by kmorin           ###   ########.fr       */
+/*   Updated: 2024/02/10 08:12:35 by kmorin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,12 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 		return;
 	}
 
+	if (msg->params[1].size() != 2) {
+		response = "Sorry, we don't handle multiple flags inside one MODE command";
+		client->sendMessage(response);
+		return;
+	}
+
 	if (!msg->params[1].compare("+i") || !msg->params[1].compare("-i"))
 		handleInvit(server, msg, client, channel);
 	else if (!msg->params[1].compare("+t") || !msg->params[1].compare("-t"))
@@ -236,8 +242,13 @@ void	Mode::channelMode(Server* server, t_Message* msg, Client* client) {
 
 void	Mode::userMode(Server* server, t_Message* msg, Client* client) {
 
-	Client*	clientChanging = server->getClient(msg->params[0]);
 	std::string	response;
+	Client*	clientChanging = server->getClient(msg->params[0]);
+	if (!clientChanging) {
+		response = ERR_NEEDMOREPARAMS(client->getAddress(), client->getNick(), msg->command);
+		client->sendMessage(response);
+		return;
+	}
 
 	// Check if the nickname correspond to the sender
 	if (clientChanging->getNick() != client->getNick()) {
