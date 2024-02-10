@@ -25,33 +25,67 @@ It’s always a good thing to know.
 </div>
 
 
-
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#authors">Authors</a></li>
-    <li><a href="#sources">Sources</a></li>
-  </ol>
-</details>
 
-
+- [About The Project](#about-the-project)
+    - [Which client was used ?](#which-client-was-used-)
+    - [How to instal IRSSI ?](#how-to-instal-irssi-)
+    - [Our implemented commands](#our-implemented-commands)
+- [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+- [Usage](#usage)
+- [Authors](#authors)
+- [Sources](#sources)
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+This project, `ft_irc`, is an endeavor to create a fully functional IRC (Internet Relay Chat) server from scratch. The goal is to understand and implement the protocols that govern the internet, specifically the IRC protocol, which is a cornerstone of real-time communication over the internet. We are mainly going to implement the server side, while using an already established client to test our server.
 
+<p align="center">
+<img src="./images/socketServerClient.png" width="400">
+</p>
+
+### Which client was used ?
+For this project, we used [IRSSI](https://irssi.org/), a terminal-based IRC client for UNIX systems. It is open-source and highly configurable, making it a popular choice for IRC users.
+
+IRSSI provides a robust and user-friendly interface for IRC communications. It supports multiple servers and channels, and it offers a variety of scripts and themes to customize the user experience.
+
+> We used the rawlog to be able to check for the format of IRSSI, formatting the Replies and the Errors was easier with it when
+we were connecting to DALnet on IRSSI.  
+> ```rawlog: ./rawlog open [path_of_the_rawlog_that_[was]/[will_be]_created]```
+
+### How to instal IRSSI ?
+
+On Ubuntu/Debian:
+```sh
+sudo apt-get update
+sudo apt-get install irssi
+```
+
+On macOS (using Homebrew)
+```sh
+brew install irssi
+```
+
+### Our implemented commands
+
+| Command | Description |
+|:---------:|:-------------|
+| `Invite` | Invite a client to a channel that is set to invite-only |
+| `Join` | Try to join a channel or create one if it does not exist |
+| `Kick` | If the user is the channel operator, kick the targeted user from given channel |
+| `Kill` | Available to server operator, close the targeted client connection |
+| `Mode` | Set the channel mode if channel operator (channel mode: i,k,l,o,t) |
+| `Nick` | Nick set/change the nickname of the client if the nickname is not already given |
+| `Oper` | Set user to Operator if correct password given|
+| `Part` | Leave the given channel |
+| `Pass` | Set the password to the client and compare if it is the same as the server |
+| `Privmsg` | Send a message to the targeted client / channel |
+| `Quit` | Disconnect from the server and quit the IRC client used |
+| `Topic` | Available to channel operator, set the topic of the channel |
+| `User` | Set the username of the client |
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -67,9 +101,9 @@ It’s always a good thing to know.
    ```sh
    git clone https://github.com/bfjberger/irc_42.git
    ```
+2. Download your reference IRC client
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
